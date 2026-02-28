@@ -12,6 +12,18 @@ services:
     networks:
       - perdiemify
 
+  # One-off migration runner: docker compose -f docker-compose.prod.yml run --rm migrator
+  migrator:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: migrator
+    env_file: .env.production
+    profiles:
+      - tools
+    networks:
+      - perdiemify
+
 networks:
   perdiemify:
     external: true

@@ -18,6 +18,13 @@ RUN npx prisma generate
 # Build Next.js
 RUN npm run build
 
+# ── Migrator (used for one-off migration runs) ──
+FROM base AS migrator
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY prisma ./prisma
+CMD ["npx", "prisma", "migrate", "deploy"]
+
 # ── Production ──
 FROM base AS runner
 WORKDIR /app
@@ -33,18 +40,13 @@ COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
-# Copy Prisma files for migrations
+# Copy Prisma schema (for runtime client)
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
-COPY --from=builder /app/node_modules/prisma ./node_modules/prisma
 
-# Entrypoint script (runs migrations then starts app)
-COPY docker-entrypoint.sh ./
-USER root
-RUN chmod +x docker-entrypoint.sh
 USER nextjs
 
 EXPOSE 3002
 
-CMD ["./docker-entrypoint.sh"]
+CMD ["node", "server.js"]
