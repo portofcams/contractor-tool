@@ -3,6 +3,7 @@ import { prisma } from "@/lib/db";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { SettingsForm } from "./settings-form";
 import { MaterialPricing } from "./material-pricing";
+import { DeleteAccount } from "./delete-account";
 
 export default async function SettingsPage() {
   const contractor = await getContractor();
@@ -41,6 +42,7 @@ export default async function SettingsPage() {
               phone: fullContractor.phone || "",
               trade: fullContractor.trade,
               defaultMarkup: fullContractor.defaultMarkup,
+              logoUrl: fullContractor.logoUrl || "",
             }}
           />
         </CardContent>
@@ -67,6 +69,15 @@ export default async function SettingsPage() {
               costPerUnit: m.costPerUnit,
             }))}
           />
+        </CardContent>
+      </Card>
+
+      <Card className="border-red-500/30">
+        <CardHeader>
+          <CardTitle className="text-red-400">Danger Zone</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <DeleteAccount />
         </CardContent>
       </Card>
     </div>

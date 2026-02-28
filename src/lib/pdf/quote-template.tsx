@@ -20,6 +20,7 @@ import {
   Text,
   View,
   StyleSheet,
+  Image,
 } from "@react-pdf/renderer";
 
 // ── Types ──
@@ -29,6 +30,7 @@ export interface QuotePDFData {
   companyName: string;
   companyEmail: string;
   companyPhone?: string;
+  companyLogo?: string;
 
   // Quote
   quoteNumber: string;
@@ -62,8 +64,8 @@ export interface QuotePDFData {
 // ── Styles ──
 
 const colors = {
-  primary: "#1e40af",
-  primaryLight: "#dbeafe",
+  primary: "#d97706",
+  primaryLight: "#fef3c7",
   dark: "#111827",
   gray: "#6b7280",
   lightGray: "#f3f4f6",
@@ -261,12 +263,17 @@ export function QuotePDF({ data }: { data: QuotePDFData }) {
       <Page size="LETTER" style={styles.page}>
         {/* ── Header ── */}
         <View style={styles.header}>
-          <View>
-            <Text style={styles.companyName}>{data.companyName}</Text>
-            <Text style={styles.infoTextLight}>{data.companyEmail}</Text>
-            {data.companyPhone && (
-              <Text style={styles.infoTextLight}>{data.companyPhone}</Text>
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
+            {data.companyLogo && (
+              <Image src={data.companyLogo} style={{ width: 50, height: 50, objectFit: "contain" }} />
             )}
+            <View>
+              <Text style={styles.companyName}>{data.companyName}</Text>
+              <Text style={styles.infoTextLight}>{data.companyEmail}</Text>
+              {data.companyPhone && (
+                <Text style={styles.infoTextLight}>{data.companyPhone}</Text>
+              )}
+            </View>
           </View>
           <View style={styles.headerRight}>
             <Text style={styles.quoteLabel}>QUOTE</Text>

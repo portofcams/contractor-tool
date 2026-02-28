@@ -33,6 +33,7 @@ interface QuoteWithRelations {
     companyName: string;
     email: string;
     phone: string | null;
+    logoUrl: string | null;
   };
 }
 
@@ -47,10 +48,16 @@ interface MaterialLine {
 export async function renderQuotePDF(quote: QuoteWithRelations): Promise<Buffer> {
   const materials = quote.materials as unknown as MaterialLine[];
 
+  // Build absolute logo URL for @react-pdf/renderer (needs full URL or file path)
+  const logoUrl = quote.contractor.logoUrl
+    ? `${process.cwd()}/public${quote.contractor.logoUrl}`
+    : undefined;
+
   const data: QuotePDFData = {
     companyName: quote.contractor.companyName,
     companyEmail: quote.contractor.email,
     companyPhone: quote.contractor.phone ?? undefined,
+    companyLogo: logoUrl,
     quoteNumber: quote.quoteNumber,
     date: format(quote.createdAt, "MMMM d, yyyy"),
     trade: quote.trade,

@@ -52,9 +52,19 @@ export default async function DashboardPage() {
           </h1>
           <p className="text-muted-foreground">Here&apos;s your overview</p>
         </div>
-        <Link href="/quotes/new">
-          <Button>New Quote</Button>
-        </Link>
+        <div className="flex items-center gap-2">
+          <a href="/api/quotes/export" download>
+            <Button variant="outline" size="sm">
+              <svg className="w-4 h-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+              </svg>
+              Export CSV
+            </Button>
+          </a>
+          <Link href="/quotes/new">
+            <Button>New Quote</Button>
+          </Link>
+        </div>
       </div>
 
       {/* Stats Cards */}

@@ -39,6 +39,8 @@ model Customer {
 
   quotes     Quote[]
   floorPlans FloorPlan[]
+
+  @@index([contractorId])
 }
 
 model FloorPlan {
@@ -52,6 +54,8 @@ model FloorPlan {
   createdAt      DateTime @default(now())
 
   quotes Quote[]
+
+  @@index([customerId])
 }
 
 model Quote {
@@ -85,6 +89,10 @@ model Quote {
   acceptedAt    DateTime?
   signatureData String?   // base64 PNG of customer signature
   createdAt     DateTime  @default(now())
+
+  @@index([contractorId, createdAt])
+  @@index([contractorId, status])
+  @@index([customerId])
 }
 
 model QuoteTemplate {
@@ -98,6 +106,8 @@ model QuoteTemplate {
   laborCost     Float?
   taxRate       Float     @default(0)
   createdAt    DateTime   @default(now())
+
+  @@index([contractorId])
 }
 
 model MaterialCost {
@@ -109,4 +119,7 @@ model MaterialCost {
   unit         String  // 'sqft', 'gallon', 'sheet'
   costPerUnit  Float
   updatedAt    DateTime @updatedAt
+
+  @@index([contractorId])
+  @@index([category])
 }
