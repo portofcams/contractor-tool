@@ -47,14 +47,14 @@ const planOrder = ["free", "pro", "business"] as const;
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#1a1d23]">
       {/* Nav */}
-      <nav className="border-b">
+      <nav className="border-b border-[#333842]">
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-          <span className="text-xl font-bold text-blue-600">ContractorCalc</span>
+          <span className="text-xl font-bold text-amber-500">ContractorCalc</span>
           <div className="flex items-center gap-3">
             <Link href="/login">
-              <Button variant="ghost">Sign In</Button>
+              <Button variant="ghost" className="text-gray-400 hover:text-gray-200">Sign In</Button>
             </Link>
             <Link href="/signup">
               <Button>Start Free Trial</Button>
@@ -69,14 +69,14 @@ export default function LandingPage() {
           <Badge variant="secondary" className="mb-4">
             Built for contractors
           </Badge>
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 leading-tight">
+          <h1 className="text-4xl md:text-5xl font-bold text-[#e8e6e3] leading-tight">
             Calculate materials.
             <br />
             Send quotes.
             <br />
-            <span className="text-blue-600">Close jobs faster.</span>
+            <span className="text-amber-500">Close jobs faster.</span>
           </h1>
-          <p className="mt-6 text-lg text-gray-600 max-w-xl mx-auto">
+          <p className="mt-6 text-lg text-gray-400 max-w-xl mx-auto">
             Enter room dimensions, pick your materials, and generate a
             professional quote in 30 seconds. Flooring, painting, and drywall.
           </p>
@@ -87,25 +87,25 @@ export default function LandingPage() {
               </Button>
             </Link>
           </div>
-          <p className="mt-3 text-sm text-gray-400">
+          <p className="mt-3 text-sm text-gray-500">
             5 free quotes per month. Upgrade anytime.
           </p>
         </div>
       </section>
 
       {/* Features */}
-      <section className="py-16 px-4 bg-gray-50">
+      <section className="py-16 px-4 bg-[#15171c]">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-12">
+          <h2 className="text-3xl font-bold text-center text-[#e8e6e3] mb-12">
             Everything you need to quote faster
           </h2>
           <div className="grid md:grid-cols-3 gap-6">
             {features.map((f) => (
-              <Card key={f.title} className="border-0 shadow-sm">
+              <Card key={f.title} className="border-[#333842] bg-[#22262e]">
                 <CardContent className="pt-6">
-                  <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+                  <div className="w-10 h-10 bg-amber-500/15 rounded-lg flex items-center justify-center mb-4">
                     <svg
-                      className="w-5 h-5 text-blue-600"
+                      className="w-5 h-5 text-amber-500"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -118,8 +118,8 @@ export default function LandingPage() {
                       />
                     </svg>
                   </div>
-                  <h3 className="font-semibold text-gray-900 mb-2">{f.title}</h3>
-                  <p className="text-sm text-gray-600 leading-relaxed">
+                  <h3 className="font-semibold text-[#e8e6e3] mb-2">{f.title}</h3>
+                  <p className="text-sm text-gray-400 leading-relaxed">
                     {f.description}
                   </p>
                 </CardContent>
@@ -132,10 +132,10 @@ export default function LandingPage() {
       {/* Pricing */}
       <section className="py-16 px-4" id="pricing">
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-4">
+          <h2 className="text-3xl font-bold text-center text-[#e8e6e3] mb-4">
             Simple pricing
           </h2>
-          <p className="text-center text-gray-500 mb-12">
+          <p className="text-center text-gray-400 mb-12">
             Start free. Upgrade when you&apos;re ready.
           </p>
           <div className="grid md:grid-cols-3 gap-6">
@@ -145,25 +145,25 @@ export default function LandingPage() {
               return (
                 <Card
                   key={planId}
-                  className={isPro ? "border-blue-600 border-2 relative" : ""}
+                  className={isPro ? "border-amber-500 border-2 relative bg-[#22262e]" : "border-[#333842] bg-[#22262e]"}
                 >
                   {isPro && (
                     <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                      <Badge className="bg-blue-600">Most Popular</Badge>
+                      <Badge className="bg-amber-500 text-[#1a1d23]">Most Popular</Badge>
                     </div>
                   )}
                   <CardHeader className="text-center pb-2">
-                    <CardTitle className="text-lg">{plan.name}</CardTitle>
+                    <CardTitle className="text-lg text-[#e8e6e3]">{plan.name}</CardTitle>
                     <div className="mt-2">
-                      <span className="text-4xl font-bold">
+                      <span className="text-4xl font-bold text-[#e8e6e3]">
                         ${plan.price}
                       </span>
                       {plan.price > 0 && (
-                        <span className="text-gray-500">/mo</span>
+                        <span className="text-gray-400">/mo</span>
                       )}
                     </div>
                     {plan.price > 0 && (
-                      <p className="text-xs text-gray-400 mt-1">
+                      <p className="text-xs text-gray-500 mt-1">
                         14-day free trial
                       </p>
                     )}
@@ -173,10 +173,10 @@ export default function LandingPage() {
                       {plan.features.map((f) => (
                         <li
                           key={f}
-                          className="flex items-start gap-2 text-sm"
+                          className="flex items-start gap-2 text-sm text-gray-300"
                         >
                           <svg
-                            className="w-4 h-4 text-green-500 mt-0.5 shrink-0"
+                            className="w-4 h-4 text-green-400 mt-0.5 shrink-0"
                             fill="none"
                             viewBox="0 0 24 24"
                             stroke="currentColor"
@@ -209,19 +209,19 @@ export default function LandingPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-20 px-4 bg-blue-700">
+      <section className="py-20 px-4 bg-amber-600">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-3xl font-bold text-white mb-4">
             Stop guessing. Start quoting.
           </h2>
-          <p className="text-blue-200 mb-8">
+          <p className="text-amber-100 mb-8">
             Join contractors who save hours every week with accurate material
             calculations and professional quotes.
           </p>
           <Link href="/signup">
             <Button
               size="lg"
-              className="bg-white text-blue-700 hover:bg-blue-50 text-base px-8"
+              className="bg-[#1a1d23] text-amber-500 hover:bg-[#22262e] text-base px-8"
             >
               Create Your Free Account
             </Button>
@@ -230,16 +230,16 @@ export default function LandingPage() {
       </section>
 
       {/* Footer */}
-      <footer className="py-8 px-4 border-t">
+      <footer className="py-8 px-4 border-t border-[#333842]">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-          <span className="text-sm text-gray-400">
+          <span className="text-sm text-gray-500">
             &copy; {new Date().getFullYear()} ContractorCalc
           </span>
-          <div className="flex gap-6 text-sm text-gray-400">
-            <Link href="/login" className="hover:text-gray-600">
+          <div className="flex gap-6 text-sm text-gray-500">
+            <Link href="/login" className="hover:text-gray-300">
               Sign In
             </Link>
-            <Link href="/signup" className="hover:text-gray-600">
+            <Link href="/signup" className="hover:text-gray-300">
               Sign Up
             </Link>
           </div>

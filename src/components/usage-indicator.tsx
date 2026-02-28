@@ -23,7 +23,7 @@ export function UsageIndicator({
   if (quotesLimit === null) {
     if (compact) {
       return (
-        <p className="text-xs text-gray-500">
+        <p className="text-xs text-muted-foreground">
           {planName} plan &middot; {quotesThisMonth} quotes this month
         </p>
       );
@@ -39,19 +39,19 @@ export function UsageIndicator({
   if (compact) {
     return (
       <div className="flex items-center gap-2 text-sm">
-        <div className="flex-1 bg-gray-200 rounded-full h-1.5">
+        <div className="flex-1 bg-[#333842] rounded-full h-1.5">
           <div
             className={`h-1.5 rounded-full ${
               isBlocked
                 ? "bg-red-500"
                 : isWarning
                 ? "bg-yellow-500"
-                : "bg-blue-600"
+                : "bg-amber-500"
             }`}
             style={{ width: `${percentage}%` }}
           />
         </div>
-        <span className="text-gray-500 text-xs whitespace-nowrap">
+        <span className="text-muted-foreground text-xs whitespace-nowrap">
           {quotesThisMonth}/{quotesLimit}
         </span>
       </div>
@@ -62,15 +62,15 @@ export function UsageIndicator({
     <Card
       className={
         isBlocked
-          ? "border-red-200 bg-red-50"
+          ? "border-red-500/30 bg-red-500/10"
           : isWarning
-          ? "border-yellow-200 bg-yellow-50"
+          ? "border-yellow-500/30 bg-yellow-500/10"
           : ""
       }
     >
       <CardContent className="py-4 space-y-2">
         <div className="flex justify-between text-sm">
-          <span className={isBlocked ? "text-red-700 font-medium" : "text-gray-600"}>
+          <span className={isBlocked ? "text-red-400 font-medium" : "text-muted-foreground"}>
             {isBlocked
               ? "Monthly quote limit reached"
               : isWarning
@@ -81,14 +81,14 @@ export function UsageIndicator({
             {quotesThisMonth}/{quotesLimit}
           </span>
         </div>
-        <div className="w-full bg-gray-200 rounded-full h-2">
+        <div className="w-full bg-[#333842] rounded-full h-2">
           <div
             className={`h-2 rounded-full transition-all ${
               isBlocked
                 ? "bg-red-500"
                 : isWarning
                 ? "bg-yellow-500"
-                : "bg-blue-600"
+                : "bg-amber-500"
             }`}
             style={{ width: `${percentage}%` }}
           />

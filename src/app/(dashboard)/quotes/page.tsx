@@ -26,7 +26,7 @@ export default async function QuotesPage() {
       {quotes.length === 0 ? (
         <Card>
           <CardContent className="py-12 text-center">
-            <p className="text-gray-500 mb-4">No quotes yet.</p>
+            <p className="text-muted-foreground mb-4">No quotes yet.</p>
             <Link href="/quotes/new">
               <Button>Create Your First Quote</Button>
             </Link>
@@ -40,7 +40,7 @@ export default async function QuotesPage() {
                 <CardContent className="flex items-center justify-between py-4">
                   <div>
                     <p className="font-medium">{quote.customer.name}</p>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-sm text-muted-foreground">
                       {quote.quoteNumber} &middot;{" "}
                       <span className="capitalize">{quote.trade}</span> &middot;{" "}
                       {new Date(quote.createdAt).toLocaleDateString()}

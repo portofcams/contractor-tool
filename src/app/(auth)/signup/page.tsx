@@ -71,16 +71,16 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-background px-4">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold">ContractorCalc</CardTitle>
+          <CardTitle className="text-2xl font-bold text-amber-500">ContractorCalc</CardTitle>
           <CardDescription>Create your account — 14-day free trial</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             {error && (
-              <div className="bg-red-50 text-red-600 text-sm p-3 rounded-md">
+              <div className="bg-red-500/10 text-red-400 text-sm p-3 rounded-md">
                 {error}
               </div>
             )}
@@ -140,9 +140,9 @@ export default function SignupPage() {
               {loading ? "Creating account..." : "Start Free Trial"}
             </Button>
           </form>
-          <p className="text-center text-sm text-gray-500 mt-4">
+          <p className="text-center text-sm text-muted-foreground mt-4">
             Already have an account?{" "}
-            <Link href="/login" className="text-blue-600 hover:underline">
+            <Link href="/login" className="text-amber-500 hover:underline">
               Sign in
             </Link>
           </p>

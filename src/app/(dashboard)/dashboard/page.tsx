@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { UsageIndicator } from "@/components/usage-indicator";
+import { DashboardCharts } from "./charts";
 
 export default async function DashboardPage() {
   const contractor = await getContractor();
@@ -49,7 +50,7 @@ export default async function DashboardPage() {
           <h1 className="text-2xl font-bold">
             Welcome, {contractor.companyName}
           </h1>
-          <p className="text-gray-500">Here&apos;s your overview</p>
+          <p className="text-muted-foreground">Here&apos;s your overview</p>
         </div>
         <Link href="/quotes/new">
           <Button>New Quote</Button>
@@ -60,7 +61,7 @@ export default async function DashboardPage() {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-500">
+            <CardTitle className="text-sm font-medium text-muted-foreground">
               Total Quotes
             </CardTitle>
           </CardHeader>
@@ -70,7 +71,7 @@ export default async function DashboardPage() {
         </Card>
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-500">
+            <CardTitle className="text-sm font-medium text-muted-foreground">
               Win Rate
             </CardTitle>
           </CardHeader>
@@ -80,7 +81,7 @@ export default async function DashboardPage() {
         </Card>
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-500">
+            <CardTitle className="text-sm font-medium text-muted-foreground">
               Revenue
             </CardTitle>
           </CardHeader>
@@ -92,7 +93,7 @@ export default async function DashboardPage() {
         </Card>
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-500">
+            <CardTitle className="text-sm font-medium text-muted-foreground">
               Customers
             </CardTitle>
           </CardHeader>
@@ -101,6 +102,9 @@ export default async function DashboardPage() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Charts */}
+      <DashboardCharts />
 
       {/* Usage Indicator (free tier) */}
       <UsageIndicator
@@ -113,15 +117,15 @@ export default async function DashboardPage() {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle>Recent Quotes</CardTitle>
-          <Link href="/quotes" className="text-sm text-blue-600 hover:underline">
+          <Link href="/quotes" className="text-sm text-amber-500 hover:underline">
             View all
           </Link>
         </CardHeader>
         <CardContent>
           {recentQuotes.length === 0 ? (
-            <p className="text-gray-500 text-center py-8">
+            <p className="text-muted-foreground text-center py-8">
               No quotes yet.{" "}
-              <Link href="/quotes/new" className="text-blue-600 hover:underline">
+              <Link href="/quotes/new" className="text-amber-500 hover:underline">
                 Create your first quote
               </Link>
             </p>
@@ -131,11 +135,11 @@ export default async function DashboardPage() {
                 <Link
                   key={quote.id}
                   href={`/quotes/${quote.id}`}
-                  className="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 transition-colors"
+                  className="flex items-center justify-between p-3 rounded-lg hover:bg-secondary transition-colors"
                 >
                   <div>
                     <p className="font-medium">{quote.customer.name}</p>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-sm text-muted-foreground">
                       {quote.quoteNumber} &middot; {quote.trade}
                     </p>
                   </div>

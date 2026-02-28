@@ -92,7 +92,7 @@ export function MaterialPricing({
 
   return (
     <div className="space-y-4">
-      <p className="text-sm text-gray-500">
+      <p className="text-sm text-muted-foreground">
         Override default material costs. Leave blank to use the default price.
       </p>
 
@@ -100,8 +100,8 @@ export function MaterialPricing({
         <div
           className={`text-sm p-3 rounded-md ${
             result.success
-              ? "bg-green-50 text-green-700"
-              : "bg-red-50 text-red-600"
+              ? "bg-green-500/10 text-green-400"
+              : "bg-red-500/10 text-red-400"
           }`}
         >
           {result.message}
@@ -110,7 +110,7 @@ export function MaterialPricing({
 
       {categories.map((cat) => (
         <div key={cat}>
-          <h3 className="font-semibold text-sm text-gray-700 mb-2 capitalize">
+          <h3 className="font-semibold text-sm text-gray-300 mb-2 capitalize">
             {cat}
           </h3>
           <div className="space-y-2">

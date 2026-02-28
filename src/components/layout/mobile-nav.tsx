@@ -15,7 +15,7 @@ export function MobileNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 right-0 border-t bg-white z-50">
+    <nav className="md:hidden fixed bottom-0 left-0 right-0 border-t border-[#333842] bg-[#15171c] z-50">
       <div className="flex justify-around py-2">
         {navItems.map((item) => {
           const isActive =
@@ -28,7 +28,7 @@ export function MobileNav() {
               href={item.href}
               className={cn(
                 "flex flex-col items-center gap-1 px-3 py-1 text-xs font-medium",
-                isActive ? "text-blue-600" : "text-gray-500"
+                isActive ? "text-amber-500" : "text-gray-400"
               )}
             >
               {item.label}

@@ -20,9 +20,10 @@ model Contractor {
   stripeCustomerId String?
   createdAt        DateTime @default(now())
 
-  customers Customer[]
-  quotes    Quote[]
-  materials MaterialCost[]
+  customers      Customer[]
+  quotes         Quote[]
+  materials      MaterialCost[]
+  quoteTemplates QuoteTemplate[]
 }
 
 model Customer {
@@ -84,6 +85,19 @@ model Quote {
   acceptedAt    DateTime?
   signatureData String?   // base64 PNG of customer signature
   createdAt     DateTime  @default(now())
+}
+
+model QuoteTemplate {
+  id           String     @id @default(uuid())
+  contractorId String
+  contractor   Contractor @relation(fields: [contractorId], references: [id])
+  name         String
+  trade        String     // 'flooring', 'painting', 'drywall'
+  materials    Json       // same format as Quote.materials
+  markupPercent Float     @default(50)
+  laborCost     Float?
+  taxRate       Float     @default(0)
+  createdAt    DateTime   @default(now())
 }
 
 model MaterialCost {

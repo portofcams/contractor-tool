@@ -17,18 +17,32 @@ export function QuoteActions({
   currentStatus,
   customerEmail,
   publicToken,
+  quoteData,
 }: {
   quoteId: string;
   currentStatus: string;
   customerEmail?: string;
   publicToken: string;
+  quoteData?: {
+    trade: string;
+    materials: Record<string, unknown>[];
+    markupPercent: number;
+    laborCost?: number;
+    taxRate: number;
+  };
 }) {
   const router = useRouter();
   const [loading, setLoading] = useState("");
   const [emailDialogOpen, setEmailDialogOpen] = useState(false);
+  const [templateDialogOpen, setTemplateDialogOpen] = useState(false);
+  const [templateName, setTemplateName] = useState("");
   const [emailTo, setEmailTo] = useState(customerEmail || "");
   const [copied, setCopied] = useState(false);
   const [emailResult, setEmailResult] = useState<{
+    success?: boolean;
+    message?: string;
+  }>({});
+  const [templateResult, setTemplateResult] = useState<{
     success?: boolean;
     message?: string;
   }>({});
@@ -98,6 +112,38 @@ export function QuoteActions({
     setLoading("");
   }
 
+  async function saveAsTemplate() {
+    if (!templateName || !quoteData) return;
+    setLoading("template");
+    setTemplateResult({});
+
+    try {
+      const res = await fetch("/api/templates", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: templateName,
+          trade: quoteData.trade,
+          materials: quoteData.materials,
+          markupPercent: quoteData.markupPercent,
+          laborCost: quoteData.laborCost,
+          taxRate: quoteData.taxRate,
+        }),
+      });
+
+      if (res.ok) {
+        setTemplateResult({ success: true, message: "Template saved!" });
+        setTimeout(() => setTemplateDialogOpen(false), 1500);
+      } else {
+        const data = await res.json();
+        setTemplateResult({ success: false, message: data.error || "Failed to save" });
+      }
+    } catch {
+      setTemplateResult({ success: false, message: "Network error" });
+    }
+    setLoading("");
+  }
+
   return (
     <>
       <div className="flex flex-wrap gap-3">
@@ -131,6 +177,21 @@ export function QuoteActions({
         >
           Email Quote
         </Button>
+
+        {/* Save as Template */}
+        {quoteData && (
+          <Button
+            variant="outline"
+            onClick={() => {
+              setTemplateResult({});
+              setTemplateName("");
+              setTemplateDialogOpen(true);
+            }}
+            disabled={!!loading}
+          >
+            Save as Template
+          </Button>
+        )}
 
         {/* Status actions */}
         {currentStatus === "draft" && (
@@ -179,8 +240,8 @@ export function QuoteActions({
               <div
                 className={`text-sm p-3 rounded-md ${
                   emailResult.success
-                    ? "bg-green-50 text-green-700"
-                    : "bg-red-50 text-red-600"
+                    ? "bg-green-500/10 text-green-400"
+                    : "bg-red-500/10 text-red-400"
                 }`}
               >
                 {emailResult.message}
@@ -198,6 +259,51 @@ export function QuoteActions({
                 disabled={!emailTo || loading === "email"}
               >
                 {loading === "email" ? "Sending..." : "Send Quote"}
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Template Dialog */}
+      <Dialog open={templateDialogOpen} onOpenChange={setTemplateDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Save as Template</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 pt-2">
+            <div className="space-y-2">
+              <Label htmlFor="templateName">Template Name</Label>
+              <Input
+                id="templateName"
+                value={templateName}
+                onChange={(e) => setTemplateName(e.target.value)}
+                placeholder="e.g., Standard Hardwood Install"
+              />
+            </div>
+            {templateResult.message && (
+              <div
+                className={`text-sm p-3 rounded-md ${
+                  templateResult.success
+                    ? "bg-green-500/10 text-green-400"
+                    : "bg-red-500/10 text-red-400"
+                }`}
+              >
+                {templateResult.message}
+              </div>
+            )}
+            <div className="flex gap-3 justify-end">
+              <Button
+                variant="outline"
+                onClick={() => setTemplateDialogOpen(false)}
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={saveAsTemplate}
+                disabled={!templateName || loading === "template"}
+              >
+                {loading === "template" ? "Saving..." : "Save Template"}
               </Button>
             </div>
           </div>

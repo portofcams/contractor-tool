@@ -65,8 +65,8 @@ export function SettingsForm({ contractor }: { contractor: ContractorSettings })
         <div
           className={`text-sm p-3 rounded-md ${
             result.success
-              ? "bg-green-50 text-green-700"
-              : "bg-red-50 text-red-600"
+              ? "bg-green-500/10 text-green-400"
+              : "bg-red-500/10 text-red-400"
           }`}
         >
           {result.message}
@@ -89,7 +89,7 @@ export function SettingsForm({ contractor }: { contractor: ContractorSettings })
           id="email"
           value={contractor.email}
           disabled
-          className="bg-gray-50"
+          className="bg-secondary"
         />
         <p className="text-xs text-gray-400">Email cannot be changed</p>
       </div>

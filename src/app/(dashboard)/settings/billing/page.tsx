@@ -36,12 +36,12 @@ export default async function BillingPage({
       <h1 className="text-2xl font-bold">Billing & Plan</h1>
 
       {params.success && (
-        <div className="bg-green-50 text-green-700 p-4 rounded-lg text-sm">
+        <div className="bg-green-500/10 text-green-400 p-4 rounded-lg text-sm">
           Subscription activated! Your plan has been upgraded.
         </div>
       )}
       {params.canceled && (
-        <div className="bg-yellow-50 text-yellow-700 p-4 rounded-lg text-sm">
+        <div className="bg-yellow-500/10 text-yellow-400 p-4 rounded-lg text-sm">
           Checkout canceled. No changes were made.
         </div>
       )}
@@ -65,28 +65,28 @@ export default async function BillingPage({
               {currentPlan.price === 0 ? "Free" : `$${currentPlan.price}`}
             </span>
             {currentPlan.price > 0 && (
-              <span className="text-gray-500">/month</span>
+              <span className="text-muted-foreground">/month</span>
             )}
           </div>
 
           {/* Usage */}
-          <div className="bg-gray-50 rounded-lg p-4">
+          <div className="bg-secondary rounded-lg p-4">
             <div className="flex justify-between text-sm mb-2">
-              <span className="text-gray-600">Quotes this month</span>
+              <span className="text-muted-foreground">Quotes this month</span>
               <span className="font-medium">
                 {quotesThisMonth}
                 {remaining !== null ? ` / ${currentPlan.quotesPerMonth}` : ""}
               </span>
             </div>
             {remaining !== null && (
-              <div className="w-full bg-gray-200 rounded-full h-2">
+              <div className="w-full bg-[#333842] rounded-full h-2">
                 <div
                   className={`h-2 rounded-full transition-all ${
                     remaining === 0
                       ? "bg-red-500"
                       : remaining <= 2
                       ? "bg-yellow-500"
-                      : "bg-blue-600"
+                      : "bg-amber-500"
                   }`}
                   style={{
                     width: `${Math.min(
@@ -99,14 +99,14 @@ export default async function BillingPage({
               </div>
             )}
             {remaining !== null && (
-              <p className="text-xs text-gray-500 mt-1">
+              <p className="text-xs text-muted-foreground mt-1">
                 {remaining === 0
-                  ? "Limit reached — upgrade to continue"
+                  ? "Limit reached \u2014 upgrade to continue"
                   : `${remaining} quotes remaining`}
               </p>
             )}
             {remaining === null && (
-              <p className="text-xs text-gray-500 mt-1">Unlimited quotes</p>
+              <p className="text-xs text-muted-foreground mt-1">Unlimited quotes</p>
             )}
           </div>
 
@@ -114,7 +114,7 @@ export default async function BillingPage({
           <ul className="space-y-1">
             {currentPlan.features.map((f) => (
               <li key={f} className="flex items-center gap-2 text-sm">
-                <span className="text-green-600">&#10003;</span>
+                <span className="text-green-400">&#10003;</span>
                 {f}
               </li>
             ))}
@@ -135,7 +135,7 @@ export default async function BillingPage({
               key={plan.id}
               className={
                 plan.id === currentPlan.id
-                  ? "border-blue-600 border-2"
+                  ? "border-amber-500 border-2"
                   : ""
               }
             >
@@ -153,16 +153,16 @@ export default async function BillingPage({
                     {plan.price === 0 ? "Free" : `$${plan.price}`}
                   </span>
                   {plan.price > 0 && (
-                    <span className="text-gray-500 text-sm">/mo</span>
+                    <span className="text-muted-foreground text-sm">/mo</span>
                   )}
                 </div>
                 {plan.price > 0 && (
-                  <p className="text-xs text-blue-600">14-day free trial</p>
+                  <p className="text-xs text-amber-500">14-day free trial</p>
                 )}
                 <ul className="space-y-1 text-sm">
                   {plan.features.map((f) => (
                     <li key={f} className="flex items-center gap-2">
-                      <span className="text-green-600 text-xs">&#10003;</span>
+                      <span className="text-green-400 text-xs">&#10003;</span>
                       {f}
                     </li>
                   ))}

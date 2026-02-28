@@ -35,7 +35,7 @@ export default async function QuoteDetailPage({
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold">{quote.quoteNumber}</h1>
-          <p className="text-gray-500">
+          <p className="text-muted-foreground">
             {quote.customer.name} &middot;{" "}
             <span className="capitalize">{quote.trade}</span>
           </p>
@@ -62,7 +62,7 @@ export default async function QuoteDetailPage({
         </CardHeader>
         <CardContent>
           <table className="w-full text-sm">
-            <thead className="bg-gray-50">
+            <thead className="bg-secondary">
               <tr>
                 <th className="text-left p-3">Item</th>
                 <th className="text-right p-3">Qty</th>
@@ -148,6 +148,13 @@ export default async function QuoteDetailPage({
         currentStatus={quote.status}
         customerEmail={quote.customer.email ?? undefined}
         publicToken={quote.publicToken}
+        quoteData={{
+          trade: quote.trade,
+          materials: quote.materials as unknown as Record<string, unknown>[],
+          markupPercent: quote.markupPercent,
+          laborCost: quote.laborCost ?? undefined,
+          taxRate: quote.taxRate,
+        }}
       />
     </div>
   );

@@ -25,13 +25,13 @@ export function CustomerActions({
   // If already accepted/rejected, show status
   if (currentStatus === "accepted") {
     return (
-      <Card className="border-green-200 bg-green-50">
+      <Card className="border-green-500/30 bg-green-500/10">
         <CardContent className="pt-6 text-center">
           <div className="text-3xl mb-2">&#10003;</div>
-          <p className="text-green-700 font-semibold text-lg">
+          <p className="text-green-400 font-semibold text-lg">
             Quote Accepted
           </p>
-          <p className="text-green-600 text-sm mt-1">
+          <p className="text-green-400/80 text-sm mt-1">
             Thank you for your business!
           </p>
         </CardContent>
@@ -41,10 +41,10 @@ export function CustomerActions({
 
   if (currentStatus === "rejected") {
     return (
-      <Card className="border-red-200 bg-red-50">
+      <Card className="border-red-500/30 bg-red-500/10">
         <CardContent className="pt-6 text-center">
-          <p className="text-red-700 font-semibold text-lg">Quote Declined</p>
-          <p className="text-red-600 text-sm mt-1">
+          <p className="text-red-400 font-semibold text-lg">Quote Declined</p>
+          <p className="text-red-400/80 text-sm mt-1">
             This quote has been declined.
           </p>
         </CardContent>
@@ -84,7 +84,7 @@ export function CustomerActions({
     if (!ctx) return;
     const pos = getCanvasPos(e);
     ctx.lineTo(pos.x, pos.y);
-    ctx.strokeStyle = "#1e40af";
+    ctx.strokeStyle = "#f59e0b";
     ctx.lineWidth = 2;
     ctx.lineCap = "round";
     ctx.stroke();
@@ -145,7 +145,7 @@ export function CustomerActions({
         <CardTitle>Your Response</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-muted-foreground">
           Please review the quote above and accept or decline below.
         </p>
 
@@ -153,8 +153,8 @@ export function CustomerActions({
           <div
             className={`text-sm p-3 rounded-md ${
               result.success
-                ? "bg-green-50 text-green-700"
-                : "bg-red-50 text-red-600"
+                ? "bg-green-500/10 text-green-400"
+                : "bg-red-500/10 text-red-400"
             }`}
           >
             {result.message}
@@ -181,10 +181,10 @@ export function CustomerActions({
           </div>
         ) : (
           <div className="space-y-3">
-            <p className="text-sm font-medium text-gray-700">
+            <p className="text-sm font-medium text-gray-300">
               Sign below to accept this quote:
             </p>
-            <div className="border rounded-lg overflow-hidden bg-white">
+            <div className="border border-border rounded-lg overflow-hidden bg-[#2a2f38]">
               <canvas
                 ref={canvasRef}
                 width={500}

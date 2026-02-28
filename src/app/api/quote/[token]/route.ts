@@ -9,6 +9,7 @@
 
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
+import { sendQuoteNotification } from "@/lib/email";
 
 export async function POST(
   req: Request,
@@ -24,6 +25,10 @@ export async function POST(
 
   const quote = await prisma.quote.findUnique({
     where: { publicToken: token },
+    include: {
+      customer: { select: { name: true } },
+      contractor: { select: { email: true, companyName: true } },
+    },
   });
 
   if (!quote) {
@@ -37,6 +42,8 @@ export async function POST(
     );
   }
 
+  const newStatus = action === "accept" ? "accepted" : "rejected";
+
   if (action === "accept") {
     await prisma.quote.update({
       where: { id: quote.id },
@@ -46,13 +53,22 @@ export async function POST(
         signatureData: signatureData || null,
       },
     });
-    return NextResponse.json({ status: "accepted" });
+  } else {
+    await prisma.quote.update({
+      where: { id: quote.id },
+      data: { status: "rejected" },
+    });
   }
 
-  // decline
-  await prisma.quote.update({
-    where: { id: quote.id },
-    data: { status: "rejected" },
-  });
-  return NextResponse.json({ status: "rejected" });
+  // Send email notification to contractor (fire and forget)
+  sendQuoteNotification({
+    to: quote.contractor.email,
+    companyName: quote.contractor.companyName,
+    customerName: quote.customer.name,
+    quoteNumber: quote.quoteNumber,
+    total: quote.total,
+    action: action === "accept" ? "accepted" : "declined",
+  }).catch((err) => console.error("Failed to send notification:", err));
+
+  return NextResponse.json({ status: newStatus });
 }

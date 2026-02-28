@@ -5,6 +5,7 @@ import { prisma } from "@/lib/db";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { FloorPlanUpload, FloorPlanGallery } from "@/components/floor-plan-upload";
 
 export default async function CustomerDetailPage({
   params,
@@ -21,6 +22,9 @@ export default async function CustomerDetailPage({
         orderBy: { createdAt: "desc" },
         take: 10,
       },
+      floorPlans: {
+        orderBy: { createdAt: "desc" },
+      },
     },
   });
 
@@ -31,7 +35,7 @@ export default async function CustomerDetailPage({
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold">{customer.name}</h1>
-          <p className="text-gray-500">{customer.email || customer.phone || "No contact info"}</p>
+          <p className="text-muted-foreground">{customer.email || customer.phone || "No contact info"}</p>
         </div>
         <Link href={`/quotes/new?customerId=${customer.id}`}>
           <Button>New Quote</Button>
@@ -46,23 +50,23 @@ export default async function CustomerDetailPage({
           <CardContent className="space-y-2 text-sm">
             {customer.email && (
               <p>
-                <span className="text-gray-500">Email:</span> {customer.email}
+                <span className="text-muted-foreground">Email:</span> {customer.email}
               </p>
             )}
             {customer.phone && (
               <p>
-                <span className="text-gray-500">Phone:</span> {customer.phone}
+                <span className="text-muted-foreground">Phone:</span> {customer.phone}
               </p>
             )}
             {customer.address && (
               <p>
-                <span className="text-gray-500">Address:</span>{" "}
+                <span className="text-muted-foreground">Address:</span>{" "}
                 {customer.address}
               </p>
             )}
             {customer.notes && (
               <p>
-                <span className="text-gray-500">Notes:</span> {customer.notes}
+                <span className="text-muted-foreground">Notes:</span> {customer.notes}
               </p>
             )}
           </CardContent>
@@ -74,20 +78,20 @@ export default async function CustomerDetailPage({
           </CardHeader>
           <CardContent>
             {customer.quotes.length === 0 ? (
-              <p className="text-gray-500 text-sm">No quotes yet.</p>
+              <p className="text-muted-foreground text-sm">No quotes yet.</p>
             ) : (
               <div className="space-y-2">
                 {customer.quotes.map((quote) => (
                   <Link
                     key={quote.id}
                     href={`/quotes/${quote.id}`}
-                    className="flex items-center justify-between p-2 rounded hover:bg-gray-50"
+                    className="flex items-center justify-between p-2 rounded hover:bg-secondary"
                   >
                     <div>
                       <p className="text-sm font-medium">
                         {quote.quoteNumber}
                       </p>
-                      <p className="text-xs text-gray-500">{quote.trade}</p>
+                      <p className="text-xs text-muted-foreground">{quote.trade}</p>
                     </div>
                     <div className="flex items-center gap-2">
                       <span className="text-sm font-medium">
@@ -112,6 +116,24 @@ export default async function CustomerDetailPage({
           </CardContent>
         </Card>
       </div>
+
+      {/* Floor Plans */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Floor Plans</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <FloorPlanGallery
+            floorPlans={customer.floorPlans.map((fp) => ({
+              id: fp.id,
+              fileUrl: fp.fileUrl,
+              fileType: fp.fileType,
+              createdAt: fp.createdAt,
+            }))}
+          />
+          <FloorPlanUpload customerId={customer.id} />
+        </CardContent>
+      </Card>
     </div>
   );
 }

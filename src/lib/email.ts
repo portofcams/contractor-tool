@@ -161,3 +161,122 @@ export async function sendQuoteEmail(params: SendQuoteEmailParams): Promise<{ su
     return { success: false, error: String(err) };
   }
 }
+
+/**
+ * Send notification to contractor when a customer accepts or declines a quote.
+ */
+interface QuoteNotificationParams {
+  to: string;
+  companyName: string;
+  customerName: string;
+  quoteNumber: string;
+  total: number;
+  action: "accepted" | "declined";
+}
+
+export async function sendQuoteNotification(params: QuoteNotificationParams): Promise<{ success: boolean; error?: string }> {
+  const { to, companyName, customerName, quoteNumber, total, action } = params;
+
+  const isAccepted = action === "accepted";
+  const subject = `Quote ${quoteNumber} ${action} by ${customerName}`;
+  const totalFormatted = total.toLocaleString("en-US", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+
+  const statusColor = isAccepted ? "#16a34a" : "#dc2626";
+  const statusBg = isAccepted ? "#f0fdf4" : "#fef2f2";
+  const statusBorder = isAccepted ? "#bbf7d0" : "#fecaca";
+  const statusText = isAccepted ? "Accepted" : "Declined";
+
+  const html = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="margin:0; padding:0; background-color:#1a1d23; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#1a1d23; padding:40px 20px;">
+    <tr>
+      <td align="center">
+        <table width="600" cellpadding="0" cellspacing="0" style="background-color:#22262e; border-radius:8px; overflow:hidden;">
+
+          <!-- Header -->
+          <tr>
+            <td style="background-color:#22262e; padding:30px 40px; border-bottom:1px solid #333842;">
+              <h1 style="margin:0; color:#f59e0b; font-size:20px; font-weight:700;">ContractorCalc</h1>
+            </td>
+          </tr>
+
+          <!-- Body -->
+          <tr>
+            <td style="padding:40px;">
+              <p style="margin:0 0 20px; color:#e8e6e3; font-size:16px; line-height:1.6;">
+                Hi ${companyName},
+              </p>
+              <p style="margin:0 0 24px; color:#9ca3af; font-size:14px; line-height:1.6;">
+                ${customerName} has responded to your quote.
+              </p>
+
+              <!-- Status box -->
+              <table width="100%" cellpadding="0" cellspacing="0" style="background-color:${statusBg}; border:1px solid ${statusBorder}; border-radius:8px; margin:0 0 24px;">
+                <tr>
+                  <td style="padding:20px; text-align:center;">
+                    <p style="margin:0 0 4px; color:${statusColor}; font-size:24px; font-weight:700;">
+                      ${statusText}
+                    </p>
+                    <p style="margin:0; color:#6b7280; font-size:14px;">
+                      Quote ${quoteNumber} &mdash; $${totalFormatted}
+                    </p>
+                  </td>
+                </tr>
+              </table>
+
+              <p style="margin:0 0 8px; color:#9ca3af; font-size:14px; line-height:1.6;">
+                ${isAccepted
+                  ? "Great news! The customer has signed and accepted the quote. You can view the signed copy in your dashboard."
+                  : "The customer has declined this quote. You can follow up or send a revised quote from your dashboard."}
+              </p>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="background-color:#15171c; padding:20px 40px; border-top:1px solid #333842;">
+              <p style="margin:0; color:#6b7280; font-size:12px; text-align:center;">
+                ContractorCalc &mdash; Professional quotes in 30 seconds
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+  `.trim();
+
+  if (!resend) {
+    console.log("═══ NOTIFICATION EMAIL (dev mode) ═══");
+    console.log(`  To: ${to}`);
+    console.log(`  Subject: ${subject}`);
+    console.log(`  Action: ${action}`);
+    console.log("═════════════════════════════════════");
+    return { success: true };
+  }
+
+  try {
+    await resend.emails.send({
+      from: FROM_ADDRESS,
+      to,
+      subject,
+      html,
+    });
+    return { success: true };
+  } catch (err) {
+    console.error("Notification email error:", err);
+    return { success: false, error: String(err) };
+  }
+}

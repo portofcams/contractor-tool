@@ -47,6 +47,16 @@ interface MaterialLine {
   cost: number;
 }
 
+interface QuoteTemplate {
+  id: string;
+  name: string;
+  trade: string;
+  materials: MaterialLine[];
+  markupPercent: number;
+  laborCost: number | null;
+  taxRate: number;
+}
+
 type Step = 1 | 2 | 3 | 4 | 5;
 
 export default function NewQuotePage() {
@@ -83,6 +93,9 @@ export default function NewQuotePage() {
   const [markupPercent, setMarkupPercent] = useState(50);
   const [taxRate, setTaxRate] = useState(0);
 
+  // Templates
+  const [templates, setTemplates] = useState<QuoteTemplate[]>([]);
+
   useEffect(() => {
     fetch("/api/customers")
       .then((r) => r.json())
@@ -92,7 +105,24 @@ export default function NewQuotePage() {
       .then((r) => r.json())
       .then(setUsage)
       .catch(() => {});
+    fetch("/api/templates")
+      .then((r) => r.json())
+      .then((data: QuoteTemplate[]) => {
+        if (Array.isArray(data)) setTemplates(data);
+      })
+      .catch(() => {});
   }, []);
+
+  function applyTemplate(t: QuoteTemplate) {
+    setTrade(t.trade as typeof trade);
+    setMaterials(t.materials);
+    const sub = t.materials.reduce((s, l) => s + l.cost, 0);
+    setSubtotal(sub);
+    setMarkupPercent(t.markupPercent);
+    setLaborCost(t.laborCost || 0);
+    setTaxRate(t.taxRate);
+    setStep(4);
+  }
 
   const totalSqft = rooms.reduce((sum, r) => sum + r.length * r.width, 0);
   const totalWallSqft = rooms.reduce(
@@ -241,35 +271,35 @@ export default function NewQuotePage() {
           <div
             key={s}
             className={`h-2 flex-1 rounded-full ${
-              s <= step ? "bg-blue-600" : "bg-gray-200"
+              s <= step ? "bg-amber-500" : "bg-[#333842]"
             }`}
           />
         ))}
       </div>
       {usage && usage.quotesRemaining !== null && !usage.isAtLimit && (
-        <p className="text-xs text-gray-500 text-center">
+        <p className="text-xs text-muted-foreground text-center">
           {usage.quotesRemaining} quote{usage.quotesRemaining !== 1 ? "s" : ""}{" "}
           remaining on {usage.planName} plan &middot;{" "}
-          <Link href="/settings/billing" className="text-blue-600 hover:underline">
+          <Link href="/settings/billing" className="text-amber-500 hover:underline">
             Upgrade
           </Link>
         </p>
       )}
 
       {error && (
-        <div className="bg-red-50 text-red-600 text-sm p-3 rounded-md">
+        <div className="bg-red-500/10 text-red-400 text-sm p-3 rounded-md">
           {error}
         </div>
       )}
 
       {/* Quote limit blocker */}
       {usage?.isAtLimit && (
-        <Card className="border-red-200 bg-red-50">
+        <Card className="border-red-500/30 bg-red-500/10">
           <CardContent className="py-8 text-center space-y-3">
-            <p className="text-red-800 font-medium text-lg">
+            <p className="text-red-400 font-medium text-lg">
               Monthly quote limit reached
             </p>
-            <p className="text-red-600 text-sm">
+            <p className="text-red-400 text-sm">
               You&apos;ve used all {usage.quotesLimit} quotes on the{" "}
               {usage.planName} plan this month. Upgrade to create unlimited
               quotes.
@@ -305,9 +335,9 @@ export default function NewQuotePage() {
                 ))}
               </SelectContent>
             </Select>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-muted-foreground">
               Or{" "}
-              <a href="/customers/new" className="text-blue-600 hover:underline">
+              <a href="/customers/new" className="text-amber-500 hover:underline">
                 add a new customer
               </a>
             </p>
@@ -316,8 +346,29 @@ export default function NewQuotePage() {
               disabled={!customerId}
               className="w-full"
             >
-              Next
+              Next — Enter Dimensions
             </Button>
+
+            {/* Templates */}
+            {templates.length > 0 && customerId && (
+              <div className="pt-2 border-t border-border">
+                <p className="text-sm text-muted-foreground mb-2">Or start from a template:</p>
+                <div className="space-y-2">
+                  {templates.map((t) => (
+                    <button
+                      key={t.id}
+                      onClick={() => applyTemplate(t)}
+                      className="w-full text-left p-3 rounded-lg border border-border hover:border-amber-500/50 hover:bg-secondary transition-colors"
+                    >
+                      <p className="font-medium text-sm">{t.name}</p>
+                      <p className="text-xs text-muted-foreground capitalize">
+                        {t.trade} &middot; {t.materials.length} items &middot; {t.markupPercent}% markup
+                      </p>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
           </CardContent>
         </Card>
       )}
@@ -386,7 +437,7 @@ export default function NewQuotePage() {
                     />
                   </div>
                 </div>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-muted-foreground">
                   {room.length * room.width} sqft floor &middot;{" "}
                   {2 * (room.length + room.width) * room.height} sqft walls
                 </p>
@@ -395,7 +446,7 @@ export default function NewQuotePage() {
             <Button variant="outline" onClick={addRoom} className="w-full">
               + Add Room
             </Button>
-            <div className="bg-blue-50 p-3 rounded-md text-sm">
+            <div className="bg-amber-500/10 p-3 rounded-md text-sm">
               <strong>Total:</strong> {totalSqft} sqft floor &middot;{" "}
               {totalWallSqft} sqft walls
             </div>
@@ -553,7 +604,7 @@ export default function NewQuotePage() {
           <CardContent className="space-y-4">
             <div className="border rounded-lg overflow-hidden">
               <table className="w-full text-sm">
-                <thead className="bg-gray-50">
+                <thead className="bg-secondary">
                   <tr>
                     <th className="text-left p-3">Item</th>
                     <th className="text-right p-3">Qty</th>
@@ -618,7 +669,7 @@ export default function NewQuotePage() {
               </div>
             </div>
 
-            <div className="bg-gray-50 p-4 rounded-lg space-y-1 text-sm">
+            <div className="bg-secondary p-4 rounded-lg space-y-1 text-sm">
               <div className="flex justify-between">
                 <span>Materials Subtotal</span>
                 <span>${subtotal.toFixed(2)}</span>
@@ -672,21 +723,21 @@ export default function NewQuotePage() {
           <CardContent className="space-y-4">
             <div className="space-y-2 text-sm">
               <div className="flex justify-between py-2 border-b">
-                <span className="text-gray-500">Customer</span>
+                <span className="text-muted-foreground">Customer</span>
                 <span className="font-medium">
                   {customers.find((c) => c.id === customerId)?.name}
                 </span>
               </div>
               <div className="flex justify-between py-2 border-b">
-                <span className="text-gray-500">Trade</span>
+                <span className="text-muted-foreground">Trade</span>
                 <span className="font-medium capitalize">{trade}</span>
               </div>
               <div className="flex justify-between py-2 border-b">
-                <span className="text-gray-500">Total Area</span>
+                <span className="text-muted-foreground">Total Area</span>
                 <span className="font-medium">{totalSqft} sqft</span>
               </div>
               <div className="flex justify-between py-2 border-b">
-                <span className="text-gray-500">Materials</span>
+                <span className="text-muted-foreground">Materials</span>
                 <span className="font-medium">
                   {materials.filter((m) => m.cost > 0).length} items
                 </span>

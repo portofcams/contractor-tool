@@ -27,7 +27,7 @@ export default async function CustomersPage() {
       {customers.length === 0 ? (
         <Card>
           <CardContent className="py-12 text-center">
-            <p className="text-gray-500 mb-4">No customers yet.</p>
+            <p className="text-muted-foreground mb-4">No customers yet.</p>
             <Link href="/customers/new">
               <Button>Add Your First Customer</Button>
             </Link>
@@ -41,11 +41,11 @@ export default async function CustomersPage() {
                 <CardContent className="flex items-center justify-between py-4">
                   <div>
                     <p className="font-medium">{customer.name}</p>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-sm text-muted-foreground">
                       {customer.email || customer.phone || "No contact info"}
                     </p>
                   </div>
-                  <div className="text-right text-sm text-gray-500">
+                  <div className="text-right text-sm text-muted-foreground">
                     {customer._count.quotes} quote
                     {customer._count.quotes !== 1 ? "s" : ""}
                   </div>

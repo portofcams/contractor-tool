@@ -93,23 +93,26 @@ Prioritized backlog. Check items off as completed. Each section maps to a develo
 - [ ] Default templates per trade type
 
 ### Customer Portal
-- [ ] Public quote view page (no login required, unique URL)
-- [ ] "Accept" / "Decline" buttons for customers
-- [ ] Digital signature capture
-- [ ] Automatic status update on accept/decline
+- [x] Public quote view page (no login required, unique URL)
+- [x] "Accept" / "Decline" buttons for customers
+- [x] Digital signature capture
+- [x] Automatic status update on accept/decline
+- [ ] Email notification to contractor on accept/decline
 
 ### Landing Page
-- [ ] Marketing page at `/` for non-authenticated users
-- [ ] Pricing table
-- [ ] Feature highlights
+- [x] Marketing page at `/landing` for non-authenticated users
+- [x] Pricing table (Free/Pro/Business)
+- [x] Feature highlights (6 cards)
+- [x] CTA → signup
 - [ ] Testimonials section
-- [ ] CTA → signup
+- [ ] Root `/` redirects auth→dashboard, unauth→landing
 
 ### Settings Page
-- [ ] Company profile (name, logo, contact)
-- [ ] Default markup percentage
-- [ ] Custom material pricing
-- [ ] Trade preferences
+- [x] Company profile (name, phone, trade)
+- [x] Default markup percentage
+- [x] Custom material pricing
+- [x] Trade preferences
+- [ ] Company logo upload
 - [ ] Notification preferences
 - [ ] Account deletion
 

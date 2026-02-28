@@ -41,12 +41,12 @@ export default async function PublicQuotePage({
   const tradeName = quote.trade.charAt(0).toUpperCase() + quote.trade.slice(1);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-[#1a1d23]">
       {/* Header */}
-      <header className="bg-blue-700 text-white">
+      <header className="bg-[#22262e] border-b border-amber-500/30">
         <div className="max-w-3xl mx-auto px-4 py-8">
-          <h1 className="text-2xl font-bold">{quote.contractor.companyName}</h1>
-          <p className="text-blue-200 mt-1">{tradeName} Services</p>
+          <h1 className="text-2xl font-bold text-[#e8e6e3]">{quote.contractor.companyName}</h1>
+          <p className="text-amber-400 mt-1">{tradeName} Services</p>
         </div>
       </header>
 
@@ -54,13 +54,13 @@ export default async function PublicQuotePage({
         {/* Quote header */}
         <div className="flex items-start justify-between">
           <div>
-            <h2 className="text-xl font-bold text-gray-900">
+            <h2 className="text-xl font-bold text-[#e8e6e3]">
               Quote {quote.quoteNumber}
             </h2>
-            <p className="text-gray-500 text-sm mt-1">
+            <p className="text-muted-foreground text-sm mt-1">
               Prepared for {quote.customer.name}
             </p>
-            <p className="text-gray-400 text-xs mt-1">
+            <p className="text-gray-500 text-xs mt-1">
               {new Date(quote.createdAt).toLocaleDateString("en-US", {
                 year: "numeric",
                 month: "long",
@@ -93,26 +93,26 @@ export default async function PublicQuotePage({
           </CardHeader>
           <CardContent>
             <table className="w-full text-sm">
-              <thead className="bg-gray-50">
+              <thead className="bg-secondary">
                 <tr>
-                  <th className="text-left p-3 font-medium text-gray-600">Item</th>
-                  <th className="text-right p-3 font-medium text-gray-600">Qty</th>
-                  <th className="text-right p-3 font-medium text-gray-600">Unit Cost</th>
-                  <th className="text-right p-3 font-medium text-gray-600">Total</th>
+                  <th className="text-left p-3 font-medium text-muted-foreground">Item</th>
+                  <th className="text-right p-3 font-medium text-muted-foreground">Qty</th>
+                  <th className="text-right p-3 font-medium text-muted-foreground">Unit Cost</th>
+                  <th className="text-right p-3 font-medium text-muted-foreground">Total</th>
                 </tr>
               </thead>
               <tbody>
                 {materials.map((m, i) => (
-                  <tr key={i} className="border-t">
+                  <tr key={i} className="border-t border-border">
                     <td className="p-3">{m.item}</td>
                     <td className="text-right p-3">
                       {m.qty} {m.unit}
                     </td>
                     <td className="text-right p-3">
-                      {m.unitCost > 0 ? `$${m.unitCost.toFixed(2)}` : "—"}
+                      {m.unitCost > 0 ? `$${m.unitCost.toFixed(2)}` : "\u2014"}
                     </td>
                     <td className="text-right p-3">
-                      {m.cost > 0 ? `$${m.cost.toFixed(2)}` : "—"}
+                      {m.cost > 0 ? `$${m.cost.toFixed(2)}` : "\u2014"}
                     </td>
                   </tr>
                 ))}
@@ -128,11 +128,11 @@ export default async function PublicQuotePage({
           </CardHeader>
           <CardContent className="space-y-2 text-sm">
             <div className="flex justify-between">
-              <span className="text-gray-600">Materials</span>
+              <span className="text-muted-foreground">Materials</span>
               <span>${quote.subtotal.toFixed(2)}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-600">
+              <span className="text-muted-foreground">
                 Markup ({quote.markupPercent}%)
               </span>
               <span>
@@ -141,13 +141,13 @@ export default async function PublicQuotePage({
             </div>
             {quote.laborCost && quote.laborCost > 0 && (
               <div className="flex justify-between">
-                <span className="text-gray-600">Labor</span>
+                <span className="text-muted-foreground">Labor</span>
                 <span>${quote.laborCost.toFixed(2)}</span>
               </div>
             )}
             {quote.taxRate > 0 && (
               <div className="flex justify-between">
-                <span className="text-gray-600">Tax ({quote.taxRate}%)</span>
+                <span className="text-muted-foreground">Tax ({quote.taxRate}%)</span>
                 <span>
                   $
                   {(
@@ -158,9 +158,9 @@ export default async function PublicQuotePage({
                 </span>
               </div>
             )}
-            <div className="flex justify-between font-bold text-lg pt-3 border-t">
+            <div className="flex justify-between font-bold text-lg pt-3 border-t border-border">
               <span>Total</span>
-              <span className="text-blue-700">
+              <span className="text-amber-500">
                 ${quote.total.toLocaleString("en-US", { minimumFractionDigits: 2 })}
               </span>
             </div>
@@ -176,13 +176,13 @@ export default async function PublicQuotePage({
 
         {/* Contact info */}
         <Card>
-          <CardContent className="pt-6 text-sm text-gray-500 text-center">
+          <CardContent className="pt-6 text-sm text-muted-foreground text-center">
             <p>
               Questions? Contact {quote.contractor.companyName}
               {quote.contractor.phone && ` at ${quote.contractor.phone}`}
               {quote.contractor.email && ` or ${quote.contractor.email}`}
             </p>
-            <p className="mt-2 text-xs text-gray-400">
+            <p className="mt-2 text-xs text-gray-500">
               This quote is valid for 30 days from the date above.
             </p>
           </CardContent>

@@ -52,7 +52,7 @@ export default function NewCustomerPage() {
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             {error && (
-              <div className="bg-red-50 text-red-600 text-sm p-3 rounded-md">
+              <div className="bg-red-500/10 text-red-400 text-sm p-3 rounded-md">
                 {error}
               </div>
             )}
