@@ -15,6 +15,7 @@ model Contractor {
   trade            String   // 'flooring', 'painting', 'drywall'
   phone            String?
   logoUrl          String?
+  defaultMarkup    Float    @default(50)
   subscriptionPlan String   @default("free") // 'free', 'pro', 'business'
   stripeCustomerId String?
   createdAt        DateTime @default(now())
@@ -62,6 +63,7 @@ model Quote {
   floorPlan    FloorPlan? @relation(fields: [floorPlanId], references: [id])
 
   quoteNumber String @unique
+  publicToken String @unique @default(uuid())
   trade       String // 'flooring', 'painting', 'drywall'
   status      String @default("draft") // 'draft', 'sent', 'accepted', 'rejected'
 
@@ -76,11 +78,12 @@ model Quote {
   total         Float
 
   // Metadata
-  pdfUrl     String?
-  sentAt     DateTime?
-  viewedAt   DateTime?
-  acceptedAt DateTime?
-  createdAt  DateTime  @default(now())
+  pdfUrl        String?
+  sentAt        DateTime?
+  viewedAt      DateTime?
+  acceptedAt    DateTime?
+  signatureData String?   // base64 PNG of customer signature
+  createdAt     DateTime  @default(now())
 }
 
 model MaterialCost {

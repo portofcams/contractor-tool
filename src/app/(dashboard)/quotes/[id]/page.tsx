@@ -147,6 +147,7 @@ export default async function QuoteDetailPage({
         quoteId={quote.id}
         currentStatus={quote.status}
         customerEmail={quote.customer.email ?? undefined}
+        publicToken={quote.publicToken}
       />
     </div>
   );

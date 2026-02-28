@@ -55,10 +55,10 @@ Prioritized backlog. Check items off as completed. Each section maps to a develo
 - [ ] Submit for review
 
 ### GitHub Repository
-- [ ] Create GitHub repo
-- [ ] Push all code
-- [ ] Add `.env` to secrets
-- [ ] Verify CI/CD pipelines run
+- [x] Create GitHub repo (https://github.com/portofcams/contractor-tool)
+- [x] Push all code (100 files, 19k lines)
+- [ ] Add `.env` to secrets (do when setting up Vultr deploy)
+- [ ] Verify CI/CD pipelines run (needs Vultr secrets first)
 - [ ] Set up branch protection on `main`
 
 ---

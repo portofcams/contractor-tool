@@ -7,11 +7,12 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
 const navItems = [
-  { href: "/", label: "Dashboard", icon: "grid" },
+  { href: "/dashboard", label: "Dashboard", icon: "grid" },
   { href: "/quotes", label: "Quotes", icon: "file-text" },
   { href: "/quotes/new", label: "New Quote", icon: "plus-circle" },
   { href: "/customers", label: "Customers", icon: "users" },
   { href: "/settings/billing", label: "Billing", icon: "credit-card" },
+  { href: "/settings", label: "Settings", icon: "settings" },
 ];
 
 const iconMap: Record<string, string> = {
@@ -23,6 +24,8 @@ const iconMap: Record<string, string> = {
     "M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2 M9 7a4 4 0 100-8 4 4 0 000 8zm14 14v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75",
   "credit-card":
     "M1 4h22v16H1V4zm0 6h22M5 14h4",
+  settings:
+    "M12 15a3 3 0 100-6 3 3 0 000 6z M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z",
 };
 
 export function Sidebar() {
@@ -31,15 +34,17 @@ export function Sidebar() {
   return (
     <aside className="hidden md:flex md:w-64 md:flex-col border-r bg-white">
       <div className="p-6">
-        <Link href="/" className="text-xl font-bold text-blue-600">
+        <Link href="/dashboard" className="text-xl font-bold text-blue-600">
           ContractorCalc
         </Link>
       </div>
       <nav className="flex-1 px-4 space-y-1">
         {navItems.map((item) => {
           const isActive =
-            item.href === "/"
-              ? pathname === "/"
+            item.href === "/dashboard"
+              ? pathname === "/dashboard"
+              : item.href === "/settings"
+              ? pathname === "/settings"
               : pathname.startsWith(item.href);
           return (
             <Link

@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 
 const navItems = [
-  { href: "/", label: "Home" },
+  { href: "/dashboard", label: "Home" },
   { href: "/quotes/new", label: "Quote" },
   { href: "/quotes", label: "Quotes" },
   { href: "/customers", label: "Clients" },
@@ -19,8 +19,8 @@ export function MobileNav() {
       <div className="flex justify-around py-2">
         {navItems.map((item) => {
           const isActive =
-            item.href === "/"
-              ? pathname === "/"
+            item.href === "/dashboard"
+              ? pathname === "/dashboard"
               : pathname.startsWith(item.href);
           return (
             <Link

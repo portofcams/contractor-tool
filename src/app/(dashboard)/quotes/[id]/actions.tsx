@@ -16,15 +16,18 @@ export function QuoteActions({
   quoteId,
   currentStatus,
   customerEmail,
+  publicToken,
 }: {
   quoteId: string;
   currentStatus: string;
   customerEmail?: string;
+  publicToken: string;
 }) {
   const router = useRouter();
   const [loading, setLoading] = useState("");
   const [emailDialogOpen, setEmailDialogOpen] = useState(false);
   const [emailTo, setEmailTo] = useState(customerEmail || "");
+  const [copied, setCopied] = useState(false);
   const [emailResult, setEmailResult] = useState<{
     success?: boolean;
     message?: string;
@@ -101,6 +104,20 @@ export function QuoteActions({
         {/* PDF Download — always available */}
         <Button variant="outline" onClick={downloadPDF} disabled={!!loading}>
           {loading === "pdf" ? "Generating..." : "Download PDF"}
+        </Button>
+
+        {/* Copy Public Link */}
+        <Button
+          variant="outline"
+          onClick={() => {
+            const url = `${window.location.origin}/quote/${publicToken}`;
+            navigator.clipboard.writeText(url);
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000);
+          }}
+          disabled={!!loading}
+        >
+          {copied ? "Copied!" : "Copy Link"}
         </Button>
 
         {/* Email Quote — always available */}
