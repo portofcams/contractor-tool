@@ -37,9 +37,18 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
+COPY --from=builder /app/node_modules/prisma ./node_modules/prisma
 
+# Copy seed script dependencies
+COPY --from=builder /app/node_modules/tsx ./node_modules/tsx
+COPY --from=builder /app/node_modules/esbuild ./node_modules/esbuild
+
+# Entrypoint script (runs migrations then starts app)
+COPY docker-entrypoint.sh ./
+USER root
+RUN chmod +x docker-entrypoint.sh
 USER nextjs
 
 EXPOSE 3002
 
-CMD ["node", "server.js"]
+CMD ["./docker-entrypoint.sh"]
