@@ -1,0 +1,64 @@
+# ─────────────────────────────────────────────────────────────
+# GitHub Actions — iOS Build Check
+# ─────────────────────────────────────────────────────────────
+#
+# Trigger: Push to `main` or any PR that changes iOS-related files
+#
+# What it does:
+#   1. Build the static export for Capacitor
+#   2. Sync web assets into the iOS project
+#   3. Verify the Xcode build compiles
+#
+# Note: Actual App Store submission is done manually from Xcode
+# or via Fastlane (TODO: add Fastlane lane in future session)
+#
+# Required GitHub Secrets:
+#   (None for build check — signing requires Apple certs)
+# ─────────────────────────────────────────────────────────────
+
+name: iOS Build Check
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/**"
+      - "capacitor.config.ts"
+      - "ios/**"
+      - "package.json"
+  pull_request:
+    paths:
+      - "src/**"
+      - "capacitor.config.ts"
+      - "ios/**"
+
+jobs:
+  ios-build-check:
+    name: Verify iOS Build
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+
+      - run: npm ci
+
+      - name: Build static export for iOS
+        run: npm run build:ios
+
+      - name: Sync Capacitor
+        run: npx cap sync ios
+
+      - name: Build iOS (no signing)
+        run: |
+          cd ios/App
+          xcodebuild build \
+            -workspace App.xcworkspace \
+            -scheme App \
+            -destination 'platform=iOS Simulator,name=iPhone 16' \
+            -configuration Debug \
+            CODE_SIGNING_ALLOWED=NO \
+            | tail -20

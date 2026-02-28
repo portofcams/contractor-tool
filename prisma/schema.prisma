@@ -1,0 +1,95 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Contractor {
+  id               String   @id @default(uuid())
+  email            String   @unique
+  passwordHash     String
+  companyName      String
+  trade            String   // 'flooring', 'painting', 'drywall'
+  phone            String?
+  logoUrl          String?
+  subscriptionPlan String   @default("free") // 'free', 'pro', 'business'
+  stripeCustomerId String?
+  createdAt        DateTime @default(now())
+
+  customers Customer[]
+  quotes    Quote[]
+  materials MaterialCost[]
+}
+
+model Customer {
+  id           String     @id @default(uuid())
+  contractorId String
+  contractor   Contractor @relation(fields: [contractorId], references: [id])
+  name         String
+  email        String?
+  phone        String?
+  address      String?
+  notes        String?
+  createdAt    DateTime   @default(now())
+
+  quotes     Quote[]
+  floorPlans FloorPlan[]
+}
+
+model FloorPlan {
+  id             String   @id @default(uuid())
+  customerId     String
+  customer       Customer @relation(fields: [customerId], references: [id])
+  fileUrl        String
+  fileType       String   // 'pdf', 'image'
+  totalSquareFeet Float?
+  roomsData      Json?    // Store room dimensions as JSON
+  createdAt      DateTime @default(now())
+
+  quotes Quote[]
+}
+
+model Quote {
+  id           String     @id @default(uuid())
+  contractorId String
+  contractor   Contractor @relation(fields: [contractorId], references: [id])
+  customerId   String
+  customer     Customer   @relation(fields: [customerId], references: [id])
+  floorPlanId  String?
+  floorPlan    FloorPlan? @relation(fields: [floorPlanId], references: [id])
+
+  quoteNumber String @unique
+  trade       String // 'flooring', 'painting', 'drywall'
+  status      String @default("draft") // 'draft', 'sent', 'accepted', 'rejected'
+
+  // Materials calculated (stored as JSON)
+  materials Json // [{item: 'Hardwood', qty: 500, unit: 'sqft', cost: 2500}]
+
+  // Pricing
+  subtotal      Float
+  laborCost     Float?
+  markupPercent Float  @default(50)
+  taxRate       Float  @default(0)
+  total         Float
+
+  // Metadata
+  pdfUrl     String?
+  sentAt     DateTime?
+  viewedAt   DateTime?
+  acceptedAt DateTime?
+  createdAt  DateTime  @default(now())
+}
+
+model MaterialCost {
+  id           String  @id @default(uuid())
+  contractorId String? // null = default pricing
+  contractor   Contractor? @relation(fields: [contractorId], references: [id])
+  category     String  // 'flooring', 'paint', 'drywall'
+  materialType String  // 'hardwood', 'interior_paint', 'drywall_sheet'
+  unit         String  // 'sqft', 'gallon', 'sheet'
+  costPerUnit  Float
+  updatedAt    DateTime @updatedAt
+}
