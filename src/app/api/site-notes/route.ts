@@ -10,28 +10,77 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 
+/** Max note content length */
+const MAX_CONTENT_LENGTH = 10000;
+
+/** Validate that customerId/quoteId belong to this contractor */
+async function verifyOwnership(
+  contractorId: string,
+  customerId?: string | null,
+  quoteId?: string | null
+): Promise<string | null> {
+  if (customerId) {
+    const customer = await prisma.customer.findFirst({
+      where: { id: customerId, contractorId },
+    });
+    if (!customer) return "Customer not found";
+  }
+  if (quoteId) {
+    const quote = await prisma.quote.findFirst({
+      where: { id: quoteId, contractorId },
+    });
+    if (!quote) return "Quote not found";
+  }
+  return null;
+}
+
 export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const { customerId, quoteId, content } = await req.json();
+  let body: Record<string, unknown>;
+  try {
+    body = await req.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+  }
+
+  const { customerId, quoteId, content } = body as {
+    customerId?: string;
+    quoteId?: string;
+    content?: string;
+  };
 
   if (!content || typeof content !== "string" || content.trim().length === 0) {
     return NextResponse.json({ error: "Content is required" }, { status: 400 });
   }
 
-  const note = await prisma.siteNote.create({
-    data: {
-      contractorId: session.user.id,
-      customerId: customerId || null,
-      quoteId: quoteId || null,
-      content: content.trim(),
-    },
-  });
+  if (content.length > MAX_CONTENT_LENGTH) {
+    return NextResponse.json({ error: `Content too long (max ${MAX_CONTENT_LENGTH} chars)` }, { status: 400 });
+  }
 
-  return NextResponse.json(note, { status: 201 });
+  // IDOR: verify ownership of customerId/quoteId
+  const ownershipError = await verifyOwnership(session.user.id, customerId, quoteId);
+  if (ownershipError) {
+    return NextResponse.json({ error: ownershipError }, { status: 404 });
+  }
+
+  try {
+    const note = await prisma.siteNote.create({
+      data: {
+        contractorId: session.user.id,
+        customerId: customerId || null,
+        quoteId: quoteId || null,
+        content: content.trim(),
+      },
+    });
+
+    return NextResponse.json(note, { status: 201 });
+  } catch {
+    return NextResponse.json({ error: "Failed to save note" }, { status: 500 });
+  }
 }
 
 export async function GET(req: NextRequest) {
@@ -48,13 +97,17 @@ export async function GET(req: NextRequest) {
   if (customerId) where.customerId = customerId;
   if (quoteId) where.quoteId = quoteId;
 
-  const notes = await prisma.siteNote.findMany({
-    where,
-    orderBy: { createdAt: "desc" },
-    take: 100,
-  });
+  try {
+    const notes = await prisma.siteNote.findMany({
+      where,
+      orderBy: { createdAt: "desc" },
+      take: 100,
+    });
 
-  return NextResponse.json(notes);
+    return NextResponse.json(notes);
+  } catch {
+    return NextResponse.json({ error: "Failed to fetch notes" }, { status: 500 });
+  }
 }
 
 export async function PATCH(req: NextRequest) {
@@ -63,10 +116,21 @@ export async function PATCH(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const { id, content } = await req.json();
+  let body: Record<string, unknown>;
+  try {
+    body = await req.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+  }
+
+  const { id, content } = body as { id?: string; content?: string };
 
   if (!id || !content) {
     return NextResponse.json({ error: "id and content required" }, { status: 400 });
+  }
+
+  if (content.length > MAX_CONTENT_LENGTH) {
+    return NextResponse.json({ error: `Content too long (max ${MAX_CONTENT_LENGTH} chars)` }, { status: 400 });
   }
 
   // Verify ownership
@@ -78,12 +142,16 @@ export async function PATCH(req: NextRequest) {
     return NextResponse.json({ error: "Note not found" }, { status: 404 });
   }
 
-  const updated = await prisma.siteNote.update({
-    where: { id },
-    data: { content: content.trim() },
-  });
+  try {
+    const updated = await prisma.siteNote.update({
+      where: { id },
+      data: { content: content.trim() },
+    });
 
-  return NextResponse.json(updated);
+    return NextResponse.json(updated);
+  } catch {
+    return NextResponse.json({ error: "Failed to update note" }, { status: 500 });
+  }
 }
 
 export async function DELETE(req: NextRequest) {
@@ -92,7 +160,14 @@ export async function DELETE(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const { id } = await req.json();
+  let body: Record<string, unknown>;
+  try {
+    body = await req.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+  }
+
+  const { id } = body as { id?: string };
 
   if (!id) {
     return NextResponse.json({ error: "id required" }, { status: 400 });
@@ -106,7 +181,10 @@ export async function DELETE(req: NextRequest) {
     return NextResponse.json({ error: "Note not found" }, { status: 404 });
   }
 
-  await prisma.siteNote.delete({ where: { id } });
-
-  return NextResponse.json({ success: true });
+  try {
+    await prisma.siteNote.delete({ where: { id } });
+    return NextResponse.json({ success: true });
+  } catch {
+    return NextResponse.json({ error: "Failed to delete note" }, { status: 500 });
+  }
 }

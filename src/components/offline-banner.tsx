@@ -72,14 +72,17 @@ export function OfflineBanner() {
 
   return (
     <div
+      role="status"
+      aria-live="polite"
+      aria-atomic="true"
       className={`text-white text-center text-sm py-2 px-4 ${
-        isOffline ? "bg-blue-600" : syncResult ? "bg-green-600" : "bg-blue-600/80"
+        isOffline ? "bg-blue-700" : syncResult ? "bg-green-700" : "bg-blue-700/90"
       }`}
     >
       <span className="inline-flex items-center gap-2">
         {isOffline ? (
           <>
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
               <path strokeLinecap="round" strokeLinejoin="round" d="M18.364 5.636a9 9 0 010 12.728M15.536 8.464a5 5 0 010 7.072M12 12h.01" />
             </svg>
             You&apos;re offline — quotes will be saved locally and synced when back online.
@@ -91,7 +94,7 @@ export function OfflineBanner() {
           </>
         ) : syncResult ? (
           <>
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
               <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
             </svg>
             {syncResult}
@@ -104,6 +107,8 @@ export function OfflineBanner() {
                 <button
                   onClick={triggerSync}
                   disabled={syncing}
+                  aria-label={syncing ? "Syncing pending items" : `Sync ${pendingCount} pending item${pendingCount !== 1 ? "s" : ""} now`}
+                  aria-busy={syncing}
                   className="bg-white/20 px-2 py-0.5 rounded text-xs hover:bg-white/30"
                 >
                   {syncing ? "Syncing..." : "Sync now"}

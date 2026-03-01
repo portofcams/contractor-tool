@@ -447,10 +447,18 @@ export default function NewQuotePage() {
   return (
     <div className="max-w-2xl mx-auto space-y-6">
       {/* Progress indicator — 4 steps now */}
-      <div className="flex items-center gap-2">
+      <div
+        className="flex items-center gap-2"
+        role="progressbar"
+        aria-label={`Quote creation progress: step ${step} of 4`}
+        aria-valuenow={step}
+        aria-valuemin={1}
+        aria-valuemax={4}
+      >
         {[1, 2, 3, 4].map((s) => (
           <div
             key={s}
+            aria-hidden="true"
             className={`h-2 flex-1 rounded-full ${
               s <= step ? "bg-blue-500" : "bg-[#334155]"
             }`}
@@ -468,8 +476,8 @@ export default function NewQuotePage() {
       )}
 
       {isOffline && (
-        <div className="bg-blue-500/10 text-blue-400 text-sm p-3 rounded-md flex items-center gap-2">
-          <svg className="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <div role="status" aria-live="polite" className="bg-blue-500/10 text-blue-400 text-sm p-3 rounded-md flex items-center gap-2">
+          <svg className="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
             <path strokeLinecap="round" strokeLinejoin="round" d="M18.364 5.636a9 9 0 010 12.728M15.536 8.464a5 5 0 010 7.072M12 12h.01" />
           </svg>
           Offline mode — your quote will be saved locally and synced when you reconnect.
@@ -477,14 +485,14 @@ export default function NewQuotePage() {
       )}
 
       {error && (
-        <div className="bg-red-500/10 text-red-400 text-sm p-3 rounded-md">
+        <div role="alert" className="bg-red-500/10 text-red-400 text-sm p-3 rounded-md">
           {error}
         </div>
       )}
 
       {/* Quote limit blocker */}
       {usage?.isAtLimit && (
-        <Card className="border-red-500/30 bg-red-500/10">
+        <Card className="border-red-500/30 bg-red-500/10" role="alert">
           <CardContent className="py-8 text-center space-y-3">
             <p className="text-red-400 font-medium text-lg">
               Monthly quote limit reached
@@ -652,12 +660,13 @@ export default function NewQuotePage() {
                 <Button
                   onClick={startLidarScan}
                   disabled={scanning}
+                  aria-busy={scanning}
                   className="w-full"
                 >
                   {scanning ? "Scanning..." : "Scan Room with LiDAR"}
                 </Button>
                 {scanError && (
-                  <p className="text-xs text-red-400">{scanError}</p>
+                  <p role="alert" className="text-xs text-red-400">{scanError}</p>
                 )}
               </div>
             )}
@@ -668,6 +677,7 @@ export default function NewQuotePage() {
                   <Input
                     value={room.name}
                     onChange={(e) => updateRoom(i, "name", e.target.value)}
+                    aria-label={`Room ${i + 1} name`}
                     className="font-medium max-w-48"
                   />
                   {rooms.length > 1 && (
@@ -675,6 +685,7 @@ export default function NewQuotePage() {
                       variant="ghost"
                       size="sm"
                       onClick={() => removeRoom(i)}
+                      aria-label={`Remove ${room.name || `Room ${i + 1}`}`}
                       className="text-red-500"
                     >
                       Remove
@@ -683,8 +694,9 @@ export default function NewQuotePage() {
                 </div>
                 <div className="grid grid-cols-3 gap-3">
                   <div>
-                    <Label className="text-xs">Length (ft)</Label>
+                    <Label htmlFor={`room-${i}-length`} className="text-xs">Length (ft)</Label>
                     <Input
+                      id={`room-${i}-length`}
                       type="number"
                       min={0}
                       value={room.length || ""}
@@ -695,8 +707,9 @@ export default function NewQuotePage() {
                     />
                   </div>
                   <div>
-                    <Label className="text-xs">Width (ft)</Label>
+                    <Label htmlFor={`room-${i}-width`} className="text-xs">Width (ft)</Label>
                     <Input
+                      id={`room-${i}-width`}
                       type="number"
                       min={0}
                       value={room.width || ""}
@@ -707,8 +720,9 @@ export default function NewQuotePage() {
                     />
                   </div>
                   <div>
-                    <Label className="text-xs">Height (ft)</Label>
+                    <Label htmlFor={`room-${i}-height`} className="text-xs">Height (ft)</Label>
                     <Input
+                      id={`room-${i}-height`}
                       type="number"
                       min={0}
                       value={room.height || ""}
