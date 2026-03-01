@@ -45,6 +45,9 @@ COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
 
+# Copy server external packages not traced by standalone build
+COPY --from=builder /app/node_modules/bcryptjs ./node_modules/bcryptjs
+
 USER nextjs
 
 EXPOSE 3002
