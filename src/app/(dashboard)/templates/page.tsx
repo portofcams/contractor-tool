@@ -3,6 +3,7 @@ import { prisma } from "@/lib/db";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { TemplateActions } from "./actions";
+import { LoadDefaults } from "./load-defaults";
 
 interface MaterialLine {
   item: string;
@@ -30,9 +31,10 @@ export default async function TemplatesPage() {
         <Card>
           <CardContent className="py-12 text-center">
             <p className="text-muted-foreground mb-2">No templates yet.</p>
-            <p className="text-sm text-muted-foreground">
-              Save a quote as a template from any quote detail page to reuse it later.
+            <p className="text-sm text-muted-foreground mb-4">
+              Save a quote as a template from any quote detail page, or load starter templates for your trade.
             </p>
+            <LoadDefaults />
           </CardContent>
         </Card>
       ) : (

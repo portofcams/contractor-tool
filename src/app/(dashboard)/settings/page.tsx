@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { SettingsForm } from "./settings-form";
 import { MaterialPricing } from "./material-pricing";
 import { DeleteAccount } from "./delete-account";
+import { NotificationPrefs } from "./notification-prefs";
 
 export default async function SettingsPage() {
   const contractor = await getContractor();
@@ -68,6 +69,18 @@ export default async function SettingsPage() {
               unit: m.unit,
               costPerUnit: m.costPerUnit,
             }))}
+          />
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Notifications</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <NotificationPrefs
+            notifyOnAccept={fullContractor.notifyOnAccept}
+            notifyOnDecline={fullContractor.notifyOnDecline}
           />
         </CardContent>
       </Card>

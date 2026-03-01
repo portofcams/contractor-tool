@@ -42,7 +42,13 @@ export async function POST(req: Request) {
     );
   }
 
-  const ext = file.name.split(".").pop() || "png";
+  const extMap: Record<string, string> = {
+    "image/jpeg": "jpg",
+    "image/png": "png",
+    "image/webp": "webp",
+    "image/svg+xml": "svg",
+  };
+  const ext = extMap[file.type] || "png";
   const fileName = `${randomUUID()}.${ext}`;
   const uploadDir = path.join(process.cwd(), "public", "uploads", "logos");
   await mkdir(uploadDir, { recursive: true });

@@ -15,11 +15,17 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { renderQuotePDF } from "@/lib/pdf/render";
 import { sendQuoteEmail } from "@/lib/email";
+import { rateLimit } from "@/lib/rate-limit";
+
+const limiter = rateLimit({ interval: 60_000, limit: 10 });
 
 export async function POST(
   req: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const limited = limiter.check(req);
+  if (limited) return limited;
+
   const { id } = await params;
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) {
@@ -42,6 +48,12 @@ export async function POST(
     recipientEmail = (body as { email?: string }).email || quote.customer.email || "";
   } catch {
     recipientEmail = quote.customer.email || "";
+  }
+
+  // Basic email format validation
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (recipientEmail && !emailRegex.test(recipientEmail)) {
+    return NextResponse.json({ error: "Invalid email address format" }, { status: 400 });
   }
 
   if (!recipientEmail) {

@@ -26,19 +26,31 @@ export async function POST(req: Request) {
 
     const { name, trade, materials, markupPercent, laborCost, taxRate } = body;
 
-    if (!name || !trade || !materials) {
-      return NextResponse.json({ error: "Name, trade, and materials are required" }, { status: 400 });
+    if (!name || typeof name !== "string" || name.length > 200) {
+      return NextResponse.json({ error: "Valid name is required (max 200 chars)" }, { status: 400 });
     }
+
+    if (!trade || !["flooring", "painting", "drywall"].includes(trade)) {
+      return NextResponse.json({ error: "Valid trade is required" }, { status: 400 });
+    }
+
+    if (!Array.isArray(materials) || materials.length === 0 || materials.length > 100) {
+      return NextResponse.json({ error: "Materials array is required (max 100 items)" }, { status: 400 });
+    }
+
+    const safeMarkup = typeof markupPercent === "number" ? Math.max(0, Math.min(500, markupPercent)) : 50;
+    const safeLabor = typeof laborCost === "number" ? Math.max(0, laborCost) : null;
+    const safeTax = typeof taxRate === "number" ? Math.max(0, Math.min(100, taxRate)) : 0;
 
     const template = await prisma.quoteTemplate.create({
       data: {
         contractorId: contractor.id,
-        name,
+        name: name.slice(0, 200),
         trade,
         materials,
-        markupPercent: markupPercent ?? 50,
-        laborCost: laborCost || null,
-        taxRate: taxRate ?? 0,
+        markupPercent: safeMarkup,
+        laborCost: safeLabor,
+        taxRate: safeTax,
       },
     });
 

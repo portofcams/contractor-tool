@@ -23,6 +23,16 @@ const resend = process.env.RESEND_API_KEY
 // Use Resend's test domain in development
 const FROM_ADDRESS = process.env.RESEND_FROM_EMAIL || "onboarding@resend.dev";
 
+/** Escape HTML special characters to prevent XSS in email templates */
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
 interface SendQuoteEmailParams {
   to: string;
   customerName: string;
@@ -44,8 +54,13 @@ export async function sendQuoteEmail(params: SendQuoteEmailParams): Promise<{ su
     pdfBuffer,
   } = params;
 
-  const subject = `Quote ${quoteNumber} from ${companyName}`;
-  const tradeName = trade.charAt(0).toUpperCase() + trade.slice(1);
+  const safeCompany = escapeHtml(companyName);
+  const safeCustomer = escapeHtml(customerName);
+  const safeTrade = escapeHtml(trade);
+  const safeQuoteNum = escapeHtml(quoteNumber);
+
+  const subject = `Quote ${safeQuoteNum} from ${safeCompany}`;
+  const tradeName = safeTrade.charAt(0).toUpperCase() + safeTrade.slice(1);
   const totalFormatted = total.toLocaleString("en-US", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
@@ -67,7 +82,7 @@ export async function sendQuoteEmail(params: SendQuoteEmailParams): Promise<{ su
           <!-- Header -->
           <tr>
             <td style="background-color:#1e40af; padding:30px 40px;">
-              <h1 style="margin:0; color:#ffffff; font-size:24px; font-weight:700;">${companyName}</h1>
+              <h1 style="margin:0; color:#ffffff; font-size:24px; font-weight:700;">${safeCompany}</h1>
               <p style="margin:4px 0 0; color:#93c5fd; font-size:14px;">${tradeName} Services</p>
             </td>
           </tr>
@@ -76,7 +91,7 @@ export async function sendQuoteEmail(params: SendQuoteEmailParams): Promise<{ su
           <tr>
             <td style="padding:40px;">
               <p style="margin:0 0 20px; color:#111827; font-size:16px; line-height:1.6;">
-                Hi ${customerName},
+                Hi ${safeCustomer},
               </p>
               <p style="margin:0 0 20px; color:#374151; font-size:14px; line-height:1.6;">
                 Thank you for the opportunity to provide a quote for your ${tradeName.toLowerCase()} project. Please find the details attached.
@@ -92,7 +107,7 @@ export async function sendQuoteEmail(params: SendQuoteEmailParams): Promise<{ su
                         <td style="color:#6b7280; font-size:12px; text-transform:uppercase; letter-spacing:1px; padding-bottom:8px;" align="right">Total</td>
                       </tr>
                       <tr>
-                        <td style="color:#111827; font-size:18px; font-weight:700;">${quoteNumber}</td>
+                        <td style="color:#111827; font-size:18px; font-weight:700;">${safeQuoteNum}</td>
                         <td style="color:#1e40af; font-size:24px; font-weight:700;" align="right">$${totalFormatted}</td>
                       </tr>
                     </table>
@@ -110,7 +125,7 @@ export async function sendQuoteEmail(params: SendQuoteEmailParams): Promise<{ su
 
               <p style="margin:24px 0 0; color:#111827; font-size:14px; line-height:1.6;">
                 Best regards,<br>
-                <strong>${companyName}</strong>
+                <strong>${safeCompany}</strong>
               </p>
             </td>
           </tr>
@@ -150,7 +165,7 @@ export async function sendQuoteEmail(params: SendQuoteEmailParams): Promise<{ su
       html,
       attachments: [
         {
-          filename: `${quoteNumber}.pdf`,
+          filename: `${safeQuoteNum}.pdf`,
           content: pdfBuffer,
         },
       ],
@@ -176,6 +191,10 @@ interface QuoteNotificationParams {
 
 export async function sendQuoteNotification(params: QuoteNotificationParams): Promise<{ success: boolean; error?: string }> {
   const { to, companyName, customerName, quoteNumber, total, action } = params;
+
+  const safeCompany = escapeHtml(companyName);
+  const safeCustomer = escapeHtml(customerName);
+  const safeQuoteNum = escapeHtml(quoteNumber);
 
   const isAccepted = action === "accepted";
   const subject = `Quote ${quoteNumber} ${action} by ${customerName}`;
@@ -213,10 +232,10 @@ export async function sendQuoteNotification(params: QuoteNotificationParams): Pr
           <tr>
             <td style="padding:40px;">
               <p style="margin:0 0 20px; color:#e8e6e3; font-size:16px; line-height:1.6;">
-                Hi ${companyName},
+                Hi ${safeCompany},
               </p>
               <p style="margin:0 0 24px; color:#9ca3af; font-size:14px; line-height:1.6;">
-                ${customerName} has responded to your quote.
+                ${safeCustomer} has responded to your quote.
               </p>
 
               <!-- Status box -->
@@ -227,7 +246,7 @@ export async function sendQuoteNotification(params: QuoteNotificationParams): Pr
                       ${statusText}
                     </p>
                     <p style="margin:0; color:#6b7280; font-size:14px;">
-                      Quote ${quoteNumber} &mdash; $${totalFormatted}
+                      Quote ${safeQuoteNum} &mdash; $${totalFormatted}
                     </p>
                   </td>
                 </tr>

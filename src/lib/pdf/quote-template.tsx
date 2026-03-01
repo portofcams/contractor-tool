@@ -75,8 +75,8 @@ const colors = {
 
 const styles = StyleSheet.create({
   page: {
-    padding: 40,
-    fontSize: 10,
+    padding: 32,
+    fontSize: 11,
     fontFamily: "Helvetica",
     color: colors.dark,
   },
@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
     borderBottomColor: colors.primary,
   },
   companyName: {
-    fontSize: 22,
+    fontSize: 24,
     fontFamily: "Helvetica-Bold",
     color: colors.primary,
   },
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
     width: "48%",
   },
   infoLabel: {
-    fontSize: 8,
+    fontSize: 9,
     fontFamily: "Helvetica-Bold",
     color: colors.primary,
     textTransform: "uppercase",
@@ -149,19 +149,19 @@ const styles = StyleSheet.create({
   tableHeader: {
     flexDirection: "row",
     backgroundColor: colors.primary,
-    paddingVertical: 8,
+    paddingVertical: 10,
     paddingHorizontal: 10,
   },
   tableHeaderText: {
     fontFamily: "Helvetica-Bold",
-    fontSize: 9,
+    fontSize: 10,
     color: colors.white,
     textTransform: "uppercase",
     letterSpacing: 0.5,
   },
   tableRow: {
     flexDirection: "row",
-    paddingVertical: 8,
+    paddingVertical: 10,
     paddingHorizontal: 10,
     borderBottomWidth: 1,
     borderBottomColor: colors.border,
@@ -190,29 +190,29 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   summaryLabel: {
-    fontSize: 10,
+    fontSize: 11,
     color: colors.gray,
   },
   summaryValue: {
-    fontSize: 10,
+    fontSize: 11,
     fontFamily: "Helvetica-Bold",
   },
   totalRow: {
     flexDirection: "row",
     justifyContent: "space-between",
-    paddingVertical: 8,
+    paddingVertical: 10,
     paddingHorizontal: 10,
     marginTop: 4,
     borderTopWidth: 2,
     borderTopColor: colors.primary,
   },
   totalLabel: {
-    fontSize: 14,
+    fontSize: 16,
     fontFamily: "Helvetica-Bold",
     color: colors.dark,
   },
   totalValue: {
-    fontSize: 14,
+    fontSize: 16,
     fontFamily: "Helvetica-Bold",
     color: colors.primary,
   },
@@ -231,7 +231,7 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
   footerText: {
-    fontSize: 8,
+    fontSize: 9,
     lineHeight: 1.6,
     color: colors.gray,
   },

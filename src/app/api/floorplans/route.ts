@@ -78,8 +78,14 @@ export async function POST(req: Request) {
       );
     }
 
-    // Save file
-    const ext = file.name.split(".").pop() || "bin";
+    // Save file with safe extension
+    const extMap: Record<string, string> = {
+      "image/jpeg": "jpg",
+      "image/png": "png",
+      "image/webp": "webp",
+      "application/pdf": "pdf",
+    };
+    const ext = extMap[file.type] || "bin";
     const fileName = `${randomUUID()}.${ext}`;
     const uploadDir = path.join(process.cwd(), "public", "uploads");
     await mkdir(uploadDir, { recursive: true });

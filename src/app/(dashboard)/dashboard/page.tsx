@@ -43,6 +43,30 @@ export default async function DashboardPage() {
   const winRate =
     totalQuotes > 0 ? Math.round((acceptedQuotes / totalQuotes) * 100) : 0;
 
+  // Top customers by accepted revenue
+  const topCustomers = await prisma.customer.findMany({
+    where: { contractorId: contractor.id },
+    select: {
+      id: true,
+      name: true,
+      quotes: {
+        where: { status: "accepted" },
+        select: { total: true },
+      },
+    },
+  });
+
+  const topCustomersByRevenue = topCustomers
+    .map((c) => ({
+      id: c.id,
+      name: c.name,
+      revenue: c.quotes.reduce((sum, q) => sum + q.total, 0),
+      quoteCount: c.quotes.length,
+    }))
+    .filter((c) => c.revenue > 0)
+    .sort((a, b) => b.revenue - a.revenue)
+    .slice(0, 5);
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -177,6 +201,40 @@ export default async function DashboardPage() {
           )}
         </CardContent>
       </Card>
+      {/* Top Customers */}
+      {topCustomersByRevenue.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Top Customers by Revenue</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              {topCustomersByRevenue.map((customer, i) => (
+                <Link
+                  key={customer.id}
+                  href={`/customers/${customer.id}`}
+                  className="flex items-center justify-between p-3 rounded-lg hover:bg-secondary transition-colors"
+                >
+                  <div className="flex items-center gap-3">
+                    <span className="w-6 h-6 rounded-full bg-amber-500/15 text-amber-500 text-xs font-bold flex items-center justify-center">
+                      {i + 1}
+                    </span>
+                    <div>
+                      <p className="font-medium">{customer.name}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {customer.quoteCount} accepted quote{customer.quoteCount !== 1 ? "s" : ""}
+                      </p>
+                    </div>
+                  </div>
+                  <span className="font-medium text-amber-500">
+                    ${customer.revenue.toLocaleString()}
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }

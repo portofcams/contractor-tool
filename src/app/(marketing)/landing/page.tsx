@@ -158,11 +158,12 @@ export default function LandingPage() {
             ].map((t) => (
               <Card key={t.name} className="border-[#333842] bg-[#22262e]">
                 <CardContent className="pt-6">
-                  <div className="flex gap-1 mb-3">
+                  <div className="flex gap-1 mb-3" role="img" aria-label="5 out of 5 stars">
                     {[...Array(5)].map((_, i) => (
                       <svg
                         key={i}
                         className="w-4 h-4 text-amber-500"
+                        aria-hidden="true"
                         fill="currentColor"
                         viewBox="0 0 20 20"
                       >

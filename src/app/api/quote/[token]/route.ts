@@ -10,11 +10,17 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { sendQuoteNotification } from "@/lib/email";
+import { rateLimit } from "@/lib/rate-limit";
+
+const limiter = rateLimit({ interval: 60_000, limit: 10 });
 
 export async function POST(
   req: Request,
   { params }: { params: Promise<{ token: string }> }
 ) {
+  const limited = limiter.check(req);
+  if (limited) return limited;
+
   const { token } = await params;
   const body = await req.json();
   const { action, signatureData } = body;
@@ -23,11 +29,16 @@ export async function POST(
     return NextResponse.json({ error: "Invalid action" }, { status: 400 });
   }
 
+  // Validate signatureData size (max 500KB base64)
+  if (signatureData && (typeof signatureData !== "string" || signatureData.length > 500_000)) {
+    return NextResponse.json({ error: "Signature data too large" }, { status: 400 });
+  }
+
   const quote = await prisma.quote.findUnique({
     where: { publicToken: token },
     include: {
       customer: { select: { name: true } },
-      contractor: { select: { email: true, companyName: true } },
+      contractor: { select: { email: true, companyName: true, notifyOnAccept: true, notifyOnDecline: true } },
     },
   });
 
@@ -60,15 +71,21 @@ export async function POST(
     });
   }
 
-  // Send email notification to contractor (fire and forget)
-  sendQuoteNotification({
-    to: quote.contractor.email,
-    companyName: quote.contractor.companyName,
-    customerName: quote.customer.name,
-    quoteNumber: quote.quoteNumber,
-    total: quote.total,
-    action: action === "accept" ? "accepted" : "declined",
-  }).catch((err) => console.error("Failed to send notification:", err));
+  // Send email notification to contractor (respecting preferences)
+  const shouldNotify =
+    (action === "accept" && quote.contractor.notifyOnAccept) ||
+    (action === "decline" && quote.contractor.notifyOnDecline);
+
+  if (shouldNotify) {
+    sendQuoteNotification({
+      to: quote.contractor.email,
+      companyName: quote.contractor.companyName,
+      customerName: quote.customer.name,
+      quoteNumber: quote.quoteNumber,
+      total: quote.total,
+      action: action === "accept" ? "accepted" : "declined",
+    }).catch((err) => console.error("Failed to send notification:", err));
+  }
 
   return NextResponse.json({ status: newStatus });
 }

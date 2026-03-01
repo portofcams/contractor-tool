@@ -64,10 +64,10 @@ export default async function QuoteDetailPage({
           <table className="w-full text-sm">
             <thead className="bg-secondary">
               <tr>
-                <th className="text-left p-3">Item</th>
-                <th className="text-right p-3">Qty</th>
-                <th className="text-right p-3">Unit Cost</th>
-                <th className="text-right p-3">Total</th>
+                <th className="text-left p-3" scope="col">Item</th>
+                <th className="text-right p-3" scope="col">Qty</th>
+                <th className="text-right p-3" scope="col">Unit Cost</th>
+                <th className="text-right p-3" scope="col">Total</th>
               </tr>
             </thead>
             <tbody>
@@ -142,6 +142,53 @@ export default async function QuoteDetailPage({
           {quote.customer.address && <p>{quote.customer.address}</p>}
         </CardContent>
       </Card>
+
+      {/* Timeline */}
+      {(quote.sentAt || quote.viewedAt || quote.acceptedAt) && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Activity</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3 text-sm">
+              <div className="flex items-center gap-3">
+                <div className="w-2 h-2 rounded-full bg-muted-foreground" />
+                <span className="text-muted-foreground">Created</span>
+                <span className="ml-auto text-muted-foreground">
+                  {new Date(quote.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" })}
+                </span>
+              </div>
+              {quote.sentAt && (
+                <div className="flex items-center gap-3">
+                  <div className="w-2 h-2 rounded-full bg-blue-400" />
+                  <span>Sent to customer</span>
+                  <span className="ml-auto text-muted-foreground">
+                    {new Date(quote.sentAt).toLocaleDateString("en-US", { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" })}
+                  </span>
+                </div>
+              )}
+              {quote.viewedAt && (
+                <div className="flex items-center gap-3">
+                  <div className="w-2 h-2 rounded-full bg-amber-400" />
+                  <span>Viewed by customer</span>
+                  <span className="ml-auto text-muted-foreground">
+                    {new Date(quote.viewedAt).toLocaleDateString("en-US", { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" })}
+                  </span>
+                </div>
+              )}
+              {quote.acceptedAt && (
+                <div className="flex items-center gap-3">
+                  <div className="w-2 h-2 rounded-full bg-green-400" />
+                  <span>Accepted</span>
+                  <span className="ml-auto text-muted-foreground">
+                    {new Date(quote.acceptedAt).toLocaleDateString("en-US", { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" })}
+                  </span>
+                </div>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       <QuoteActions
         quoteId={quote.id}

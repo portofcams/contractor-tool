@@ -1,0 +1,2 @@
+ALTER TABLE "Contractor" ADD COLUMN "notifyOnAccept" BOOLEAN NOT NULL DEFAULT true;
+ALTER TABLE "Contractor" ADD COLUMN "notifyOnDecline" BOOLEAN NOT NULL DEFAULT true;

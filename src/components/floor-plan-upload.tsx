@@ -79,11 +79,20 @@ export function FloorPlanUpload({ customerId, onUpload }: FloorPlanUploadProps) 
   return (
     <div className="space-y-2">
       <div
+        role="button"
+        tabIndex={0}
+        aria-label="Upload floor plan: drag and drop or click to browse"
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
         onClick={() => fileInputRef.current?.click()}
-        className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors ${
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            fileInputRef.current?.click();
+          }
+        }}
+        className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500 ${
           isDragging
             ? "border-amber-500 bg-amber-500/10"
             : "border-border hover:border-amber-500/50 hover:bg-secondary"
@@ -95,6 +104,7 @@ export function FloorPlanUpload({ customerId, onUpload }: FloorPlanUploadProps) 
           accept="image/jpeg,image/png,image/webp,application/pdf"
           onChange={handleFileChange}
           className="hidden"
+          aria-label="Select floor plan file to upload"
         />
         <div className="space-y-2">
           <svg

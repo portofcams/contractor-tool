@@ -37,9 +37,19 @@ export async function PATCH(
 
   const body = await req.json();
 
+  // Only allow updating safe fields
+  const allowedFields: Record<string, unknown> = {};
+  if (typeof body.status === "string" && ["draft", "sent"].includes(body.status)) {
+    allowedFields.status = body.status;
+  }
+
+  if (Object.keys(allowedFields).length === 0) {
+    return NextResponse.json({ error: "No valid fields to update" }, { status: 400 });
+  }
+
   const quote = await prisma.quote.updateMany({
     where: { id, contractorId: session.user.id },
-    data: body,
+    data: allowedFields,
   });
 
   if (quote.count === 0) {

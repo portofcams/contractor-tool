@@ -43,3 +43,36 @@ export async function PUT(req: Request) {
 
   return NextResponse.json({ success: true });
 }
+
+/**
+ * PATCH /api/settings
+ *
+ * Partial update for notification preferences.
+ */
+export async function PATCH(req: Request) {
+  const session = await getServerSession(authOptions);
+  if (!session?.user?.id) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const body = await req.json();
+  const data: Record<string, boolean> = {};
+
+  if (typeof body.notifyOnAccept === "boolean") {
+    data.notifyOnAccept = body.notifyOnAccept;
+  }
+  if (typeof body.notifyOnDecline === "boolean") {
+    data.notifyOnDecline = body.notifyOnDecline;
+  }
+
+  if (Object.keys(data).length === 0) {
+    return NextResponse.json({ error: "No valid fields to update" }, { status: 400 });
+  }
+
+  await prisma.contractor.update({
+    where: { id: session.user.id },
+    data,
+  });
+
+  return NextResponse.json({ success: true });
+}

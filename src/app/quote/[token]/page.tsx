@@ -95,10 +95,10 @@ export default async function PublicQuotePage({
             <table className="w-full text-sm">
               <thead className="bg-secondary">
                 <tr>
-                  <th className="text-left p-3 font-medium text-muted-foreground">Item</th>
-                  <th className="text-right p-3 font-medium text-muted-foreground">Qty</th>
-                  <th className="text-right p-3 font-medium text-muted-foreground">Unit Cost</th>
-                  <th className="text-right p-3 font-medium text-muted-foreground">Total</th>
+                  <th className="text-left p-3 font-medium text-muted-foreground" scope="col">Item</th>
+                  <th className="text-right p-3 font-medium text-muted-foreground" scope="col">Qty</th>
+                  <th className="text-right p-3 font-medium text-muted-foreground" scope="col">Unit Cost</th>
+                  <th className="text-right p-3 font-medium text-muted-foreground" scope="col">Total</th>
                 </tr>
               </thead>
               <tbody>

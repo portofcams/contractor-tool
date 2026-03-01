@@ -2,6 +2,9 @@ import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/db";
 import { z } from "zod";
+import { rateLimit } from "@/lib/rate-limit";
+
+const limiter = rateLimit({ interval: 60_000, limit: 5 });
 
 const signupSchema = z.object({
   email: z.string().email(),
@@ -12,6 +15,9 @@ const signupSchema = z.object({
 });
 
 export async function POST(req: Request) {
+  const limited = limiter.check(req);
+  if (limited) return limited;
+
   try {
     const body = await req.json();
     const data = signupSchema.parse(body);
