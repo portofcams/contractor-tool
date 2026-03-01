@@ -46,19 +46,19 @@ interface DashboardStats {
 
 const STATUS_COLORS: Record<string, string> = {
   Accepted: "#22c55e",
-  Sent: "#f59e0b",
+  Sent: "#3b82f6",
   Draft: "#6b7280",
   Rejected: "#ef4444",
 };
 
-const TRADE_COLORS = ["#f59e0b", "#3b82f6", "#a855f7", "#22c55e"];
+const TRADE_COLORS = ["#3b82f6", "#8b5cf6", "#22c55e", "#f97316"];
 
 const tooltipStyle = {
   contentStyle: {
-    backgroundColor: "#22262e",
-    border: "1px solid #333842",
+    backgroundColor: "#1e293b",
+    border: "1px solid #334155",
     borderRadius: "8px",
-    color: "#e8e6e3",
+    color: "#f1f5f9",
     fontSize: "13px",
   },
   labelStyle: { color: "#9ca3af" },
@@ -80,7 +80,7 @@ export function DashboardCharts() {
         {[1, 2, 3, 4].map((i) => (
           <Card key={i}>
             <CardContent className="h-64 flex items-center justify-center">
-              <div className="w-8 h-8 border-2 border-amber-500 border-t-transparent rounded-full animate-spin" />
+              <div className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
             </CardContent>
           </Card>
         ))}
@@ -104,11 +104,11 @@ export function DashboardCharts() {
         <CardContent>
           <ResponsiveContainer width="100%" height={220}>
             <BarChart data={stats.monthly}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#333842" />
+              <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
               <XAxis dataKey="month" stroke="#9ca3af" fontSize={12} />
               <YAxis stroke="#9ca3af" fontSize={12} allowDecimals={false} />
               <Tooltip {...tooltipStyle} />
-              <Bar dataKey="quotes" fill="#f59e0b" radius={[4, 4, 0, 0]} name="Quotes" />
+              <Bar dataKey="quotes" fill="#3b82f6" radius={[4, 4, 0, 0]} name="Quotes" />
             </BarChart>
           </ResponsiveContainer>
         </CardContent>
@@ -122,7 +122,7 @@ export function DashboardCharts() {
         <CardContent>
           <ResponsiveContainer width="100%" height={220}>
             <AreaChart data={stats.monthly}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#333842" />
+              <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
               <XAxis dataKey="month" stroke="#9ca3af" fontSize={12} />
               <YAxis
                 stroke="#9ca3af"
@@ -136,14 +136,14 @@ export function DashboardCharts() {
               />
               <defs>
                 <linearGradient id="revenueGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#f59e0b" stopOpacity={0.3} />
-                  <stop offset="95%" stopColor="#f59e0b" stopOpacity={0} />
+                  <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3} />
+                  <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
                 </linearGradient>
               </defs>
               <Area
                 type="monotone"
                 dataKey="revenue"
-                stroke="#f59e0b"
+                stroke="#3b82f6"
                 fill="url(#revenueGradient)"
                 strokeWidth={2}
                 name="Revenue"
@@ -197,7 +197,7 @@ export function DashboardCharts() {
           <CardContent>
             <ResponsiveContainer width="100%" height={220}>
               <BarChart data={stats.tradeBreakdown} layout="vertical">
-                <CartesianGrid strokeDasharray="3 3" stroke="#333842" />
+                <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
                 <XAxis
                   type="number"
                   stroke="#9ca3af"

@@ -84,7 +84,7 @@ export function CustomerActions({
     if (!ctx) return;
     const pos = getCanvasPos(e);
     ctx.lineTo(pos.x, pos.y);
-    ctx.strokeStyle = "#f59e0b";
+    ctx.strokeStyle = "#3b82f6";
     ctx.lineWidth = 2;
     ctx.lineCap = "round";
     ctx.stroke();
@@ -184,7 +184,7 @@ export function CustomerActions({
             <p className="text-sm font-medium text-gray-300">
               Sign below to accept this quote:
             </p>
-            <div className="border border-border rounded-lg overflow-hidden bg-[#2a2f38]">
+            <div className="border border-border rounded-lg overflow-hidden bg-[#1e293b]">
               <canvas
                 ref={canvasRef}
                 width={500}

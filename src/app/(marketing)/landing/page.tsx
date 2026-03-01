@@ -47,11 +47,11 @@ const planOrder = ["free", "pro", "business"] as const;
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-[#1a1d23]">
+    <div className="min-h-screen bg-[#0f172a]">
       {/* Nav */}
-      <nav className="border-b border-[#333842]">
+      <nav className="border-b border-[#334155]">
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-          <span className="text-xl font-bold text-amber-500">ContractorCalc</span>
+          <span className="text-xl font-bold text-blue-500">ContractorCalc</span>
           <div className="flex items-center gap-3">
             <Link href="/login">
               <Button variant="ghost" className="text-gray-400 hover:text-gray-200">Sign In</Button>
@@ -69,12 +69,12 @@ export default function LandingPage() {
           <Badge variant="secondary" className="mb-4">
             Built for contractors
           </Badge>
-          <h1 className="text-4xl md:text-5xl font-bold text-[#e8e6e3] leading-tight">
+          <h1 className="text-4xl md:text-5xl font-bold text-[#f1f5f9] leading-tight">
             Calculate materials.
             <br />
             Send quotes.
             <br />
-            <span className="text-amber-500">Close jobs faster.</span>
+            <span className="text-blue-500">Close jobs faster.</span>
           </h1>
           <p className="mt-6 text-lg text-gray-400 max-w-xl mx-auto">
             Enter room dimensions, pick your materials, and generate a
@@ -94,18 +94,18 @@ export default function LandingPage() {
       </section>
 
       {/* Features */}
-      <section className="py-16 px-4 bg-[#15171c]">
+      <section className="py-16 px-4 bg-[#020617]">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-center text-[#e8e6e3] mb-12">
+          <h2 className="text-3xl font-bold text-center text-[#f1f5f9] mb-12">
             Everything you need to quote faster
           </h2>
           <div className="grid md:grid-cols-3 gap-6">
             {features.map((f) => (
-              <Card key={f.title} className="border-[#333842] bg-[#22262e]">
+              <Card key={f.title} className="border-[#334155] bg-[#1e293b]">
                 <CardContent className="pt-6">
-                  <div className="w-10 h-10 bg-amber-500/15 rounded-lg flex items-center justify-center mb-4">
+                  <div className="w-10 h-10 bg-blue-500/15 rounded-lg flex items-center justify-center mb-4">
                     <svg
-                      className="w-5 h-5 text-amber-500"
+                      className="w-5 h-5 text-blue-500"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -118,7 +118,7 @@ export default function LandingPage() {
                       />
                     </svg>
                   </div>
-                  <h3 className="font-semibold text-[#e8e6e3] mb-2">{f.title}</h3>
+                  <h3 className="font-semibold text-[#f1f5f9] mb-2">{f.title}</h3>
                   <p className="text-sm text-gray-400 leading-relaxed">
                     {f.description}
                   </p>
@@ -132,7 +132,7 @@ export default function LandingPage() {
       {/* Testimonials */}
       <section className="py-16 px-4">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-center text-[#e8e6e3] mb-12">
+          <h2 className="text-3xl font-bold text-center text-[#f1f5f9] mb-12">
             Trusted by contractors
           </h2>
           <div className="grid md:grid-cols-3 gap-6">
@@ -156,13 +156,13 @@ export default function LandingPage() {
                   "My close rate went up 30% once I started sending quotes the same day. The customer portal with e-signatures sealed the deal.",
               },
             ].map((t) => (
-              <Card key={t.name} className="border-[#333842] bg-[#22262e]">
+              <Card key={t.name} className="border-[#334155] bg-[#1e293b]">
                 <CardContent className="pt-6">
                   <div className="flex gap-1 mb-3" role="img" aria-label="5 out of 5 stars">
                     {[...Array(5)].map((_, i) => (
                       <svg
                         key={i}
-                        className="w-4 h-4 text-amber-500"
+                        className="w-4 h-4 text-blue-500"
                         aria-hidden="true"
                         fill="currentColor"
                         viewBox="0 0 20 20"
@@ -175,7 +175,7 @@ export default function LandingPage() {
                     &ldquo;{t.quote}&rdquo;
                   </p>
                   <div>
-                    <p className="text-sm font-semibold text-[#e8e6e3]">{t.name}</p>
+                    <p className="text-sm font-semibold text-[#f1f5f9]">{t.name}</p>
                     <p className="text-xs text-gray-500">{t.trade}</p>
                   </div>
                 </CardContent>
@@ -188,7 +188,7 @@ export default function LandingPage() {
       {/* Pricing */}
       <section className="py-16 px-4" id="pricing">
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-3xl font-bold text-center text-[#e8e6e3] mb-4">
+          <h2 className="text-3xl font-bold text-center text-[#f1f5f9] mb-4">
             Simple pricing
           </h2>
           <p className="text-center text-gray-400 mb-12">
@@ -201,17 +201,17 @@ export default function LandingPage() {
               return (
                 <Card
                   key={planId}
-                  className={isPro ? "border-amber-500 border-2 relative bg-[#22262e]" : "border-[#333842] bg-[#22262e]"}
+                  className={isPro ? "border-blue-500 border-2 relative bg-[#1e293b]" : "border-[#334155] bg-[#1e293b]"}
                 >
                   {isPro && (
                     <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                      <Badge className="bg-amber-500 text-[#1a1d23]">Most Popular</Badge>
+                      <Badge className="bg-blue-500 text-[#0f172a]">Most Popular</Badge>
                     </div>
                   )}
                   <CardHeader className="text-center pb-2">
-                    <CardTitle className="text-lg text-[#e8e6e3]">{plan.name}</CardTitle>
+                    <CardTitle className="text-lg text-[#f1f5f9]">{plan.name}</CardTitle>
                     <div className="mt-2">
-                      <span className="text-4xl font-bold text-[#e8e6e3]">
+                      <span className="text-4xl font-bold text-[#f1f5f9]">
                         ${plan.price}
                       </span>
                       {plan.price > 0 && (
@@ -265,19 +265,19 @@ export default function LandingPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-20 px-4 bg-amber-600">
+      <section className="py-20 px-4 bg-blue-600">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-3xl font-bold text-white mb-4">
             Stop guessing. Start quoting.
           </h2>
-          <p className="text-amber-100 mb-8">
+          <p className="text-blue-100 mb-8">
             Join contractors who save hours every week with accurate material
             calculations and professional quotes.
           </p>
           <Link href="/signup">
             <Button
               size="lg"
-              className="bg-[#1a1d23] text-amber-500 hover:bg-[#22262e] text-base px-8"
+              className="bg-[#0f172a] text-blue-500 hover:bg-[#1e293b] text-base px-8"
             >
               Create Your Free Account
             </Button>
@@ -286,7 +286,7 @@ export default function LandingPage() {
       </section>
 
       {/* Footer */}
-      <footer className="py-8 px-4 border-t border-[#333842]">
+      <footer className="py-8 px-4 border-t border-[#334155]">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
           <span className="text-sm text-gray-500">
             &copy; {new Date().getFullYear()} ContractorCalc

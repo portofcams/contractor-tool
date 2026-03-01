@@ -64,8 +64,8 @@ export interface QuotePDFData {
 // ── Styles ──
 
 const colors = {
-  primary: "#d97706",
-  primaryLight: "#fef3c7",
+  primary: "#2563eb",
+  primaryLight: "#dbeafe",
   dark: "#111827",
   gray: "#6b7280",
   lightGray: "#f3f4f6",

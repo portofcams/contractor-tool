@@ -41,12 +41,12 @@ export default async function PublicQuotePage({
   const tradeName = quote.trade.charAt(0).toUpperCase() + quote.trade.slice(1);
 
   return (
-    <div className="min-h-screen bg-[#1a1d23]">
+    <div className="min-h-screen bg-[#0f172a]">
       {/* Header */}
-      <header className="bg-[#22262e] border-b border-amber-500/30">
+      <header className="bg-[#1e293b] border-b border-blue-500/30">
         <div className="max-w-3xl mx-auto px-4 py-8">
-          <h1 className="text-2xl font-bold text-[#e8e6e3]">{quote.contractor.companyName}</h1>
-          <p className="text-amber-400 mt-1">{tradeName} Services</p>
+          <h1 className="text-2xl font-bold text-[#f1f5f9]">{quote.contractor.companyName}</h1>
+          <p className="text-blue-400 mt-1">{tradeName} Services</p>
         </div>
       </header>
 
@@ -54,7 +54,7 @@ export default async function PublicQuotePage({
         {/* Quote header */}
         <div className="flex items-start justify-between">
           <div>
-            <h2 className="text-xl font-bold text-[#e8e6e3]">
+            <h2 className="text-xl font-bold text-[#f1f5f9]">
               Quote {quote.quoteNumber}
             </h2>
             <p className="text-muted-foreground text-sm mt-1">
@@ -160,7 +160,7 @@ export default async function PublicQuotePage({
             )}
             <div className="flex justify-between font-bold text-lg pt-3 border-t border-border">
               <span>Total</span>
-              <span className="text-amber-500">
+              <span className="text-blue-500">
                 ${quote.total.toLocaleString("en-US", { minimumFractionDigits: 2 })}
               </span>
             </div>

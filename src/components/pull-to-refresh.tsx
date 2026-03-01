@@ -68,7 +68,7 @@ export function PullToRefresh({ children }: PullToRefreshProps) {
       {(pulling || refreshing) && (
         <div className="flex justify-center py-3">
           <div
-            className={`w-5 h-5 border-2 border-amber-500 border-t-transparent rounded-full ${
+            className={`w-5 h-5 border-2 border-blue-500 border-t-transparent rounded-full ${
               refreshing ? "animate-spin" : ""
             }`}
           />

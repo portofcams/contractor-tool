@@ -74,7 +74,7 @@ export default function SignupPage() {
     <div className="min-h-screen flex items-center justify-center bg-background px-4">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold text-amber-500">ContractorCalc</CardTitle>
+          <CardTitle className="text-2xl font-bold text-blue-500">ContractorCalc</CardTitle>
           <CardDescription>Create your account — 14-day free trial</CardDescription>
         </CardHeader>
         <CardContent>
@@ -142,7 +142,7 @@ export default function SignupPage() {
           </form>
           <p className="text-center text-sm text-muted-foreground mt-4">
             Already have an account?{" "}
-            <Link href="/login" className="text-amber-500 hover:underline">
+            <Link href="/login" className="text-blue-500 hover:underline">
               Sign in
             </Link>
           </p>

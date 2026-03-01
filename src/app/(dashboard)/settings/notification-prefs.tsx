@@ -72,7 +72,7 @@ export function NotificationPrefs({ notifyOnAccept, notifyOnDecline }: Notificat
           disabled={saving}
           onClick={() => handleToggle("notifyOnAccept", !accept)}
           className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors ${
-            accept ? "bg-amber-500" : "bg-secondary"
+            accept ? "bg-blue-500" : "bg-secondary"
           }`}
         >
           <span
@@ -95,7 +95,7 @@ export function NotificationPrefs({ notifyOnAccept, notifyOnDecline }: Notificat
           disabled={saving}
           onClick={() => handleToggle("notifyOnDecline", !decline)}
           className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors ${
-            decline ? "bg-amber-500" : "bg-secondary"
+            decline ? "bg-blue-500" : "bg-secondary"
           }`}
         >
           <span

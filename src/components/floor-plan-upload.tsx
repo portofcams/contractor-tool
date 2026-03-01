@@ -92,10 +92,10 @@ export function FloorPlanUpload({ customerId, onUpload }: FloorPlanUploadProps) 
             fileInputRef.current?.click();
           }
         }}
-        className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500 ${
+        className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500 ${
           isDragging
-            ? "border-amber-500 bg-amber-500/10"
-            : "border-border hover:border-amber-500/50 hover:bg-secondary"
+            ? "border-blue-500 bg-blue-500/10"
+            : "border-border hover:border-blue-500/50 hover:bg-secondary"
         }`}
       >
         <input
@@ -121,11 +121,11 @@ export function FloorPlanUpload({ customerId, onUpload }: FloorPlanUploadProps) 
             />
           </svg>
           {uploading ? (
-            <p className="text-sm text-amber-500">Uploading...</p>
+            <p className="text-sm text-blue-500">Uploading...</p>
           ) : (
             <>
               <p className="text-sm font-medium">
-                Drop a floor plan here or <span className="text-amber-500">browse</span>
+                Drop a floor plan here or <span className="text-blue-500">browse</span>
               </p>
               <p className="text-xs text-muted-foreground">
                 JPEG, PNG, WebP, or PDF up to 10MB
@@ -159,7 +159,7 @@ export function FloorPlanGallery({ floorPlans }: FloorPlanPreviewProps) {
           href={fp.fileUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="block border border-border rounded-lg overflow-hidden hover:border-amber-500/50 transition-colors"
+          className="block border border-border rounded-lg overflow-hidden hover:border-blue-500/50 transition-colors"
         >
           {fp.fileType === "image" ? (
             <img

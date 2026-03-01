@@ -79,14 +79,14 @@ export default async function BillingPage({
               </span>
             </div>
             {remaining !== null && (
-              <div className="w-full bg-[#333842] rounded-full h-2">
+              <div className="w-full bg-[#334155] rounded-full h-2">
                 <div
                   className={`h-2 rounded-full transition-all ${
                     remaining === 0
                       ? "bg-red-500"
                       : remaining <= 2
                       ? "bg-yellow-500"
-                      : "bg-amber-500"
+                      : "bg-blue-500"
                   }`}
                   style={{
                     width: `${Math.min(
@@ -135,7 +135,7 @@ export default async function BillingPage({
               key={plan.id}
               className={
                 plan.id === currentPlan.id
-                  ? "border-amber-500 border-2"
+                  ? "border-blue-500 border-2"
                   : ""
               }
             >
@@ -157,7 +157,7 @@ export default async function BillingPage({
                   )}
                 </div>
                 {plan.price > 0 && (
-                  <p className="text-xs text-amber-500">14-day free trial</p>
+                  <p className="text-xs text-blue-500">14-day free trial</p>
                 )}
                 <ul className="space-y-1 text-sm">
                   {plan.features.map((f) => (

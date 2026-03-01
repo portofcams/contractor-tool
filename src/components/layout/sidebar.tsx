@@ -34,9 +34,9 @@ export function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="hidden md:flex md:w-64 md:flex-col border-r border-[#333842] bg-[#15171c]">
+    <aside className="hidden md:flex md:w-64 md:flex-col border-r border-[#334155] bg-[#020617]">
       <div className="p-6">
-        <Link href="/dashboard" className="text-xl font-bold text-amber-500">
+        <Link href="/dashboard" className="text-xl font-bold text-blue-500">
           ContractorCalc
         </Link>
       </div>
@@ -54,10 +54,10 @@ export function Sidebar() {
               href={item.href}
               aria-current={isActive ? "page" : undefined}
               className={cn(
-                "flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500",
+                "flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500",
                 isActive
-                  ? "bg-amber-500/15 text-amber-500"
-                  : "text-gray-400 hover:bg-[#2a2f38] hover:text-gray-200"
+                  ? "bg-blue-500/15 text-blue-500"
+                  : "text-gray-400 hover:bg-[#1e293b] hover:text-gray-200"
               )}
             >
               <svg
@@ -79,7 +79,7 @@ export function Sidebar() {
           );
         })}
       </nav>
-      <div className="p-4 border-t border-[#333842]">
+      <div className="p-4 border-t border-[#334155]">
         <Button
           variant="ghost"
           className="w-full justify-start text-gray-500 hover:text-gray-300"

@@ -39,14 +39,14 @@ export function UsageIndicator({
   if (compact) {
     return (
       <div className="flex items-center gap-2 text-sm">
-        <div className="flex-1 bg-[#333842] rounded-full h-1.5">
+        <div className="flex-1 bg-[#334155] rounded-full h-1.5">
           <div
             className={`h-1.5 rounded-full ${
               isBlocked
                 ? "bg-red-500"
                 : isWarning
                 ? "bg-yellow-500"
-                : "bg-amber-500"
+                : "bg-blue-500"
             }`}
             style={{ width: `${percentage}%` }}
           />
@@ -81,14 +81,14 @@ export function UsageIndicator({
             {quotesThisMonth}/{quotesLimit}
           </span>
         </div>
-        <div className="w-full bg-[#333842] rounded-full h-2">
+        <div className="w-full bg-[#334155] rounded-full h-2">
           <div
             className={`h-2 rounded-full transition-all ${
               isBlocked
                 ? "bg-red-500"
                 : isWarning
                 ? "bg-yellow-500"
-                : "bg-amber-500"
+                : "bg-blue-500"
             }`}
             style={{ width: `${percentage}%` }}
           />

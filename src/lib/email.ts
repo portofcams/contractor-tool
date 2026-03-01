@@ -215,23 +215,23 @@ export async function sendQuoteNotification(params: QuoteNotificationParams): Pr
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-<body style="margin:0; padding:0; background-color:#1a1d23; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
-  <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#1a1d23; padding:40px 20px;">
+<body style="margin:0; padding:0; background-color:#0f172a; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#0f172a; padding:40px 20px;">
     <tr>
       <td align="center">
-        <table width="600" cellpadding="0" cellspacing="0" style="background-color:#22262e; border-radius:8px; overflow:hidden;">
+        <table width="600" cellpadding="0" cellspacing="0" style="background-color:#1e293b; border-radius:8px; overflow:hidden;">
 
           <!-- Header -->
           <tr>
-            <td style="background-color:#22262e; padding:30px 40px; border-bottom:1px solid #333842;">
-              <h1 style="margin:0; color:#f59e0b; font-size:20px; font-weight:700;">ContractorCalc</h1>
+            <td style="background-color:#1e293b; padding:30px 40px; border-bottom:1px solid #334155;">
+              <h1 style="margin:0; color:#3b82f6; font-size:20px; font-weight:700;">ContractorCalc</h1>
             </td>
           </tr>
 
           <!-- Body -->
           <tr>
             <td style="padding:40px;">
-              <p style="margin:0 0 20px; color:#e8e6e3; font-size:16px; line-height:1.6;">
+              <p style="margin:0 0 20px; color:#f1f5f9; font-size:16px; line-height:1.6;">
                 Hi ${safeCompany},
               </p>
               <p style="margin:0 0 24px; color:#9ca3af; font-size:14px; line-height:1.6;">
@@ -262,7 +262,7 @@ export async function sendQuoteNotification(params: QuoteNotificationParams): Pr
 
           <!-- Footer -->
           <tr>
-            <td style="background-color:#15171c; padding:20px 40px; border-top:1px solid #333842;">
+            <td style="background-color:#020617; padding:20px 40px; border-top:1px solid #334155;">
               <p style="margin:0; color:#6b7280; font-size:12px; text-align:center;">
                 ContractorCalc &mdash; Professional quotes in 30 seconds
               </p>

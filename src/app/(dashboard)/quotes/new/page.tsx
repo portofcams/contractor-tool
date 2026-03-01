@@ -271,7 +271,7 @@ export default function NewQuotePage() {
           <div
             key={s}
             className={`h-2 flex-1 rounded-full ${
-              s <= step ? "bg-amber-500" : "bg-[#333842]"
+              s <= step ? "bg-blue-500" : "bg-[#334155]"
             }`}
           />
         ))}
@@ -280,7 +280,7 @@ export default function NewQuotePage() {
         <p className="text-xs text-muted-foreground text-center">
           {usage.quotesRemaining} quote{usage.quotesRemaining !== 1 ? "s" : ""}{" "}
           remaining on {usage.planName} plan &middot;{" "}
-          <Link href="/settings/billing" className="text-amber-500 hover:underline">
+          <Link href="/settings/billing" className="text-blue-500 hover:underline">
             Upgrade
           </Link>
         </p>
@@ -337,7 +337,7 @@ export default function NewQuotePage() {
             </Select>
             <p className="text-sm text-muted-foreground">
               Or{" "}
-              <a href="/customers/new" className="text-amber-500 hover:underline">
+              <a href="/customers/new" className="text-blue-500 hover:underline">
                 add a new customer
               </a>
             </p>
@@ -358,7 +358,7 @@ export default function NewQuotePage() {
                     <button
                       key={t.id}
                       onClick={() => applyTemplate(t)}
-                      className="w-full text-left p-3 rounded-lg border border-border hover:border-amber-500/50 hover:bg-secondary transition-colors"
+                      className="w-full text-left p-3 rounded-lg border border-border hover:border-blue-500/50 hover:bg-secondary transition-colors"
                     >
                       <p className="font-medium text-sm">{t.name}</p>
                       <p className="text-xs text-muted-foreground capitalize">
@@ -446,7 +446,7 @@ export default function NewQuotePage() {
             <Button variant="outline" onClick={addRoom} className="w-full">
               + Add Room
             </Button>
-            <div className="bg-amber-500/10 p-3 rounded-md text-sm">
+            <div className="bg-blue-500/10 p-3 rounded-md text-sm">
               <strong>Total:</strong> {totalSqft} sqft floor &middot;{" "}
               {totalWallSqft} sqft walls
             </div>

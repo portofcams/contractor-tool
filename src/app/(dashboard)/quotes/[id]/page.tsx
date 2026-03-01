@@ -169,7 +169,7 @@ export default async function QuoteDetailPage({
               )}
               {quote.viewedAt && (
                 <div className="flex items-center gap-3">
-                  <div className="w-2 h-2 rounded-full bg-amber-400" />
+                  <div className="w-2 h-2 rounded-full bg-yellow-400" />
                   <span>Viewed by customer</span>
                   <span className="ml-auto text-muted-foreground">
                     {new Date(quote.viewedAt).toLocaleDateString("en-US", { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" })}

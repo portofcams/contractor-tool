@@ -151,7 +151,7 @@ export default async function DashboardPage() {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle>Recent Quotes</CardTitle>
-          <Link href="/quotes" className="text-sm text-amber-500 hover:underline">
+          <Link href="/quotes" className="text-sm text-blue-500 hover:underline">
             View all
           </Link>
         </CardHeader>
@@ -159,7 +159,7 @@ export default async function DashboardPage() {
           {recentQuotes.length === 0 ? (
             <p className="text-muted-foreground text-center py-8">
               No quotes yet.{" "}
-              <Link href="/quotes/new" className="text-amber-500 hover:underline">
+              <Link href="/quotes/new" className="text-blue-500 hover:underline">
                 Create your first quote
               </Link>
             </p>
@@ -216,7 +216,7 @@ export default async function DashboardPage() {
                   className="flex items-center justify-between p-3 rounded-lg hover:bg-secondary transition-colors"
                 >
                   <div className="flex items-center gap-3">
-                    <span className="w-6 h-6 rounded-full bg-amber-500/15 text-amber-500 text-xs font-bold flex items-center justify-center">
+                    <span className="w-6 h-6 rounded-full bg-blue-500/15 text-blue-500 text-xs font-bold flex items-center justify-center">
                       {i + 1}
                     </span>
                     <div>
@@ -226,7 +226,7 @@ export default async function DashboardPage() {
                       </p>
                     </div>
                   </div>
-                  <span className="font-medium text-amber-500">
+                  <span className="font-medium text-blue-500">
                     ${customer.revenue.toLocaleString()}
                   </span>
                 </Link>
