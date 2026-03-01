@@ -16,6 +16,8 @@ model Contractor {
   phone            String?
   logoUrl          String?
   defaultMarkup    Float    @default(50)
+  defaultTaxRate   Float    @default(0)
+  defaultLaborCost Float    @default(0)
   notifyOnAccept   Boolean  @default(true)
   notifyOnDecline  Boolean  @default(true)
   subscriptionPlan String   @default("free") // 'free', 'pro', 'business'

@@ -45,5 +45,11 @@ export async function GET() {
     quotesLimit: plan.quotesPerMonth,
     quotesRemaining: getQuotesRemaining(contractor.subscriptionPlan, quotesThisMonth),
     isAtLimit: isAtQuoteLimit(contractor.subscriptionPlan, quotesThisMonth),
+    defaults: {
+      trade: contractor.trade,
+      markup: contractor.defaultMarkup,
+      taxRate: contractor.defaultTaxRate,
+      laborCost: contractor.defaultLaborCost,
+    },
   });
 }

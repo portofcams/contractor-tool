@@ -43,6 +43,8 @@ export default async function SettingsPage() {
               phone: fullContractor.phone || "",
               trade: fullContractor.trade,
               defaultMarkup: fullContractor.defaultMarkup,
+              defaultTaxRate: fullContractor.defaultTaxRate,
+              defaultLaborCost: fullContractor.defaultLaborCost,
               logoUrl: fullContractor.logoUrl || "",
             }}
           />

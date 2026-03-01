@@ -13,6 +13,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import Link from "next/link";
 import {
   calculateFlooring,
@@ -31,6 +37,12 @@ interface UsageInfo {
   quotesLimit: number | null;
   quotesRemaining: number | null;
   isAtLimit: boolean;
+  defaults?: {
+    trade: string;
+    markup: number;
+    taxRate: number;
+    laborCost: number;
+  };
 }
 
 interface Customer {
@@ -57,21 +69,32 @@ interface QuoteTemplate {
   taxRate: number;
 }
 
-type Step = 1 | 2 | 3 | 4 | 5;
+type Step = 1 | 2 | 3 | 4;
 
 export default function NewQuotePage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const preselectedCustomerId = searchParams.get("customerId");
+  const duplicateFrom = searchParams.get("duplicate");
 
   const [step, setStep] = useState<Step>(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [usage, setUsage] = useState<UsageInfo | null>(null);
+  const [defaultsApplied, setDefaultsApplied] = useState(false);
 
   // Step 1: Customer
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [customerId, setCustomerId] = useState(preselectedCustomerId || "");
+
+  // Inline customer add
+  const [addCustomerOpen, setAddCustomerOpen] = useState(false);
+  const [newCustomerName, setNewCustomerName] = useState("");
+  const [newCustomerEmail, setNewCustomerEmail] = useState("");
+  const [newCustomerPhone, setNewCustomerPhone] = useState("");
+  const [newCustomerAddress, setNewCustomerAddress] = useState("");
+  const [addingCustomer, setAddingCustomer] = useState(false);
+  const [addCustomerError, setAddCustomerError] = useState("");
 
   // Step 2: Dimensions
   const [rooms, setRooms] = useState([
@@ -86,7 +109,7 @@ export default function NewQuotePage() {
   const [paintCoats, setPaintCoats] = useState(2);
   const [sheetSize, setSheetSize] = useState<SheetSize>("4x8");
 
-  // Step 4: Materials calculated
+  // Step 4: Materials + pricing (merged review + confirm)
   const [materials, setMaterials] = useState<MaterialLine[]>([]);
   const [subtotal, setSubtotal] = useState(0);
   const [laborCost, setLaborCost] = useState(0);
@@ -103,7 +126,17 @@ export default function NewQuotePage() {
       .catch(() => {});
     fetch("/api/usage")
       .then((r) => r.json())
-      .then(setUsage)
+      .then((data: UsageInfo) => {
+        setUsage(data);
+        // Apply contractor defaults (only once, not on template/duplicate)
+        if (data.defaults && !defaultsApplied && !duplicateFrom) {
+          setTrade(data.defaults.trade as typeof trade);
+          setMarkupPercent(data.defaults.markup);
+          setTaxRate(data.defaults.taxRate);
+          setLaborCost(data.defaults.laborCost);
+          setDefaultsApplied(true);
+        }
+      })
       .catch(() => {});
     fetch("/api/templates")
       .then((r) => r.json())
@@ -111,7 +144,65 @@ export default function NewQuotePage() {
         if (Array.isArray(data)) setTemplates(data);
       })
       .catch(() => {});
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Handle duplicate quote data from query params
+  useEffect(() => {
+    if (!duplicateFrom) return;
+    try {
+      const data = JSON.parse(decodeURIComponent(duplicateFrom));
+      if (data.trade) setTrade(data.trade as typeof trade);
+      if (data.materials) {
+        setMaterials(data.materials);
+        const sub = data.materials.reduce((s: number, l: MaterialLine) => s + l.cost, 0);
+        setSubtotal(sub);
+      }
+      if (typeof data.markupPercent === "number") setMarkupPercent(data.markupPercent);
+      if (typeof data.laborCost === "number") setLaborCost(data.laborCost);
+      if (typeof data.taxRate === "number") setTaxRate(data.taxRate);
+      setDefaultsApplied(true);
+      // Jump to step 4 if we have materials
+      if (data.materials?.length > 0) setStep(4 as Step);
+    } catch {
+      // Invalid duplicate data, ignore
+    }
+  }, [duplicateFrom]);
+
+  async function addCustomerInline() {
+    if (!newCustomerName) return;
+    setAddingCustomer(true);
+    setAddCustomerError("");
+
+    try {
+      const res = await fetch("/api/customers", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: newCustomerName,
+          email: newCustomerEmail || undefined,
+          phone: newCustomerPhone || undefined,
+          address: newCustomerAddress || undefined,
+        }),
+      });
+
+      if (res.ok) {
+        const customer = await res.json();
+        setCustomers((prev) => [...prev, customer]);
+        setCustomerId(customer.id);
+        setAddCustomerOpen(false);
+        setNewCustomerName("");
+        setNewCustomerEmail("");
+        setNewCustomerPhone("");
+        setNewCustomerAddress("");
+      } else {
+        const data = await res.json();
+        setAddCustomerError(data.error || "Failed to add customer");
+      }
+    } catch {
+      setAddCustomerError("Network error");
+    }
+    setAddingCustomer(false);
+  }
 
   function applyTemplate(t: QuoteTemplate) {
     setTrade(t.trade as typeof trade);
@@ -232,7 +323,7 @@ export default function NewQuotePage() {
     return Math.round(withTax * 100) / 100;
   }
 
-  async function submitQuote() {
+  async function submitQuote(andSend = false) {
     setLoading(true);
     setError("");
 
@@ -259,15 +350,32 @@ export default function NewQuotePage() {
     }
 
     const quote = await res.json();
+
+    // If "Create & Send", immediately email the quote
+    if (andSend) {
+      const customer = customers.find((c) => c.id === customerId);
+      const email = customer?.email;
+      if (email) {
+        await fetch(`/api/quotes/${quote.id}/send`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email }),
+        });
+      }
+    }
+
     router.push(`/quotes/${quote.id}`);
     router.refresh();
   }
 
+  const selectedCustomer = customers.find((c) => c.id === customerId);
+  const canSendImmediately = !!selectedCustomer?.email;
+
   return (
     <div className="max-w-2xl mx-auto space-y-6">
-      {/* Progress indicator */}
+      {/* Progress indicator — 4 steps now */}
       <div className="flex items-center gap-2">
-        {[1, 2, 3, 4, 5].map((s) => (
+        {[1, 2, 3, 4].map((s) => (
           <div
             key={s}
             className={`h-2 flex-1 rounded-full ${
@@ -337,9 +445,13 @@ export default function NewQuotePage() {
             </Select>
             <p className="text-sm text-muted-foreground">
               Or{" "}
-              <a href="/customers/new" className="text-blue-500 hover:underline">
+              <button
+                type="button"
+                className="text-blue-500 hover:underline"
+                onClick={() => setAddCustomerOpen(true)}
+              >
                 add a new customer
-              </a>
+              </button>
             </p>
             <Button
               onClick={() => setStep(2)}
@@ -372,6 +484,74 @@ export default function NewQuotePage() {
           </CardContent>
         </Card>
       )}
+
+      {/* Inline Add Customer Dialog */}
+      <Dialog open={addCustomerOpen} onOpenChange={setAddCustomerOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Add Customer</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-3 pt-2">
+            {addCustomerError && (
+              <div className="bg-red-500/10 text-red-400 text-sm p-3 rounded-md">
+                {addCustomerError}
+              </div>
+            )}
+            <div className="space-y-1">
+              <Label htmlFor="newName">Name *</Label>
+              <Input
+                id="newName"
+                value={newCustomerName}
+                onChange={(e) => setNewCustomerName(e.target.value)}
+                placeholder="John Smith"
+              />
+            </div>
+            <div className="space-y-1">
+              <Label htmlFor="newEmail">Email</Label>
+              <Input
+                id="newEmail"
+                type="email"
+                value={newCustomerEmail}
+                onChange={(e) => setNewCustomerEmail(e.target.value)}
+                placeholder="john@example.com"
+              />
+              <p className="text-xs text-muted-foreground">
+                Required for emailing quotes directly
+              </p>
+            </div>
+            <div className="space-y-1">
+              <Label htmlFor="newPhone">Phone</Label>
+              <Input
+                id="newPhone"
+                type="tel"
+                value={newCustomerPhone}
+                onChange={(e) => setNewCustomerPhone(e.target.value)}
+                placeholder="(555) 123-4567"
+              />
+            </div>
+            <div className="space-y-1">
+              <Label htmlFor="newAddress">Address</Label>
+              <Input
+                id="newAddress"
+                value={newCustomerAddress}
+                onChange={(e) => setNewCustomerAddress(e.target.value)}
+                placeholder="123 Main St"
+              />
+            </div>
+            <div className="flex gap-3 justify-end pt-2">
+              <Button variant="outline" onClick={() => setAddCustomerOpen(false)}>
+                Cancel
+              </Button>
+              <Button
+                onClick={addCustomerInline}
+                disabled={!newCustomerName || addingCustomer}
+              >
+                {addingCustomer ? "Adding..." : "Add Customer"}
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
 
       {/* Step 2: Room Dimensions */}
       {step === 2 && (
@@ -595,13 +775,22 @@ export default function NewQuotePage() {
         </Card>
       )}
 
-      {/* Step 4: Review Materials & Pricing */}
+      {/* Step 4: Review, Adjust & Create (merged steps 4+5) */}
       {step === 4 && (
         <Card>
           <CardHeader>
-            <CardTitle>Step 4: Review & Adjust Pricing</CardTitle>
+            <CardTitle>Step 4: Review & Create</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
+            {/* Quick summary */}
+            <div className="flex items-center justify-between text-sm bg-secondary p-3 rounded-lg">
+              <span className="text-muted-foreground">
+                {selectedCustomer?.name} &middot;{" "}
+                <span className="capitalize">{trade}</span> &middot;{" "}
+                {totalSqft > 0 ? `${totalSqft} sqft` : `${materials.length} items`}
+              </span>
+            </div>
+
             <div className="border rounded-lg overflow-hidden">
               <table className="w-full text-sm">
                 <thead className="bg-secondary">
@@ -620,10 +809,10 @@ export default function NewQuotePage() {
                         {m.qty} {m.unit}
                       </td>
                       <td className="text-right p-3">
-                        {m.unitCost > 0 ? `$${m.unitCost.toFixed(2)}` : "—"}
+                        {m.unitCost > 0 ? `$${m.unitCost.toFixed(2)}` : "\u2014"}
                       </td>
                       <td className="text-right p-3">
-                        {m.cost > 0 ? `$${m.cost.toFixed(2)}` : "—"}
+                        {m.cost > 0 ? `$${m.cost.toFixed(2)}` : "\u2014"}
                       </td>
                     </tr>
                   ))}
@@ -631,9 +820,9 @@ export default function NewQuotePage() {
               </table>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label>Markup %</Label>
+            <div className="grid grid-cols-3 gap-3">
+              <div className="space-y-1">
+                <Label className="text-xs">Markup %</Label>
                 <Input
                   type="number"
                   min={0}
@@ -643,8 +832,8 @@ export default function NewQuotePage() {
                   }
                 />
               </div>
-              <div className="space-y-2">
-                <Label>Labor Cost ($)</Label>
+              <div className="space-y-1">
+                <Label className="text-xs">Labor ($)</Label>
                 <Input
                   type="number"
                   min={0}
@@ -655,8 +844,8 @@ export default function NewQuotePage() {
                   placeholder="0"
                 />
               </div>
-              <div className="space-y-2">
-                <Label>Tax Rate %</Label>
+              <div className="space-y-1">
+                <Label className="text-xs">Tax %</Label>
                 <Input
                   type="number"
                   min={0}
@@ -702,63 +891,34 @@ export default function NewQuotePage() {
               </div>
             </div>
 
-            <div className="flex gap-3">
-              <Button variant="outline" onClick={() => setStep(3)}>
-                Back
-              </Button>
-              <Button onClick={() => setStep(5)} className="flex-1">
-                Review Quote
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Step 5: Confirm & Submit */}
-      {step === 5 && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Step 5: Confirm Quote</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2 text-sm">
-              <div className="flex justify-between py-2 border-b">
-                <span className="text-muted-foreground">Customer</span>
-                <span className="font-medium">
-                  {customers.find((c) => c.id === customerId)?.name}
-                </span>
+            <div className="flex flex-col gap-2">
+              <div className="flex gap-3">
+                <Button variant="outline" onClick={() => setStep(3)}>
+                  Back
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => submitQuote(false)}
+                  disabled={loading}
+                  className="flex-1"
+                >
+                  {loading ? "Creating..." : "Create Quote"}
+                </Button>
               </div>
-              <div className="flex justify-between py-2 border-b">
-                <span className="text-muted-foreground">Trade</span>
-                <span className="font-medium capitalize">{trade}</span>
-              </div>
-              <div className="flex justify-between py-2 border-b">
-                <span className="text-muted-foreground">Total Area</span>
-                <span className="font-medium">{totalSqft} sqft</span>
-              </div>
-              <div className="flex justify-between py-2 border-b">
-                <span className="text-muted-foreground">Materials</span>
-                <span className="font-medium">
-                  {materials.filter((m) => m.cost > 0).length} items
-                </span>
-              </div>
-              <div className="flex justify-between py-2 text-lg font-bold">
-                <span>Total</span>
-                <span>${getTotal().toLocaleString()}</span>
-              </div>
-            </div>
-
-            <div className="flex gap-3">
-              <Button variant="outline" onClick={() => setStep(4)}>
-                Back
-              </Button>
-              <Button
-                onClick={submitQuote}
-                disabled={loading}
-                className="flex-1"
-              >
-                {loading ? "Creating..." : "Create Quote"}
-              </Button>
+              {canSendImmediately && (
+                <Button
+                  onClick={() => submitQuote(true)}
+                  disabled={loading}
+                  className="w-full"
+                >
+                  {loading ? "Creating & Sending..." : `Create & Send to ${selectedCustomer?.email}`}
+                </Button>
+              )}
+              {!canSendImmediately && customerId && (
+                <p className="text-xs text-muted-foreground text-center">
+                  Add an email to this customer to enable one-tap send
+                </p>
+              )}
             </div>
           </CardContent>
         </Card>

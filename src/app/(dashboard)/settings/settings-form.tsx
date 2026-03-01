@@ -19,6 +19,8 @@ interface ContractorSettings {
   phone: string;
   trade: string;
   defaultMarkup: number;
+  defaultTaxRate: number;
+  defaultLaborCost: number;
   logoUrl: string;
 }
 
@@ -88,6 +90,8 @@ export function SettingsForm({ contractor }: { contractor: ContractorSettings })
           phone: formData.get("phone") || null,
           trade,
           defaultMarkup: parseFloat(formData.get("defaultMarkup") as string) || 50,
+          defaultTaxRate: parseFloat(formData.get("defaultTaxRate") as string) || 0,
+          defaultLaborCost: parseFloat(formData.get("defaultLaborCost") as string) || 0,
         }),
       });
 
@@ -222,21 +226,46 @@ export function SettingsForm({ contractor }: { contractor: ContractorSettings })
         </Select>
       </div>
 
-      <div className="space-y-2">
-        <Label htmlFor="defaultMarkup">Default Markup (%)</Label>
-        <Input
-          id="defaultMarkup"
-          name="defaultMarkup"
-          type="number"
-          min={0}
-          max={500}
-          step={1}
-          defaultValue={contractor.defaultMarkup}
-        />
-        <p className="text-xs text-muted-foreground">
-          Applied automatically to new quotes
-        </p>
+      <div className="grid grid-cols-3 gap-3">
+        <div className="space-y-2">
+          <Label htmlFor="defaultMarkup">Markup (%)</Label>
+          <Input
+            id="defaultMarkup"
+            name="defaultMarkup"
+            type="number"
+            min={0}
+            max={500}
+            step={1}
+            defaultValue={contractor.defaultMarkup}
+          />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="defaultTaxRate">Tax Rate (%)</Label>
+          <Input
+            id="defaultTaxRate"
+            name="defaultTaxRate"
+            type="number"
+            min={0}
+            max={100}
+            step={0.1}
+            defaultValue={contractor.defaultTaxRate}
+          />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="defaultLaborCost">Labor ($)</Label>
+          <Input
+            id="defaultLaborCost"
+            name="defaultLaborCost"
+            type="number"
+            min={0}
+            step={1}
+            defaultValue={contractor.defaultLaborCost}
+          />
+        </div>
       </div>
+      <p className="text-xs text-muted-foreground">
+        These defaults are applied automatically to new quotes
+      </p>
 
       <Button type="submit" disabled={loading}>
         {loading ? "Saving..." : "Save Changes"}

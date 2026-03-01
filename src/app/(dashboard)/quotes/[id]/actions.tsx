@@ -178,6 +178,28 @@ export function QuoteActions({
           Email Quote
         </Button>
 
+        {/* Duplicate Quote */}
+        {quoteData && (
+          <Button
+            variant="outline"
+            onClick={() => {
+              const data = encodeURIComponent(
+                JSON.stringify({
+                  trade: quoteData.trade,
+                  materials: quoteData.materials,
+                  markupPercent: quoteData.markupPercent,
+                  laborCost: quoteData.laborCost,
+                  taxRate: quoteData.taxRate,
+                })
+              );
+              router.push(`/quotes/new?duplicate=${data}`);
+            }}
+            disabled={!!loading}
+          >
+            Duplicate
+          </Button>
+        )}
+
         {/* Save as Template */}
         {quoteData && (
           <Button

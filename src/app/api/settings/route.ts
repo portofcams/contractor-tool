@@ -16,7 +16,7 @@ export async function PUT(req: Request) {
   }
 
   const body = await req.json();
-  const { companyName, phone, trade, defaultMarkup } = body;
+  const { companyName, phone, trade, defaultMarkup, defaultTaxRate, defaultLaborCost } = body;
 
   if (!companyName || !trade) {
     return NextResponse.json(
@@ -30,6 +30,8 @@ export async function PUT(req: Request) {
   }
 
   const markup = typeof defaultMarkup === "number" ? Math.max(0, Math.min(500, defaultMarkup)) : 50;
+  const taxRate = typeof defaultTaxRate === "number" ? Math.max(0, Math.min(100, defaultTaxRate)) : 0;
+  const laborCost = typeof defaultLaborCost === "number" ? Math.max(0, defaultLaborCost) : 0;
 
   await prisma.contractor.update({
     where: { id: session.user.id },
@@ -38,6 +40,8 @@ export async function PUT(req: Request) {
       phone: phone || null,
       trade,
       defaultMarkup: markup,
+      defaultTaxRate: taxRate,
+      defaultLaborCost: laborCost,
     },
   });
 
