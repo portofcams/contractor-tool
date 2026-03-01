@@ -159,6 +159,7 @@ export default async function CustomerDetailPage({
               id: p.id,
               fileUrl: p.fileUrl,
               caption: p.caption,
+              photoType: p.photoType,
               takenAt: p.takenAt.toISOString(),
             }))}
             customerId={customer.id}

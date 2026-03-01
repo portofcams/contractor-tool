@@ -8,6 +8,7 @@ interface SitePhoto {
   id: string;
   fileUrl: string;
   caption: string | null;
+  photoType: string;
   takenAt: string;
 }
 
@@ -23,6 +24,8 @@ export function SitePhotos({
   const [photos, setPhotos] = useState(initialPhotos);
   const [uploading, setUploading] = useState(false);
   const [caption, setCaption] = useState("");
+  const [photoType, setPhotoType] = useState("general");
+  const [filterType, setFilterType] = useState("all");
   const [selectedPhoto, setSelectedPhoto] = useState<SitePhoto | null>(null);
   const [statusMessage, setStatusMessage] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -79,6 +82,7 @@ export function SitePhotos({
     if (customerId) formData.append("customerId", customerId);
     if (quoteId) formData.append("quoteId", quoteId);
     if (caption) formData.append("caption", caption);
+    formData.append("photoType", photoType);
 
     try {
       const res = await fetch("/api/site-photos", {
@@ -102,15 +106,40 @@ export function SitePhotos({
 
   return (
     <div className="space-y-3">
-      <div className="flex items-center justify-between">
-        <h3 className="text-sm font-medium">Site Photos</h3>
+      <div className="flex items-center justify-between flex-wrap gap-2">
         <div className="flex items-center gap-2">
+          <h3 className="text-sm font-medium">Site Photos</h3>
+          <div className="flex gap-1">
+            {(["all", "before", "after", "general"] as const).map((t) => (
+              <button
+                key={t}
+                onClick={() => setFilterType(t)}
+                className={`text-xs px-2 py-0.5 rounded-full border ${
+                  filterType === t ? "bg-blue-500 text-white border-blue-500" : "border-border text-muted-foreground"
+                }`}
+              >
+                {t === "all" ? "All" : t.charAt(0).toUpperCase() + t.slice(1)}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className="flex items-center gap-2">
+          <select
+            value={photoType}
+            onChange={(e) => setPhotoType(e.target.value)}
+            aria-label="Photo type"
+            className="h-8 text-xs rounded-md border border-border bg-background px-2"
+          >
+            <option value="general">General</option>
+            <option value="before">Before</option>
+            <option value="after">After</option>
+          </select>
           <Input
             value={caption}
             onChange={(e) => setCaption(e.target.value)}
             placeholder="Caption (optional)"
             aria-label="Photo caption"
-            className="h-8 text-xs w-40"
+            className="h-8 text-xs w-32"
           />
           <input
             ref={fileInputRef}
@@ -135,13 +164,13 @@ export function SitePhotos({
         </div>
       </div>
 
-      {photos.length === 0 ? (
+      {(filterType === "all" ? photos : photos.filter(p => p.photoType === filterType)).length === 0 ? (
         <p className="text-sm text-muted-foreground py-4 text-center">
           No photos yet. Add photos from your job site visit.
         </p>
       ) : (
         <div className="grid grid-cols-3 sm:grid-cols-4 gap-2" role="list" aria-label="Site photos">
-          {photos.map((photo) => (
+          {(filterType === "all" ? photos : photos.filter(p => p.photoType === filterType)).map((photo) => (
             <button
               key={photo.id}
               role="listitem"
@@ -157,6 +186,13 @@ export function SitePhotos({
                 alt={photo.caption || "Site photo"}
                 className="w-full h-full object-cover"
               />
+              {photo.photoType !== "general" && (
+                <span className={`absolute top-1 left-1 text-[10px] px-1.5 py-0.5 rounded-full font-medium ${
+                  photo.photoType === "before" ? "bg-orange-500 text-white" : "bg-green-500 text-white"
+                }`} aria-hidden="true">
+                  {photo.photoType}
+                </span>
+              )}
               {photo.caption && (
                 <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-white text-xs p-1 truncate" aria-hidden="true">
                   {photo.caption}

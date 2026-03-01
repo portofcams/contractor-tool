@@ -31,6 +31,12 @@ model Contractor {
   roomScans      RoomScan[]
   sitePhotos     SitePhoto[]
   siteNotes      SiteNote[]
+  voiceNotes     VoiceNote[]
+  followUps      FollowUp[]
+  jobs           Job[]
+  invoices       Invoice[]
+  crewMembers    CrewMember[]
+  actualCosts    ActualCost[]
 }
 
 model Customer {
@@ -49,6 +55,9 @@ model Customer {
   roomScans  RoomScan[]
   sitePhotos SitePhoto[]
   siteNotes  SiteNote[]
+  voiceNotes VoiceNote[]
+  jobs       Job[]
+  invoices   Invoice[]
 
   @@index([contractorId])
 }
@@ -79,7 +88,7 @@ model Quote {
 
   quoteNumber String @unique
   publicToken String @unique @default(uuid())
-  trade       String // 'flooring', 'painting', 'drywall'
+  trade       String // 'flooring', 'painting', 'drywall' or comma-separated
   status      String @default("draft") // 'draft', 'sent', 'accepted', 'rejected'
 
   // Materials calculated (stored as JSON)
@@ -103,6 +112,10 @@ model Quote {
   roomScans  RoomScan[]
   sitePhotos SitePhoto[]
   siteNotes  SiteNote[]
+  voiceNotes VoiceNote[]
+  followUps  FollowUp[]
+  job        Job?
+  invoices   Invoice[]
 
   @@index([contractorId, createdAt])
   @@index([contractorId, status])
@@ -165,6 +178,7 @@ model SitePhoto {
   quote        Quote?     @relation(fields: [quoteId], references: [id], onDelete: SetNull)
   fileUrl      String
   caption      String?
+  photoType    String     @default("general") // "general", "before", "after"
   takenAt      DateTime   @default(now())
 
   @@index([contractorId])
@@ -187,4 +201,127 @@ model SiteNote {
   @@index([contractorId])
   @@index([customerId])
   @@index([quoteId])
+}
+
+model VoiceNote {
+  id           String     @id @default(uuid())
+  contractorId String
+  contractor   Contractor @relation(fields: [contractorId], references: [id], onDelete: Cascade)
+  customerId   String?
+  customer     Customer?  @relation(fields: [customerId], references: [id], onDelete: SetNull)
+  quoteId      String?
+  quote        Quote?     @relation(fields: [quoteId], references: [id], onDelete: SetNull)
+  fileUrl      String
+  duration     Int        // seconds
+  transcript   String?
+  createdAt    DateTime   @default(now())
+
+  @@index([contractorId])
+  @@index([customerId])
+}
+
+model FollowUp {
+  id           String     @id @default(uuid())
+  contractorId String
+  contractor   Contractor @relation(fields: [contractorId], references: [id], onDelete: Cascade)
+  quoteId      String
+  quote        Quote      @relation(fields: [quoteId], references: [id], onDelete: Cascade)
+  reminderDate DateTime
+  message      String?
+  status       String     @default("pending") // "pending", "sent", "dismissed"
+  createdAt    DateTime   @default(now())
+
+  @@index([contractorId])
+  @@index([quoteId])
+  @@index([reminderDate])
+}
+
+model Job {
+  id            String     @id @default(uuid())
+  contractorId  String
+  contractor    Contractor @relation(fields: [contractorId], references: [id], onDelete: Cascade)
+  quoteId       String     @unique
+  quote         Quote      @relation(fields: [quoteId], references: [id], onDelete: Cascade)
+  customerId    String
+  customer      Customer   @relation(fields: [customerId], references: [id])
+  scheduledDate DateTime
+  scheduledEnd  DateTime?
+  status        String     @default("scheduled") // "scheduled", "in_progress", "completed", "cancelled"
+  notes         String?
+  createdAt     DateTime   @default(now())
+
+  assignments JobAssignment[]
+  actualCosts ActualCost[]
+
+  @@index([contractorId])
+  @@index([customerId])
+  @@index([scheduledDate])
+}
+
+model Invoice {
+  id              String     @id @default(uuid())
+  contractorId    String
+  contractor      Contractor @relation(fields: [contractorId], references: [id], onDelete: Cascade)
+  quoteId         String
+  quote           Quote      @relation(fields: [quoteId], references: [id], onDelete: Cascade)
+  customerId      String
+  customer        Customer   @relation(fields: [customerId], references: [id])
+  invoiceNumber   String     @unique
+  amount          Float
+  paidAmount      Float      @default(0)
+  status          String     @default("unpaid") // "unpaid", "partial", "paid"
+  dueDate         DateTime
+  stripePaymentLink String?
+  paidAt          DateTime?
+  createdAt       DateTime   @default(now())
+
+  @@index([contractorId])
+  @@index([customerId])
+  @@index([status])
+}
+
+model ActualCost {
+  id           String     @id @default(uuid())
+  contractorId String
+  contractor   Contractor @relation(fields: [contractorId], references: [id], onDelete: Cascade)
+  jobId        String
+  job          Job        @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  description  String
+  amount       Float
+  category     String     // "materials", "labor", "other"
+  receiptUrl   String?
+  createdAt    DateTime   @default(now())
+
+  @@index([jobId])
+}
+
+model CrewMember {
+  id           String     @id @default(uuid())
+  contractorId String
+  contractor   Contractor @relation(fields: [contractorId], references: [id], onDelete: Cascade)
+  name         String
+  phone        String?
+  email        String?
+  role         String?    // "lead", "helper", "subcontractor"
+  hourlyRate   Float?
+  active       Boolean    @default(true)
+  createdAt    DateTime   @default(now())
+
+  assignments JobAssignment[]
+
+  @@index([contractorId])
+}
+
+model JobAssignment {
+  id           String     @id @default(uuid())
+  jobId        String
+  job          Job        @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  crewMemberId String
+  crewMember   CrewMember @relation(fields: [crewMemberId], references: [id], onDelete: Cascade)
+  hoursWorked  Float?
+  notes        String?
+  createdAt    DateTime   @default(now())
+
+  @@index([jobId])
+  @@index([crewMemberId])
 }

@@ -10,6 +10,10 @@ const navItems = [
   { href: "/dashboard", label: "Dashboard", icon: "grid" },
   { href: "/quotes", label: "Quotes", icon: "file-text" },
   { href: "/quotes/new", label: "New Quote", icon: "plus-circle" },
+  { href: "/quotes/quick", label: "Quick Estimate", icon: "zap" },
+  { href: "/jobs", label: "Jobs", icon: "calendar" },
+  { href: "/invoices", label: "Invoices", icon: "receipt" },
+  { href: "/team", label: "Team", icon: "hard-hat" },
   { href: "/templates", label: "Templates", icon: "copy" },
   { href: "/customers", label: "Customers", icon: "users" },
   { href: "/settings/billing", label: "Billing", icon: "credit-card" },
@@ -21,6 +25,10 @@ const iconMap: Record<string, string> = {
   "file-text":
     "M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z M14 2v6h6 M16 13H8 M16 17H8 M10 9H8",
   "plus-circle": "M12 2a10 10 0 100 20 10 10 0 000-20zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z",
+  zap: "M13 2L3 14h9l-1 8 10-12h-9l1-8z",
+  calendar: "M19 4H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V6a2 2 0 00-2-2zM16 2v4M8 2v4M3 10h18",
+  receipt: "M4 2v20l4-2 4 2 4-2 4 2V2l-4 2-4-2-4 2-4-2zM8 10h8M8 14h4",
+  "hard-hat": "M2 18h20M4 18v-4a8 8 0 0116 0v4M12 2v6M4 14h16",
   copy: "M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z",
   users:
     "M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2 M9 7a4 4 0 100-8 4 4 0 000 8zm14 14v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75",

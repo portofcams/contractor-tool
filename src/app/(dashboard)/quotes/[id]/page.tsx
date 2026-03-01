@@ -6,6 +6,8 @@ import { Badge } from "@/components/ui/badge";
 import { QuoteActions } from "./actions";
 import { SitePhotos } from "@/components/site-photos";
 import { SiteNotes } from "@/components/site-notes";
+import { VoiceRecorder } from "@/components/voice-recorder";
+import { FollowUpManager } from "@/components/follow-up-manager";
 
 interface MaterialLine {
   item: string;
@@ -32,8 +34,8 @@ export default async function QuoteDetailPage({
 
   const materials = quote.materials as unknown as MaterialLine[];
 
-  // Fetch site photos and notes for this quote
-  const [sitePhotos, siteNotes] = await Promise.all([
+  // Fetch site photos, notes, voice notes, and follow-ups for this quote
+  const [sitePhotos, siteNotes, voiceNotes, followUps] = await Promise.all([
     prisma.sitePhoto.findMany({
       where: { quoteId: id, contractorId: contractor.id },
       orderBy: { takenAt: "desc" },
@@ -41,6 +43,14 @@ export default async function QuoteDetailPage({
     prisma.siteNote.findMany({
       where: { quoteId: id, contractorId: contractor.id },
       orderBy: { createdAt: "desc" },
+    }),
+    prisma.voiceNote.findMany({
+      where: { quoteId: id, contractorId: contractor.id },
+      orderBy: { createdAt: "desc" },
+    }),
+    prisma.followUp.findMany({
+      where: { quoteId: id, contractorId: contractor.id },
+      orderBy: { reminderDate: "asc" },
     }),
   ]);
 
@@ -215,6 +225,7 @@ export default async function QuoteDetailPage({
               id: p.id,
               fileUrl: p.fileUrl,
               caption: p.caption,
+              photoType: p.photoType,
               takenAt: p.takenAt.toISOString(),
             }))}
             customerId={quote.customerId}
@@ -238,6 +249,43 @@ export default async function QuoteDetailPage({
             }))}
             customerId={quote.customerId}
             quoteId={quote.id}
+          />
+        </CardContent>
+      </Card>
+
+      {/* Voice Notes */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Voice Notes</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <VoiceRecorder
+            notes={voiceNotes.map((v) => ({
+              id: v.id,
+              fileUrl: v.fileUrl,
+              duration: v.duration,
+              createdAt: v.createdAt.toISOString(),
+            }))}
+            customerId={quote.customerId}
+            quoteId={quote.id}
+          />
+        </CardContent>
+      </Card>
+
+      {/* Follow-up Reminders */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Follow-ups</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <FollowUpManager
+            quoteId={quote.id}
+            followUps={followUps.map((f) => ({
+              id: f.id,
+              reminderDate: f.reminderDate.toISOString(),
+              message: f.message,
+              status: f.status,
+            }))}
           />
         </CardContent>
       </Card>

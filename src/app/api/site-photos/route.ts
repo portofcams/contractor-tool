@@ -73,6 +73,9 @@ export async function POST(req: NextRequest) {
   const customerId = formData.get("customerId") as string | null;
   const quoteId = formData.get("quoteId") as string | null;
   const caption = formData.get("caption") as string | null;
+  const photoType = formData.get("photoType") as string | null;
+  const validPhotoTypes = ["general", "before", "after"];
+  const safePhotoType = photoType && validPhotoTypes.includes(photoType) ? photoType : "general";
 
   if (!file) {
     return NextResponse.json({ error: "No file provided" }, { status: 400 });
@@ -128,6 +131,7 @@ export async function POST(req: NextRequest) {
         quoteId: quoteId || null,
         fileUrl,
         caption: caption || null,
+        photoType: safePhotoType,
       },
     });
 

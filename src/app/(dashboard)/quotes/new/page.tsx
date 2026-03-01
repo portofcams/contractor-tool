@@ -97,6 +97,7 @@ export default function NewQuotePage() {
   const [newCustomerAddress, setNewCustomerAddress] = useState("");
   const [addingCustomer, setAddingCustomer] = useState(false);
   const [addCustomerError, setAddCustomerError] = useState("");
+  const [gpsLoading, setGpsLoading] = useState(false);
 
   // Step 2: Dimensions
   const [rooms, setRooms] = useState([
@@ -185,6 +186,30 @@ export default function NewQuotePage() {
       // Invalid duplicate data, ignore
     }
   }, [duplicateFrom]);
+
+  async function fillAddressFromGps() {
+    setGpsLoading(true);
+    setAddCustomerError("");
+    try {
+      const pos = await new Promise<GeolocationPosition>((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 10000 });
+      });
+      const { latitude, longitude } = pos.coords;
+      const res = await fetch(
+        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`,
+        { headers: { "User-Agent": "ContractorCalc/1.0" } }
+      );
+      if (res.ok) {
+        const data = await res.json();
+        if (data.display_name) {
+          setNewCustomerAddress(data.display_name);
+        }
+      }
+    } catch {
+      setAddCustomerError("Could not get location. Check GPS permissions.");
+    }
+    setGpsLoading(false);
+  }
 
   async function addCustomerInline() {
     if (!newCustomerName) return;
@@ -291,7 +316,7 @@ export default function NewQuotePage() {
     setScanning(false);
   }
 
-  function calculateMaterials() {
+  function calculateTradeLines(): MaterialLine[] {
     const lines: MaterialLine[] = [];
 
     if (trade === "flooring") {
@@ -362,8 +387,22 @@ export default function NewQuotePage() {
       });
     }
 
+    return lines;
+  }
+
+  function calculateMaterials() {
+    const lines = calculateTradeLines();
     setMaterials(lines);
     const sub = lines.reduce((s, l) => s + l.cost, 0);
+    setSubtotal(sub);
+    setStep(4);
+  }
+
+  function addTradeToExisting() {
+    const newLines = calculateTradeLines();
+    const combined = [...materials, ...newLines];
+    setMaterials(combined);
+    const sub = combined.reduce((s, l) => s + l.cost, 0);
     setSubtotal(sub);
     setStep(4);
   }
@@ -621,12 +660,25 @@ export default function NewQuotePage() {
             </div>
             <div className="space-y-1">
               <Label htmlFor="newAddress">Address</Label>
-              <Input
-                id="newAddress"
-                value={newCustomerAddress}
-                onChange={(e) => setNewCustomerAddress(e.target.value)}
-                placeholder="123 Main St"
-              />
+              <div className="flex gap-2">
+                <Input
+                  id="newAddress"
+                  value={newCustomerAddress}
+                  onChange={(e) => setNewCustomerAddress(e.target.value)}
+                  placeholder="123 Main St"
+                  className="flex-1"
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={fillAddressFromGps}
+                  disabled={gpsLoading}
+                  className="shrink-0 text-xs"
+                >
+                  {gpsLoading ? "Locating..." : "GPS"}
+                </Button>
+              </div>
             </div>
             <div className="flex gap-3 justify-end pt-2">
               <Button variant="outline" onClick={() => setAddCustomerOpen(false)}>
@@ -883,9 +935,15 @@ export default function NewQuotePage() {
               <Button variant="outline" onClick={() => setStep(2)}>
                 Back
               </Button>
-              <Button onClick={calculateMaterials} className="flex-1">
-                Calculate Materials
-              </Button>
+              {materials.length > 0 ? (
+                <Button onClick={addTradeToExisting} className="flex-1">
+                  Add Trade to Quote
+                </Button>
+              ) : (
+                <Button onClick={calculateMaterials} className="flex-1">
+                  Calculate Materials
+                </Button>
+              )}
             </div>
           </CardContent>
         </Card>
@@ -1010,7 +1068,7 @@ export default function NewQuotePage() {
             <div className="flex flex-col gap-2">
               <div className="flex gap-3">
                 <Button variant="outline" onClick={() => setStep(3)}>
-                  Back
+                  {materials.length > 0 ? "+ Trade" : "Back"}
                 </Button>
                 <Button
                   variant="outline"
