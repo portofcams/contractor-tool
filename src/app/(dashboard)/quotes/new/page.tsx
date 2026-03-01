@@ -100,6 +100,7 @@ export default function NewQuotePage() {
   const [gpsLoading, setGpsLoading] = useState(false);
 
   // Step 2: Dimensions
+  const [entryMode, setEntryMode] = useState<"dimensions" | "sqft">("sqft");
   const [rooms, setRooms] = useState([
     { name: "Room 1", length: 0, width: 0, height: 8 },
   ]);
@@ -258,11 +259,21 @@ export default function NewQuotePage() {
     setStep(4);
   }
 
-  const totalSqft = rooms.reduce((sum, r) => sum + r.length * r.width, 0);
-  const totalWallSqft = rooms.reduce(
-    (sum, r) => sum + 2 * (r.length + r.width) * r.height,
-    0
-  );
+  const totalSqft = rooms.reduce((sum, r) => {
+    if (entryMode === "sqft") {
+      // In sqft mode, length stores the total sqft directly
+      return sum + r.length;
+    }
+    return sum + r.length * r.width;
+  }, 0);
+  const totalWallSqft = rooms.reduce((sum, r) => {
+    if (entryMode === "sqft") {
+      // Approximate perimeter from sqft (assume square room)
+      const side = Math.sqrt(r.length || 0);
+      return sum + 2 * (side + side) * r.height;
+    }
+    return sum + 2 * (r.length + r.width) * r.height;
+  }, 0);
   const totalCeilingSqft = totalSqft;
 
   function addRoom() {
@@ -702,6 +713,32 @@ export default function NewQuotePage() {
             <CardTitle>Step 2: Room Dimensions</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
+            {/* Entry mode toggle */}
+            <div className="flex rounded-lg border border-border overflow-hidden">
+              <button
+                type="button"
+                onClick={() => setEntryMode("sqft")}
+                className={`flex-1 px-4 py-2 text-sm font-medium transition-colors ${
+                  entryMode === "sqft"
+                    ? "bg-blue-500 text-white"
+                    : "bg-secondary text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                Total Sqft
+              </button>
+              <button
+                type="button"
+                onClick={() => setEntryMode("dimensions")}
+                className={`flex-1 px-4 py-2 text-sm font-medium transition-colors ${
+                  entryMode === "dimensions"
+                    ? "bg-blue-500 text-white"
+                    : "bg-secondary text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                L × W Dimensions
+              </button>
+            </div>
+
             {/* LiDAR Scanner */}
             {lidarAvailable && (
               <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4 text-center space-y-2">
@@ -710,7 +747,10 @@ export default function NewQuotePage() {
                   Scan the room with your device&apos;s LiDAR sensor to auto-fill dimensions
                 </p>
                 <Button
-                  onClick={startLidarScan}
+                  onClick={() => {
+                    setEntryMode("dimensions");
+                    startLidarScan();
+                  }}
                   disabled={scanning}
                   aria-busy={scanning}
                   className="w-full"
@@ -744,50 +784,92 @@ export default function NewQuotePage() {
                     </Button>
                   )}
                 </div>
-                <div className="grid grid-cols-3 gap-3">
-                  <div>
-                    <Label htmlFor={`room-${i}-length`} className="text-xs">Length (ft)</Label>
-                    <Input
-                      id={`room-${i}-length`}
-                      type="number"
-                      min={0}
-                      value={room.length || ""}
-                      onChange={(e) =>
-                        updateRoom(i, "length", parseFloat(e.target.value) || 0)
-                      }
-                      placeholder="0"
-                    />
+
+                {entryMode === "sqft" ? (
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <Label htmlFor={`room-${i}-sqft`} className="text-xs">Square Footage</Label>
+                      <Input
+                        id={`room-${i}-sqft`}
+                        type="number"
+                        min={0}
+                        value={room.length || ""}
+                        onChange={(e) =>
+                          updateRoom(i, "length", parseFloat(e.target.value) || 0)
+                        }
+                        placeholder="0"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor={`room-${i}-height-sqft`} className="text-xs">Ceiling Height (ft)</Label>
+                      <Input
+                        id={`room-${i}-height-sqft`}
+                        type="number"
+                        min={0}
+                        value={room.height || ""}
+                        onChange={(e) =>
+                          updateRoom(i, "height", parseFloat(e.target.value) || 0)
+                        }
+                        placeholder="8"
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <Label htmlFor={`room-${i}-width`} className="text-xs">Width (ft)</Label>
-                    <Input
-                      id={`room-${i}-width`}
-                      type="number"
-                      min={0}
-                      value={room.width || ""}
-                      onChange={(e) =>
-                        updateRoom(i, "width", parseFloat(e.target.value) || 0)
-                      }
-                      placeholder="0"
-                    />
+                ) : (
+                  <div className="grid grid-cols-3 gap-3">
+                    <div>
+                      <Label htmlFor={`room-${i}-length`} className="text-xs">Length (ft)</Label>
+                      <Input
+                        id={`room-${i}-length`}
+                        type="number"
+                        min={0}
+                        value={room.length || ""}
+                        onChange={(e) =>
+                          updateRoom(i, "length", parseFloat(e.target.value) || 0)
+                        }
+                        placeholder="0"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor={`room-${i}-width`} className="text-xs">Width (ft)</Label>
+                      <Input
+                        id={`room-${i}-width`}
+                        type="number"
+                        min={0}
+                        value={room.width || ""}
+                        onChange={(e) =>
+                          updateRoom(i, "width", parseFloat(e.target.value) || 0)
+                        }
+                        placeholder="0"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor={`room-${i}-height`} className="text-xs">Height (ft)</Label>
+                      <Input
+                        id={`room-${i}-height`}
+                        type="number"
+                        min={0}
+                        value={room.height || ""}
+                        onChange={(e) =>
+                          updateRoom(i, "height", parseFloat(e.target.value) || 0)
+                        }
+                        placeholder="8"
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <Label htmlFor={`room-${i}-height`} className="text-xs">Height (ft)</Label>
-                    <Input
-                      id={`room-${i}-height`}
-                      type="number"
-                      min={0}
-                      value={room.height || ""}
-                      onChange={(e) =>
-                        updateRoom(i, "height", parseFloat(e.target.value) || 0)
-                      }
-                      placeholder="8"
-                    />
-                  </div>
-                </div>
+                )}
+
                 <p className="text-sm text-muted-foreground">
-                  {room.length * room.width} sqft floor &middot;{" "}
-                  {2 * (room.length + room.width) * room.height} sqft walls
+                  {entryMode === "sqft" ? (
+                    <>
+                      {room.length || 0} sqft floor &middot;{" "}
+                      {Math.round(2 * (Math.sqrt(room.length || 0) + Math.sqrt(room.length || 0)) * room.height)} sqft walls
+                    </>
+                  ) : (
+                    <>
+                      {room.length * room.width} sqft floor &middot;{" "}
+                      {2 * (room.length + room.width) * room.height} sqft walls
+                    </>
+                  )}
                 </p>
               </div>
             ))}
@@ -795,8 +877,8 @@ export default function NewQuotePage() {
               + Add Room
             </Button>
             <div className="bg-blue-500/10 p-3 rounded-md text-sm">
-              <strong>Total:</strong> {totalSqft} sqft floor &middot;{" "}
-              {totalWallSqft} sqft walls
+              <strong>Total:</strong> {Math.round(totalSqft)} sqft floor &middot;{" "}
+              {Math.round(totalWallSqft)} sqft walls
             </div>
             <div className="flex gap-3">
               <Button variant="outline" onClick={() => setStep(1)}>
