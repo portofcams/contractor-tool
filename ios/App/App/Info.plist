@@ -47,5 +47,9 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>ContractorCalc uses the camera for LiDAR room scanning and job site photos.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>ContractorCalc needs photo library access to save and attach job site photos.</string>
 </dict>
 </plist>

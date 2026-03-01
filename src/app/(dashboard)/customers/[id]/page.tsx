@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { FloorPlanUpload, FloorPlanGallery } from "@/components/floor-plan-upload";
+import { SitePhotos } from "@/components/site-photos";
+import { SiteNotes } from "@/components/site-notes";
 
 export default async function CustomerDetailPage({
   params,
@@ -29,6 +31,17 @@ export default async function CustomerDetailPage({
   });
 
   if (!customer) notFound();
+
+  const [sitePhotos, siteNotes] = await Promise.all([
+    prisma.sitePhoto.findMany({
+      where: { customerId: id, contractorId: contractor.id },
+      orderBy: { takenAt: "desc" },
+    }),
+    prisma.siteNote.findMany({
+      where: { customerId: id, contractorId: contractor.id },
+      orderBy: { createdAt: "desc" },
+    }),
+  ]);
 
   return (
     <div className="space-y-6">
@@ -132,6 +145,42 @@ export default async function CustomerDetailPage({
             }))}
           />
           <FloorPlanUpload customerId={customer.id} />
+        </CardContent>
+      </Card>
+
+      {/* Site Photos */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Site Photos</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <SitePhotos
+            photos={sitePhotos.map((p) => ({
+              id: p.id,
+              fileUrl: p.fileUrl,
+              caption: p.caption,
+              takenAt: p.takenAt.toISOString(),
+            }))}
+            customerId={customer.id}
+          />
+        </CardContent>
+      </Card>
+
+      {/* Site Notes */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Site Notes</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <SiteNotes
+            notes={siteNotes.map((n) => ({
+              id: n.id,
+              content: n.content,
+              createdAt: n.createdAt.toISOString(),
+              updatedAt: n.updatedAt.toISOString(),
+            }))}
+            customerId={customer.id}
+          />
         </CardContent>
       </Card>
     </div>

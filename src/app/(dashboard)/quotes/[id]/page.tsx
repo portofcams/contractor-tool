@@ -4,6 +4,8 @@ import { prisma } from "@/lib/db";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { QuoteActions } from "./actions";
+import { SitePhotos } from "@/components/site-photos";
+import { SiteNotes } from "@/components/site-notes";
 
 interface MaterialLine {
   item: string;
@@ -29,6 +31,18 @@ export default async function QuoteDetailPage({
   if (!quote) notFound();
 
   const materials = quote.materials as unknown as MaterialLine[];
+
+  // Fetch site photos and notes for this quote
+  const [sitePhotos, siteNotes] = await Promise.all([
+    prisma.sitePhoto.findMany({
+      where: { quoteId: id, contractorId: contractor.id },
+      orderBy: { takenAt: "desc" },
+    }),
+    prisma.siteNote.findMany({
+      where: { quoteId: id, contractorId: contractor.id },
+      orderBy: { createdAt: "desc" },
+    }),
+  ]);
 
   return (
     <div className="max-w-2xl mx-auto space-y-6">
@@ -189,6 +203,44 @@ export default async function QuoteDetailPage({
           </CardContent>
         </Card>
       )}
+
+      {/* Site Photos */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Site Photos</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <SitePhotos
+            photos={sitePhotos.map((p) => ({
+              id: p.id,
+              fileUrl: p.fileUrl,
+              caption: p.caption,
+              takenAt: p.takenAt.toISOString(),
+            }))}
+            customerId={quote.customerId}
+            quoteId={quote.id}
+          />
+        </CardContent>
+      </Card>
+
+      {/* Site Notes */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Site Notes</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <SiteNotes
+            notes={siteNotes.map((n) => ({
+              id: n.id,
+              content: n.content,
+              createdAt: n.createdAt.toISOString(),
+              updatedAt: n.updatedAt.toISOString(),
+            }))}
+            customerId={quote.customerId}
+            quoteId={quote.id}
+          />
+        </CardContent>
+      </Card>
 
       <QuoteActions
         quoteId={quote.id}

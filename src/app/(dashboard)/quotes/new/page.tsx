@@ -30,6 +30,8 @@ import {
   type PaintType,
   type SheetSize,
 } from "@/lib/calculators";
+import { roomScanner, type ScannedRoom } from "@/lib/room-scanner";
+import { offlineStore } from "@/lib/offline-storage";
 
 interface UsageInfo {
   planName: string;
@@ -100,6 +102,9 @@ export default function NewQuotePage() {
   const [rooms, setRooms] = useState([
     { name: "Room 1", length: 0, width: 0, height: 8 },
   ]);
+  const [lidarAvailable, setLidarAvailable] = useState(false);
+  const [scanning, setScanning] = useState(false);
+  const [scanError, setScanError] = useState("");
 
   // Step 3: Trade & material
   const [trade, setTrade] = useState<"flooring" | "painting" | "drywall">("flooring");
@@ -118,6 +123,7 @@ export default function NewQuotePage() {
 
   // Templates
   const [templates, setTemplates] = useState<QuoteTemplate[]>([]);
+  const [isOffline, setIsOffline] = useState(false);
 
   useEffect(() => {
     fetch("/api/customers")
@@ -144,6 +150,18 @@ export default function NewQuotePage() {
         if (Array.isArray(data)) setTemplates(data);
       })
       .catch(() => {});
+    // Check LiDAR availability
+    roomScanner.isAvailable().then(setLidarAvailable).catch(() => {});
+    // Offline detection
+    setIsOffline(!navigator.onLine);
+    const goOffline = () => setIsOffline(true);
+    const goOnline = () => setIsOffline(false);
+    window.addEventListener("offline", goOffline);
+    window.addEventListener("online", goOnline);
+    return () => {
+      window.removeEventListener("offline", goOffline);
+      window.removeEventListener("online", goOnline);
+    };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Handle duplicate quote data from query params
@@ -239,6 +257,40 @@ export default function NewQuotePage() {
     setRooms(updated);
   }
 
+  async function startLidarScan() {
+    setScanning(true);
+    setScanError("");
+    try {
+      const result = await roomScanner.scan();
+      if (result.rooms.length > 0) {
+        const scannedRooms = result.rooms.map((r: ScannedRoom) => ({
+          name: r.name,
+          length: r.length,
+          width: r.width,
+          height: r.height,
+        }));
+        setRooms(scannedRooms);
+
+        // Save the scan to the server
+        fetch("/api/room-scans", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            customerId: customerId || undefined,
+            roomsData: result.rooms,
+            surfaceCount: result.surfaceCount,
+          }),
+        }).catch(() => {});
+      }
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "Scan failed";
+      if (msg !== "Scan cancelled by user") {
+        setScanError(msg);
+      }
+    }
+    setScanning(false);
+  }
+
   function calculateMaterials() {
     const lines: MaterialLine[] = [];
 
@@ -327,19 +379,40 @@ export default function NewQuotePage() {
     setLoading(true);
     setError("");
 
+    const quotePayload = {
+      customerId,
+      trade,
+      materials,
+      subtotal,
+      laborCost: laborCost || undefined,
+      markupPercent,
+      taxRate,
+      total: getTotal(),
+    };
+
+    // Offline mode: save locally and queue for sync
+    if (isOffline) {
+      try {
+        await offlineStore.saveQuote({
+          ...quotePayload,
+          customerId,
+          laborCost: laborCost || 0,
+          status: "draft",
+          materials: materials as unknown[],
+        });
+        router.push("/quotes");
+        router.refresh();
+      } catch {
+        setError("Failed to save offline quote");
+      }
+      setLoading(false);
+      return;
+    }
+
     const res = await fetch("/api/quotes", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        customerId,
-        trade,
-        materials,
-        subtotal,
-        laborCost: laborCost || undefined,
-        markupPercent,
-        taxRate,
-        total: getTotal(),
-      }),
+      body: JSON.stringify(quotePayload),
     });
 
     if (!res.ok) {
@@ -392,6 +465,15 @@ export default function NewQuotePage() {
             Upgrade
           </Link>
         </p>
+      )}
+
+      {isOffline && (
+        <div className="bg-blue-500/10 text-blue-400 text-sm p-3 rounded-md flex items-center gap-2">
+          <svg className="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M18.364 5.636a9 9 0 010 12.728M15.536 8.464a5 5 0 010 7.072M12 12h.01" />
+          </svg>
+          Offline mode — your quote will be saved locally and synced when you reconnect.
+        </div>
       )}
 
       {error && (
@@ -560,6 +642,26 @@ export default function NewQuotePage() {
             <CardTitle>Step 2: Room Dimensions</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
+            {/* LiDAR Scanner */}
+            {lidarAvailable && (
+              <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4 text-center space-y-2">
+                <p className="text-sm font-medium">LiDAR Scanner Available</p>
+                <p className="text-xs text-muted-foreground">
+                  Scan the room with your device&apos;s LiDAR sensor to auto-fill dimensions
+                </p>
+                <Button
+                  onClick={startLidarScan}
+                  disabled={scanning}
+                  className="w-full"
+                >
+                  {scanning ? "Scanning..." : "Scan Room with LiDAR"}
+                </Button>
+                {scanError && (
+                  <p className="text-xs text-red-400">{scanError}</p>
+                )}
+              </div>
+            )}
+
             {rooms.map((room, i) => (
               <div key={i} className="border rounded-lg p-4 space-y-3">
                 <div className="flex items-center justify-between">
@@ -902,10 +1004,16 @@ export default function NewQuotePage() {
                   disabled={loading}
                   className="flex-1"
                 >
-                  {loading ? "Creating..." : "Create Quote"}
+                  {loading
+                    ? isOffline
+                      ? "Saving..."
+                      : "Creating..."
+                    : isOffline
+                    ? "Save Offline"
+                    : "Create Quote"}
                 </Button>
               </div>
-              {canSendImmediately && (
+              {canSendImmediately && !isOffline && (
                 <Button
                   onClick={() => submitQuote(true)}
                   disabled={loading}
@@ -914,9 +1022,14 @@ export default function NewQuotePage() {
                   {loading ? "Creating & Sending..." : `Create & Send to ${selectedCustomer?.email}`}
                 </Button>
               )}
-              {!canSendImmediately && customerId && (
+              {!canSendImmediately && customerId && !isOffline && (
                 <p className="text-xs text-muted-foreground text-center">
                   Add an email to this customer to enable one-tap send
+                </p>
+              )}
+              {isOffline && (
+                <p className="text-xs text-muted-foreground text-center">
+                  Email sending available when back online
                 </p>
               )}
             </div>

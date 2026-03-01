@@ -28,6 +28,9 @@ model Contractor {
   quotes         Quote[]
   materials      MaterialCost[]
   quoteTemplates QuoteTemplate[]
+  roomScans      RoomScan[]
+  sitePhotos     SitePhoto[]
+  siteNotes      SiteNote[]
 }
 
 model Customer {
@@ -43,6 +46,9 @@ model Customer {
 
   quotes     Quote[]
   floorPlans FloorPlan[]
+  roomScans  RoomScan[]
+  sitePhotos SitePhoto[]
+  siteNotes  SiteNote[]
 
   @@index([contractorId])
 }
@@ -94,6 +100,10 @@ model Quote {
   signatureData String?   // base64 PNG of customer signature
   createdAt     DateTime  @default(now())
 
+  roomScans  RoomScan[]
+  sitePhotos SitePhoto[]
+  siteNotes  SiteNote[]
+
   @@index([contractorId, createdAt])
   @@index([contractorId, status])
   @@index([customerId])
@@ -126,4 +136,55 @@ model MaterialCost {
 
   @@index([contractorId])
   @@index([category])
+}
+
+model RoomScan {
+  id           String     @id @default(uuid())
+  contractorId String
+  contractor   Contractor @relation(fields: [contractorId], references: [id], onDelete: Cascade)
+  customerId   String?
+  customer     Customer?  @relation(fields: [customerId], references: [id], onDelete: SetNull)
+  quoteId      String?
+  quote        Quote?     @relation(fields: [quoteId], references: [id], onDelete: SetNull)
+  roomsData    Json       // [{ name, length, width, height, floorArea, wallArea }]
+  surfaceCount Int        @default(0)
+  scanDate     DateTime   @default(now())
+  notes        String?
+
+  @@index([contractorId])
+  @@index([customerId])
+}
+
+model SitePhoto {
+  id           String     @id @default(uuid())
+  contractorId String
+  contractor   Contractor @relation(fields: [contractorId], references: [id], onDelete: Cascade)
+  customerId   String?
+  customer     Customer?  @relation(fields: [customerId], references: [id], onDelete: SetNull)
+  quoteId      String?
+  quote        Quote?     @relation(fields: [quoteId], references: [id], onDelete: SetNull)
+  fileUrl      String
+  caption      String?
+  takenAt      DateTime   @default(now())
+
+  @@index([contractorId])
+  @@index([customerId])
+  @@index([quoteId])
+}
+
+model SiteNote {
+  id           String     @id @default(uuid())
+  contractorId String
+  contractor   Contractor @relation(fields: [contractorId], references: [id], onDelete: Cascade)
+  customerId   String?
+  customer     Customer?  @relation(fields: [customerId], references: [id], onDelete: SetNull)
+  quoteId      String?
+  quote        Quote?     @relation(fields: [quoteId], references: [id], onDelete: SetNull)
+  content      String
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@index([contractorId])
+  @@index([customerId])
+  @@index([quoteId])
 }
