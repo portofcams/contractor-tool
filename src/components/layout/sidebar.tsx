@@ -42,7 +42,7 @@ export function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="hidden md:flex md:w-64 md:flex-col border-r border-[#334155] bg-[#020617]">
+    <aside aria-label="Main navigation" className="hidden md:flex md:w-64 md:flex-col border-r border-[#334155] bg-[#020617]">
       <div className="p-6">
         <Link href="/dashboard" className="text-xl font-bold text-blue-500">
           ContractorCalc

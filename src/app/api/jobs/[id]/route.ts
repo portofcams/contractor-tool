@@ -23,6 +23,11 @@ export async function PATCH(
     status?: string; scheduledDate?: string; scheduledEnd?: string; notes?: string;
   };
 
+  const validStatuses = ["scheduled", "in_progress", "completed", "cancelled"];
+  if (status && !validStatuses.includes(status)) {
+    return NextResponse.json({ error: "Invalid status" }, { status: 400 });
+  }
+
   const data: Record<string, unknown> = {};
   if (status) data.status = status;
   if (scheduledDate) data.scheduledDate = new Date(scheduledDate);

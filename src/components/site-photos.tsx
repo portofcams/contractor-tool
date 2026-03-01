@@ -114,6 +114,7 @@ export function SitePhotos({
               <button
                 key={t}
                 onClick={() => setFilterType(t)}
+                aria-pressed={filterType === t}
                 className={`text-xs px-2 py-0.5 rounded-full border ${
                   filterType === t ? "bg-blue-500 text-white border-blue-500" : "border-border text-muted-foreground"
                 }`}

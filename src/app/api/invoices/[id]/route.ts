@@ -21,8 +21,14 @@ export async function PATCH(
 
   const { paidAmount, status } = body as { paidAmount?: number; status?: string };
 
+  const validStatuses = ["unpaid", "partial", "paid", "overdue", "void"];
+  if (status && !validStatuses.includes(status)) {
+    return NextResponse.json({ error: "Invalid status" }, { status: 400 });
+  }
+
   const data: Record<string, unknown> = {};
   if (typeof paidAmount === "number") {
+    if (paidAmount < 0) return NextResponse.json({ error: "Invalid amount" }, { status: 400 });
     data.paidAmount = paidAmount;
     if (paidAmount >= invoice.amount) {
       data.status = "paid";

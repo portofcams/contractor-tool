@@ -48,6 +48,16 @@ export async function DELETE(req: Request) {
 
   // Delete all related data in order (respecting FK constraints)
   await prisma.$transaction([
+    prisma.jobAssignment.deleteMany({ where: { job: { contractorId: contractor.id } } }),
+    prisma.actualCost.deleteMany({ where: { contractorId: contractor.id } }),
+    prisma.job.deleteMany({ where: { contractorId: contractor.id } }),
+    prisma.invoice.deleteMany({ where: { contractorId: contractor.id } }),
+    prisma.followUp.deleteMany({ where: { contractorId: contractor.id } }),
+    prisma.voiceNote.deleteMany({ where: { contractorId: contractor.id } }),
+    prisma.sitePhoto.deleteMany({ where: { contractorId: contractor.id } }),
+    prisma.siteNote.deleteMany({ where: { contractorId: contractor.id } }),
+    prisma.roomScan.deleteMany({ where: { contractorId: contractor.id } }),
+    prisma.crewMember.deleteMany({ where: { contractorId: contractor.id } }),
     prisma.floorPlan.deleteMany({
       where: { customer: { contractorId: contractor.id } },
     }),

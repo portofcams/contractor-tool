@@ -124,7 +124,7 @@ export function ProfitTracker({
           </p>
           <p
             className={`text-xs ${
-              profit >= 0 ? "text-green-400/70" : "text-red-400/70"
+              profit >= 0 ? "text-green-500" : "text-red-500"
             }`}
           >
             {profitPercent}%

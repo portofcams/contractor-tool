@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -57,6 +57,8 @@ export default function JobsCalendarPage() {
   const [loading, setLoading] = useState(true);
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedJob, setSelectedJob] = useState<Job | null>(null);
+  const [statusMessage, setStatusMessage] = useState("");
+  const detailRef = useRef<HTMLDivElement>(null);
 
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
@@ -66,6 +68,12 @@ export default function JobsCalendarPage() {
   useEffect(() => {
     fetchJobs();
   }, []);
+
+  useEffect(() => {
+    if (selectedJob) {
+      detailRef.current?.focus();
+    }
+  }, [selectedJob]);
 
   async function fetchJobs() {
     try {
@@ -112,9 +120,12 @@ export default function JobsCalendarPage() {
         if (selectedJob && selectedJob.id === jobId) {
           setSelectedJob({ ...selectedJob, status: status as Job["status"] });
         }
+        setStatusMessage(`Job status updated to ${status.replace("_", " ")}`);
+      } else {
+        setStatusMessage("Failed to update job status");
       }
     } catch {
-      // silently fail
+      setStatusMessage("Failed to update job status");
     }
   }
 
@@ -163,13 +174,13 @@ export default function JobsCalendarPage() {
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
-            <Button variant="outline" size="sm" onClick={prevMonth}>
+            <Button variant="outline" size="sm" onClick={prevMonth} aria-label="Previous month">
               &larr; Prev
             </Button>
             <CardTitle>
               {monthName} {year}
             </CardTitle>
-            <Button variant="outline" size="sm" onClick={nextMonth}>
+            <Button variant="outline" size="sm" onClick={nextMonth} aria-label="Next month">
               Next &rarr;
             </Button>
           </div>
@@ -180,6 +191,7 @@ export default function JobsCalendarPage() {
             {DAYS.map((day) => (
               <div
                 key={day}
+                role="columnheader"
                 className="text-center text-xs font-medium text-muted-foreground py-1"
               >
                 {day}
@@ -188,7 +200,7 @@ export default function JobsCalendarPage() {
           </div>
 
           {/* Calendar grid */}
-          <div className="grid grid-cols-7 gap-1">
+          <div className="grid grid-cols-7 gap-1" role="grid">
             {calendarCells.map((day, idx) => {
               const dayJobs = day ? getJobsForDay(day) : [];
               const today = new Date();
@@ -200,6 +212,7 @@ export default function JobsCalendarPage() {
               return (
                 <div
                   key={idx}
+                  role="gridcell"
                   className={`min-h-[80px] rounded-md border border-border p-1 ${
                     day ? "bg-secondary/30" : "bg-transparent border-transparent"
                   } ${isToday ? "ring-2 ring-primary" : ""}`}
@@ -220,6 +233,7 @@ export default function JobsCalendarPage() {
                           <button
                             key={job.id}
                             onClick={() => setSelectedJob(job)}
+                            aria-label={`View job ${job.jobNumber} for ${job.quote?.customer?.name || 'unknown'}`}
                             className="w-full text-left"
                           >
                             <div className="flex items-center gap-1">
@@ -246,7 +260,7 @@ export default function JobsCalendarPage() {
 
       {/* Job Detail Panel */}
       {selectedJob && (
-        <Card>
+        <Card ref={detailRef} tabIndex={-1}>
           <CardHeader>
             <div className="flex items-center justify-between">
               <CardTitle className="text-lg">
@@ -346,6 +360,7 @@ export default function JobsCalendarPage() {
           </CardContent>
         </Card>
       )}
+      <div aria-live="polite" aria-atomic="true" className="sr-only">{statusMessage}</div>
     </div>
   );
 }

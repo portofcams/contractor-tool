@@ -15,6 +15,7 @@ import {
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -59,6 +60,7 @@ export default function TeamPage() {
   const [submitting, setSubmitting] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editForm, setEditForm] = useState<Partial<CrewMember>>({});
+  const [statusMessage, setStatusMessage] = useState("");
 
   useEffect(() => {
     fetchCrew();
@@ -96,10 +98,13 @@ export default function TeamPage() {
       if (res.ok) {
         setForm(emptyForm);
         setDialogOpen(false);
+        setStatusMessage("Member added");
         await fetchCrew();
+      } else {
+        setStatusMessage("Failed to add member");
       }
     } catch {
-      // silently fail
+      setStatusMessage("Failed to add member");
     } finally {
       setSubmitting(false);
     }
@@ -172,11 +177,13 @@ export default function TeamPage() {
           <DialogContent>
             <DialogHeader>
               <DialogTitle>Add Crew Member</DialogTitle>
+              <DialogDescription>Enter crew member contact information and role.</DialogDescription>
             </DialogHeader>
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label>Name</Label>
+                <Label htmlFor="crew-name">Name</Label>
                 <Input
+                  id="crew-name"
                   placeholder="Full name"
                   value={form.name}
                   onChange={(e) =>
@@ -185,8 +192,9 @@ export default function TeamPage() {
                 />
               </div>
               <div className="space-y-2">
-                <Label>Phone</Label>
+                <Label htmlFor="crew-phone">Phone</Label>
                 <Input
+                  id="crew-phone"
                   placeholder="(555) 123-4567"
                   value={form.phone}
                   onChange={(e) =>
@@ -195,8 +203,9 @@ export default function TeamPage() {
                 />
               </div>
               <div className="space-y-2">
-                <Label>Email</Label>
+                <Label htmlFor="crew-email">Email</Label>
                 <Input
+                  id="crew-email"
                   type="email"
                   placeholder="email@example.com"
                   value={form.email}
@@ -206,7 +215,7 @@ export default function TeamPage() {
                 />
               </div>
               <div className="space-y-2">
-                <Label>Role</Label>
+                <Label htmlFor="crew-role">Role</Label>
                 <Select
                   value={form.role}
                   onValueChange={(v) =>
@@ -216,7 +225,7 @@ export default function TeamPage() {
                     })
                   }
                 >
-                  <SelectTrigger className="w-full">
+                  <SelectTrigger id="crew-role" className="w-full">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -229,8 +238,9 @@ export default function TeamPage() {
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label>Hourly Rate ($)</Label>
+                <Label htmlFor="crew-rate">Hourly Rate ($)</Label>
                 <Input
+                  id="crew-rate"
                   type="number"
                   placeholder="25.00"
                   value={form.hourlyRate}
@@ -269,10 +279,10 @@ export default function TeamPage() {
           </CardContent>
         </Card>
       ) : (
-        <div className="space-y-3">
+        <ul aria-label="Crew members" className="space-y-3 list-none p-0">
           {crew.map((member) => (
+            <li key={member.id}>
             <Card
-              key={member.id}
               className={!member.active ? "opacity-60" : ""}
             >
               <CardContent className="py-4">
@@ -281,8 +291,9 @@ export default function TeamPage() {
                   <div className="space-y-3">
                     <div className="grid grid-cols-2 gap-3">
                       <div className="space-y-1">
-                        <Label className="text-xs">Name</Label>
+                        <Label htmlFor="edit-name" className="text-xs">Name</Label>
                         <Input
+                          id="edit-name"
                           value={editForm.name || ""}
                           onChange={(e) =>
                             setEditForm({
@@ -293,8 +304,9 @@ export default function TeamPage() {
                         />
                       </div>
                       <div className="space-y-1">
-                        <Label className="text-xs">Phone</Label>
+                        <Label htmlFor="edit-phone" className="text-xs">Phone</Label>
                         <Input
+                          id="edit-phone"
                           value={editForm.phone || ""}
                           onChange={(e) =>
                             setEditForm({
@@ -305,8 +317,9 @@ export default function TeamPage() {
                         />
                       </div>
                       <div className="space-y-1">
-                        <Label className="text-xs">Email</Label>
+                        <Label htmlFor="edit-email" className="text-xs">Email</Label>
                         <Input
+                          id="edit-email"
                           value={editForm.email || ""}
                           onChange={(e) =>
                             setEditForm({
@@ -317,7 +330,7 @@ export default function TeamPage() {
                         />
                       </div>
                       <div className="space-y-1">
-                        <Label className="text-xs">Role</Label>
+                        <Label htmlFor="edit-role" className="text-xs">Role</Label>
                         <Select
                           value={editForm.role || "helper"}
                           onValueChange={(v) =>
@@ -327,7 +340,7 @@ export default function TeamPage() {
                             })
                           }
                         >
-                          <SelectTrigger className="w-full">
+                          <SelectTrigger id="edit-role" className="w-full">
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
@@ -340,8 +353,9 @@ export default function TeamPage() {
                         </Select>
                       </div>
                       <div className="space-y-1">
-                        <Label className="text-xs">Hourly Rate ($)</Label>
+                        <Label htmlFor="edit-rate" className="text-xs">Hourly Rate ($)</Label>
                         <Input
+                          id="edit-rate"
                           type="number"
                           value={editForm.hourlyRate || ""}
                           onChange={(e) =>
@@ -415,9 +429,11 @@ export default function TeamPage() {
                 )}
               </CardContent>
             </Card>
+            </li>
           ))}
-        </div>
+        </ul>
       )}
+      <div aria-live="polite" aria-atomic="true" className="sr-only">{statusMessage}</div>
     </div>
   );
 }

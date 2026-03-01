@@ -45,6 +45,7 @@ export default function InvoicesPage() {
   const [paymentInvoiceId, setPaymentInvoiceId] = useState<string | null>(null);
   const [paymentAmount, setPaymentAmount] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [statusMessage, setStatusMessage] = useState("");
 
   useEffect(() => {
     fetchInvoices();
@@ -79,9 +80,12 @@ export default function InvoicesPage() {
         setPaymentInvoiceId(null);
         setPaymentAmount("");
         await fetchInvoices();
+        setStatusMessage("Payment recorded");
+      } else {
+        setStatusMessage("Payment failed");
       }
     } catch {
-      // silently fail
+      setStatusMessage("Payment failed");
     } finally {
       setSubmitting(false);
     }
@@ -202,6 +206,7 @@ export default function InvoicesPage() {
                               <Input
                                 type="number"
                                 placeholder="Amount"
+                                aria-label="Payment amount"
                                 className="w-24 h-8"
                                 value={paymentAmount}
                                 onChange={(e) =>
@@ -249,6 +254,7 @@ export default function InvoicesPage() {
           </CardContent>
         </Card>
       )}
+      <div aria-live="polite" aria-atomic="true" className="sr-only">{statusMessage}</div>
     </div>
   );
 }

@@ -80,12 +80,12 @@ export default function QuickEstimatePage() {
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <Label>Trade</Label>
+            <Label htmlFor="quick-trade">Trade</Label>
             <Select
               value={trade}
               onValueChange={(v) => setTrade(v as Trade)}
             >
-              <SelectTrigger className="w-full">
+              <SelectTrigger id="quick-trade" className="w-full">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -98,12 +98,12 @@ export default function QuickEstimatePage() {
 
           {trade === "flooring" && (
             <div className="space-y-2">
-              <Label>Material Type</Label>
+              <Label htmlFor="quick-material">Material Type</Label>
               <Select
                 value={flooringType}
                 onValueChange={(v) => setFlooringType(v as FlooringType)}
               >
-                <SelectTrigger className="w-full">
+                <SelectTrigger id="quick-material" className="w-full">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -124,8 +124,9 @@ export default function QuickEstimatePage() {
           )}
 
           <div className="space-y-2">
-            <Label>Square Footage</Label>
+            <Label htmlFor="quick-sqft">Square Footage</Label>
             <Input
+              id="quick-sqft"
               type="number"
               placeholder="e.g. 500"
               value={sqft}
@@ -148,7 +149,7 @@ export default function QuickEstimatePage() {
         </CardContent>
       </Card>
 
-      <Card className="border-2">
+      <Card className="border-2" aria-live="polite">
         <CardContent className="py-8 text-center">
           <p className="text-sm text-muted-foreground mb-2">
             Estimated Price (with 50% markup)

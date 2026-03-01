@@ -69,6 +69,11 @@ export async function PATCH(req: NextRequest) {
   const { id, status } = body as { id?: string; status?: string };
   if (!id || !status) return NextResponse.json({ error: "id and status required" }, { status: 400 });
 
+  const validStatuses = ["pending", "sent", "dismissed"];
+  if (!validStatuses.includes(status)) {
+    return NextResponse.json({ error: "Invalid status" }, { status: 400 });
+  }
+
   const existing = await prisma.followUp.findFirst({ where: { id, contractorId: session.user.id } });
   if (!existing) return NextResponse.json({ error: "Not found" }, { status: 404 });
 

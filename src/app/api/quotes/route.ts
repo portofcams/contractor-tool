@@ -84,6 +84,14 @@ export async function POST(req: Request) {
       }
     }
 
+    // Verify customer belongs to this contractor
+    const customer = await prisma.customer.findFirst({
+      where: { id: data.customerId, contractorId: session.user.id },
+    });
+    if (!customer) {
+      return NextResponse.json({ error: "Customer not found" }, { status: 404 });
+    }
+
     const quote = await prisma.quote.create({
       data: {
         contractorId: session.user.id,

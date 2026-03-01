@@ -16,7 +16,12 @@ export async function POST(req: NextRequest) {
     name?: string; phone?: string; email?: string; role?: string; hourlyRate?: number;
   };
 
-  if (!name) return NextResponse.json({ error: "Name required" }, { status: 400 });
+  if (!name || typeof name !== "string") return NextResponse.json({ error: "Name required" }, { status: 400 });
+  if (name.length > 200) return NextResponse.json({ error: "Name too long" }, { status: 400 });
+  if (phone && typeof phone === "string" && phone.length > 30) return NextResponse.json({ error: "Phone too long" }, { status: 400 });
+  if (email && typeof email === "string" && email.length > 254) return NextResponse.json({ error: "Email too long" }, { status: 400 });
+  if (role && typeof role === "string" && role.length > 100) return NextResponse.json({ error: "Role too long" }, { status: 400 });
+  if (hourlyRate !== undefined && (typeof hourlyRate !== "number" || hourlyRate < 0 || hourlyRate > 10000)) return NextResponse.json({ error: "Invalid hourly rate" }, { status: 400 });
 
   try {
     const member = await prisma.crewMember.create({

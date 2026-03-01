@@ -21,11 +21,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "No file provided" }, { status: 400 });
   }
 
-  const validTypes = ["audio/webm", "audio/ogg", "audio/mp4", "audio/mpeg", "audio/wav"];
-  if (!validTypes.includes(file.type)) {
-    return NextResponse.json({ error: "Invalid audio format" }, { status: 400 });
-  }
-
   if (file.size > 25 * 1024 * 1024) {
     return NextResponse.json({ error: "File too large. Max 25MB." }, { status: 400 });
   }
@@ -42,7 +37,21 @@ export async function POST(req: NextRequest) {
 
   const bytes = await file.arrayBuffer();
   const buffer = Buffer.from(bytes);
-  const ext = file.type.split("/")[1] === "mpeg" ? "mp3" : file.type.split("/")[1];
+
+  // Magic-byte verification for audio formats
+  const AUDIO_SIGS: { type: string; ext: string; check: (b: Buffer) => boolean }[] = [
+    { type: "audio/webm", ext: "webm", check: (b) => b.length >= 4 && b[0] === 0x1a && b[1] === 0x45 && b[2] === 0xdf && b[3] === 0xa3 },
+    { type: "audio/ogg", ext: "ogg", check: (b) => b.length >= 4 && b.toString("ascii", 0, 4) === "OggS" },
+    { type: "audio/wav", ext: "wav", check: (b) => b.length >= 4 && b.toString("ascii", 0, 4) === "RIFF" },
+    { type: "audio/mp4", ext: "m4a", check: (b) => b.length >= 8 && b.toString("ascii", 4, 8) === "ftyp" },
+    { type: "audio/mpeg", ext: "mp3", check: (b) => b.length >= 3 && ((b[0] === 0xff && (b[1] & 0xe0) === 0xe0) || b.toString("ascii", 0, 3) === "ID3") },
+  ];
+  const detected = AUDIO_SIGS.find((s) => s.check(buffer));
+  if (!detected) {
+    return NextResponse.json({ error: "File content does not match an allowed audio type" }, { status: 400 });
+  }
+
+  const ext = detected.ext;
   const fileName = `${crypto.randomUUID()}.${ext}`;
   const uploadDir = path.join(process.cwd(), "public", "uploads", "voice");
   const filePath = path.join(uploadDir, fileName);
