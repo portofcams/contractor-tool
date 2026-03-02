@@ -89,29 +89,29 @@ public class RoomScannerPlugin: CAPPlugin, CAPBridgedPlugin {
         var rooms: [[String: Any]] = []
         let metersToFeet = 3.28084
 
-        // Each floor surface represents a room area
-        for (index, floor) in capturedRoom.floors.enumerated() {
-            let dims = floor.dimensions
-            // RoomPlan dimensions: x = width, y = height (thickness), z = depth
-            let length = Double(dims.x) * metersToFeet
-            let width = Double(dims.z) * metersToFeet
-            // Find the tallest wall near this floor for ceiling height
-            let height = findWallHeight(for: floor, in: capturedRoom) * metersToFeet
+        // Use floors API on iOS 17+ for per-room detection
+        if #available(iOS 17.0, *) {
+            for (index, floor) in capturedRoom.floors.enumerated() {
+                let dims = floor.dimensions
+                let length = Double(dims.x) * metersToFeet
+                let width = Double(dims.z) * metersToFeet
+                let height = findWallHeight(for: floor, in: capturedRoom) * metersToFeet
 
-            let floorArea = length * width
-            let wallArea = 2.0 * (length + width) * height
+                let floorArea = length * width
+                let wallArea = 2.0 * (length + width) * height
 
-            rooms.append([
-                "name": "Room \(index + 1)",
-                "length": round(length * 10.0) / 10.0,
-                "width": round(width * 10.0) / 10.0,
-                "height": round(height * 10.0) / 10.0,
-                "floorArea": round(floorArea * 10.0) / 10.0,
-                "wallArea": round(wallArea * 10.0) / 10.0,
-            ])
+                rooms.append([
+                    "name": "Room \(index + 1)",
+                    "length": round(length * 10.0) / 10.0,
+                    "width": round(width * 10.0) / 10.0,
+                    "height": round(height * 10.0) / 10.0,
+                    "floorArea": round(floorArea * 10.0) / 10.0,
+                    "wallArea": round(wallArea * 10.0) / 10.0,
+                ])
+            }
         }
 
-        // If no floors detected, try to derive from walls
+        // Fallback: derive from walls (iOS 16, or if no floors detected)
         if rooms.isEmpty && !capturedRoom.walls.isEmpty {
             let wallHeights = capturedRoom.walls.map { Double($0.dimensions.y) }
             let avgHeight = (wallHeights.reduce(0, +) / Double(wallHeights.count)) * metersToFeet
@@ -143,7 +143,11 @@ public class RoomScannerPlugin: CAPPlugin, CAPBridgedPlugin {
             ])
         }
 
-        let surfaceCount = capturedRoom.walls.count + capturedRoom.floors.count
+        var floorCount = 0
+        if #available(iOS 17.0, *) {
+            floorCount = capturedRoom.floors.count
+        }
+        let surfaceCount = capturedRoom.walls.count + floorCount
 
         // Count openings (doors, windows) for reference
         var openingCount = 0
@@ -156,7 +160,7 @@ public class RoomScannerPlugin: CAPPlugin, CAPBridgedPlugin {
             "rooms": rooms,
             "surfaceCount": surfaceCount,
             "wallCount": capturedRoom.walls.count,
-            "floorCount": capturedRoom.floors.count,
+            "floorCount": floorCount,
             "doorCount": capturedRoom.doors.count,
             "windowCount": capturedRoom.windows.count,
             "openingCount": openingCount,
@@ -165,7 +169,7 @@ public class RoomScannerPlugin: CAPPlugin, CAPBridgedPlugin {
         #endif
     }
 
-    @available(iOS 16.0, *)
+    @available(iOS 17.0, *)
     private func findWallHeight(for floor: CapturedRoom.Surface, in room: CapturedRoom) -> Double {
         #if canImport(RoomPlan)
         let floorPos = floor.transform.columns.3
@@ -275,9 +279,28 @@ class RoomScanViewController: UIViewController, RoomCaptureViewDelegate, RoomCap
         }
     }
 
-    // RoomCaptureSessionDelegate
+    // RoomCaptureSessionDelegate — fallback: use raw data if view delegate doesn't fire
+    private var lastCapturedData: CapturedRoomData?
+
     func captureSession(_ session: RoomCaptureSession, didEndWith data: CapturedRoomData, error: (any Error)?) {
-        // Processing happens in captureView delegate
+        lastCapturedData = data
+        // If the view delegate doesn't fire within 2 seconds, process from raw data
+        if isProcessing {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { [weak self] in
+                guard let self = self, self.isProcessing else { return }
+                // View delegate didn't fire — try processing raw data
+                if let data = self.lastCapturedData {
+                    let finalRoom = try? CapturedRoom(from: data)
+                    self.dismiss(animated: true) {
+                        if let room = finalRoom {
+                            self.onComplete?(room)
+                        } else {
+                            self.onCancel?()
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 #endif

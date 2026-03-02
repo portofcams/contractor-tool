@@ -33,7 +33,7 @@ const config: CapacitorConfig = {
   server: {
     url: isDev
       ? "http://localhost:3000"
-      : "https://contractorcalc.com",
+      : "https://contractor.portofcams.com",
     cleartext: isDev, // Allow HTTP only in dev
   },
 

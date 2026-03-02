@@ -298,7 +298,7 @@ export default function NewQuotePage() {
     setScanError("");
     try {
       const result = await roomScanner.scan();
-      if (result.rooms.length > 0) {
+      if (result.rooms && result.rooms.length > 0) {
         const scannedRooms = result.rooms.map((r: ScannedRoom) => ({
           name: r.name,
           length: r.length,
@@ -306,6 +306,7 @@ export default function NewQuotePage() {
           height: r.height,
         }));
         setRooms(scannedRooms);
+        setEntryMode("dimensions");
 
         // Save the scan to the server
         fetch("/api/room-scans", {
@@ -317,6 +318,10 @@ export default function NewQuotePage() {
             surfaceCount: result.surfaceCount,
           }),
         }).catch(() => {});
+      } else {
+        setScanError(
+          `Scan completed but no rooms detected (walls: ${result.wallCount ?? 0}, floors: ${result.floorCount ?? 0}). Try scanning slower and closer to walls.`
+        );
       }
     } catch (err) {
       const msg = err instanceof Error ? err.message : "Scan failed";
