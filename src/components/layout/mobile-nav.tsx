@@ -6,7 +6,8 @@ import { cn } from "@/lib/utils";
 
 const navItems = [
   { href: "/dashboard", label: "Home" },
-  { href: "/quotes/new", label: "Quote" },
+  { href: "/projects", label: "Projects" },
+  { href: "/quotes/new", label: "New Quote" },
   { href: "/quotes", label: "Quotes" },
   { href: "/customers", label: "Clients" },
 ];
@@ -15,8 +16,8 @@ export function MobileNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 right-0 border-t border-[#334155] bg-[#020617] z-50">
-      <div className="flex justify-around py-2">
+    <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-background/80 backdrop-blur-xl border-t border-border z-50 safe-area-pb">
+      <div className="flex justify-around py-2 px-1">
         {navItems.map((item) => {
           const isActive =
             item.href === "/dashboard"
@@ -28,8 +29,8 @@ export function MobileNav() {
               href={item.href}
               aria-current={isActive ? "page" : undefined}
               className={cn(
-                "flex flex-col items-center gap-1 px-3 py-1 text-xs font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500",
-                isActive ? "text-blue-500" : "text-gray-400"
+                "flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-lg text-[10px] font-medium transition-all duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary",
+                isActive ? "text-primary" : "text-muted-foreground active:scale-95"
               )}
             >
               {item.label}

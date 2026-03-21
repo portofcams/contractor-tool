@@ -60,13 +60,22 @@ export async function PATCH(req: Request) {
   }
 
   const body = await req.json();
-  const data: Record<string, boolean> = {};
+  const data: Record<string, unknown> = {};
 
   if (typeof body.notifyOnAccept === "boolean") {
     data.notifyOnAccept = body.notifyOnAccept;
   }
   if (typeof body.notifyOnDecline === "boolean") {
     data.notifyOnDecline = body.notifyOnDecline;
+  }
+  if (typeof body.notifyOnView === "boolean") {
+    data.notifyOnView = body.notifyOnView;
+  }
+  if (typeof body.autoFollowUp === "boolean") {
+    data.autoFollowUp = body.autoFollowUp;
+  }
+  if (body.followUpSequence !== undefined) {
+    data.followUpSequence = body.followUpSequence;
   }
 
   if (Object.keys(data).length === 0) {

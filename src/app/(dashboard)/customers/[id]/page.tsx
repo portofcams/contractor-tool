@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { FloorPlanUpload, FloorPlanGallery } from "@/components/floor-plan-upload";
 import { SitePhotos } from "@/components/site-photos";
 import { SiteNotes } from "@/components/site-notes";
+import { CopyPortalLink } from "@/components/copy-portal-link";
 
 export default async function CustomerDetailPage({
   params,
@@ -32,7 +33,7 @@ export default async function CustomerDetailPage({
 
   if (!customer) notFound();
 
-  const [sitePhotos, siteNotes] = await Promise.all([
+  const [sitePhotos, siteNotes, voiceNotes] = await Promise.all([
     prisma.sitePhoto.findMany({
       where: { customerId: id, contractorId: contractor.id },
       orderBy: { takenAt: "desc" },
@@ -41,7 +42,19 @@ export default async function CustomerDetailPage({
       where: { customerId: id, contractorId: contractor.id },
       orderBy: { createdAt: "desc" },
     }),
+    prisma.voiceNote.findMany({
+      where: { customerId: id, contractorId: contractor.id },
+      orderBy: { createdAt: "desc" },
+    }),
   ]);
+
+  // Revenue summary
+  const totalRevenue = customer.quotes
+    .filter((q) => q.status === "accepted")
+    .reduce((sum, q) => sum + q.total, 0);
+  const pendingRevenue = customer.quotes
+    .filter((q) => q.status === "sent" || q.status === "draft")
+    .reduce((sum, q) => sum + q.total, 0);
 
   return (
     <div className="space-y-6">
@@ -50,10 +63,33 @@ export default async function CustomerDetailPage({
           <h1 className="text-2xl font-bold">{customer.name}</h1>
           <p className="text-muted-foreground">{customer.email || customer.phone || "No contact info"}</p>
         </div>
-        <Link href={`/quotes/new?customerId=${customer.id}`}>
-          <Button>New Quote</Button>
-        </Link>
+        <div className="flex items-center gap-2">
+          {customer.portalToken && (
+            <CopyPortalLink portalToken={customer.portalToken} />
+          )}
+          <Link href={`/quotes/new?customerId=${customer.id}`}>
+            <Button>New Quote</Button>
+          </Link>
+        </div>
       </div>
+
+      {/* Revenue summary */}
+      {(totalRevenue > 0 || pendingRevenue > 0) && (
+        <div className="grid grid-cols-2 gap-4">
+          <Card>
+            <CardContent className="pt-6 text-center">
+              <p className="text-xs text-muted-foreground uppercase tracking-wider">Accepted Revenue</p>
+              <p className="text-2xl font-bold text-green-500">${totalRevenue.toLocaleString()}</p>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="pt-6 text-center">
+              <p className="text-xs text-muted-foreground uppercase tracking-wider">Pending</p>
+              <p className="text-2xl font-bold text-primary">${pendingRevenue.toLocaleString()}</p>
+            </CardContent>
+          </Card>
+        </div>
+      )}
 
       <div className="grid md:grid-cols-2 gap-6">
         <Card>
@@ -142,6 +178,7 @@ export default async function CustomerDetailPage({
               fileUrl: fp.fileUrl,
               fileType: fp.fileType,
               createdAt: fp.createdAt,
+              roomsData: fp.roomsData,
             }))}
           />
           <FloorPlanUpload customerId={customer.id} />
@@ -184,6 +221,30 @@ export default async function CustomerDetailPage({
           />
         </CardContent>
       </Card>
+
+      {/* Voice Notes */}
+      {voiceNotes.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Voice Notes</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            {voiceNotes.map((vn) => (
+              <div key={vn.id} className="flex items-center gap-3 p-3 rounded-lg bg-secondary">
+                <audio controls preload="none" className="flex-1 h-8">
+                  <source src={vn.fileUrl} />
+                </audio>
+                <span className="text-xs text-muted-foreground whitespace-nowrap">
+                  {Math.floor(vn.duration / 60)}:{String(vn.duration % 60).padStart(2, "0")}
+                </span>
+                <span className="text-xs text-muted-foreground whitespace-nowrap">
+                  {new Date(vn.createdAt).toLocaleDateString()}
+                </span>
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }

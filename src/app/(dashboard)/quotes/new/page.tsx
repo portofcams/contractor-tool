@@ -30,8 +30,15 @@ import {
   type PaintType,
   type SheetSize,
 } from "@/lib/calculators";
-import { roomScanner, type ScannedRoom } from "@/lib/room-scanner";
+import { roomScanner, type ScannedRoom, type ScanResult } from "@/lib/room-scanner";
+import { ScanConfidencePanel } from "@/components/scan-confidence";
 import { offlineStore } from "@/lib/offline-storage";
+import { notifySuccess, notifyError, tapMedium } from "@/lib/haptics";
+import { AIEstimate } from "@/components/ai-estimate";
+import { ARMaterialPreviewButton } from "@/components/ar-material-preview";
+import { VoiceToQuote } from "@/components/voice-to-quote";
+import { QuoteComparison } from "@/components/quote-comparison";
+import { FloorplanEditor } from "@/components/floorplan-editor";
 
 interface UsageInfo {
   planName: string;
@@ -51,6 +58,8 @@ interface Customer {
   id: string;
   name: string;
   email?: string;
+  _count?: { quotes: number };
+  quotes?: { createdAt: string }[];
 }
 
 interface MaterialLine {
@@ -99,17 +108,23 @@ export default function NewQuotePage() {
   const [addCustomerError, setAddCustomerError] = useState("");
   const [gpsLoading, setGpsLoading] = useState(false);
 
-  // Step 2: Dimensions
+  // Notes (per step + overall)
+  const [jobNotes, setJobNotes] = useState(""); // Step 2: job type observations
+  const [dimensionNotes, setDimensionNotes] = useState(""); // Step 3: measurement notes
+  const [projectNotes, setProjectNotes] = useState(""); // Step 4: scope/conditions
+
+  // Step 2: Trade + Dimensions
+  const [trade, setTrade] = useState<"flooring" | "painting" | "drywall">("flooring");
   const [entryMode, setEntryMode] = useState<"dimensions" | "sqft">("sqft");
   const [rooms, setRooms] = useState([
-    { name: "Room 1", length: 0, width: 0, height: 8 },
+    { name: "Room 1", length: 0, width: 0, height: 8, notes: "" },
   ]);
   const [lidarAvailable, setLidarAvailable] = useState(false);
   const [scanning, setScanning] = useState(false);
   const [scanError, setScanError] = useState("");
-
-  // Step 3: Trade & material
-  const [trade, setTrade] = useState<"flooring" | "painting" | "drywall">("flooring");
+  const [scanAttempts, setScanAttempts] = useState(0);
+  const [lastScanResult, setLastScanResult] = useState<ScanResult | null>(null);
+  const [allScans, setAllScans] = useState<ScanResult[]>([]);
   const [flooringMaterial, setFlooringMaterial] = useState<FlooringMaterial>("hardwood");
   const [installPattern, setInstallPattern] = useState<InstallPattern>("straight");
   const [paintType, setPaintType] = useState<PaintType>("interior");
@@ -279,7 +294,7 @@ export default function NewQuotePage() {
   function addRoom() {
     setRooms([
       ...rooms,
-      { name: `Room ${rooms.length + 1}`, length: 0, width: 0, height: 8 },
+      { name: `Room ${rooms.length + 1}`, length: 0, width: 0, height: 8, notes: "" },
     ]);
   }
 
@@ -296,19 +311,23 @@ export default function NewQuotePage() {
   async function startLidarScan() {
     setScanning(true);
     setScanError("");
+    setScanAttempts((a) => a + 1);
     try {
       const result = await roomScanner.scan();
       if (result.rooms && result.rooms.length > 0) {
         const scannedRooms = result.rooms.map((r: ScannedRoom) => ({
           name: r.name,
-          length: r.length,
-          width: r.width,
-          height: r.height,
+          length: r.floorArea,
+          width: 0,
+          height: trade === "flooring" ? 0 : r.height,
+          notes: "",
         }));
         setRooms(scannedRooms);
-        setEntryMode("dimensions");
+        setEntryMode("sqft");
+        setLastScanResult(result);
+        setAllScans((prev) => [...prev, result]);
+        notifySuccess();
 
-        // Save the scan to the server
         fetch("/api/room-scans", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -316,17 +335,22 @@ export default function NewQuotePage() {
             customerId: customerId || undefined,
             roomsData: result.rooms,
             surfaceCount: result.surfaceCount,
+            usdzBase64: result.usdzBase64 || undefined,
           }),
         }).catch(() => {});
       } else {
         setScanError(
-          `Scan completed but no rooms detected (walls: ${result.wallCount ?? 0}, floors: ${result.floorCount ?? 0}). Try scanning slower and closer to walls.`
+          "No rooms detected. Tips: stand in the center of the room, scan slowly, and make sure all walls are visible."
         );
       }
     } catch (err) {
       const msg = err instanceof Error ? err.message : "Scan failed";
-      if (msg !== "Scan cancelled by user") {
-        setScanError(msg);
+      if (msg === "Scan cancelled by user") {
+        // User cancelled — no error
+      } else if (msg.includes("processing") || msg.includes("timeout")) {
+        setScanError("Scan processing timed out. Try a smaller room or scan more slowly.");
+      } else {
+        setScanError(`Scan failed: ${msg}. Tap "Try Again" to retry.`);
       }
     }
     setScanning(false);
@@ -434,6 +458,14 @@ export default function NewQuotePage() {
     setLoading(true);
     setError("");
 
+    // Combine all notes into one field
+    const allNotes = [
+      jobNotes && `**Job Type Notes:**\n${jobNotes}`,
+      dimensionNotes && `**Measurement Notes:**\n${dimensionNotes}`,
+      ...rooms.filter(r => r.notes).map(r => `**${r.name}:**\n${r.notes}`),
+      projectNotes && `**Scope & Conditions:**\n${projectNotes}`,
+    ].filter(Boolean).join("\n\n");
+
     const quotePayload = {
       customerId,
       trade,
@@ -443,6 +475,7 @@ export default function NewQuotePage() {
       markupPercent,
       taxRate,
       total: getTotal(),
+      notes: allNotes || undefined,
     };
 
     // Offline mode: save locally and queue for sync
@@ -473,10 +506,12 @@ export default function NewQuotePage() {
     if (!res.ok) {
       const data = await res.json();
       setError(data.error || "Failed to create quote");
+      notifyError();
       setLoading(false);
       return;
     }
 
+    notifySuccess();
     const quote = await res.json();
 
     // If "Create & Send", immediately email the quote
@@ -515,7 +550,7 @@ export default function NewQuotePage() {
             key={s}
             aria-hidden="true"
             className={`h-2 flex-1 rounded-full ${
-              s <= step ? "bg-blue-500" : "bg-[#334155]"
+              s <= step ? "bg-primary" : "bg-[#334155]"
             }`}
           />
         ))}
@@ -524,14 +559,14 @@ export default function NewQuotePage() {
         <p className="text-xs text-muted-foreground text-center">
           {usage.quotesRemaining} quote{usage.quotesRemaining !== 1 ? "s" : ""}{" "}
           remaining on {usage.planName} plan &middot;{" "}
-          <Link href="/settings/billing" className="text-blue-500 hover:underline">
+          <Link href="/settings/billing" className="text-primary hover:underline">
             Upgrade
           </Link>
         </p>
       )}
 
       {isOffline && (
-        <div role="status" aria-live="polite" className="bg-blue-500/10 text-blue-400 text-sm p-3 rounded-md flex items-center gap-2">
+        <div role="status" aria-live="polite" className="bg-primary/8 text-blue-400 text-sm p-3 rounded-md flex items-center gap-2">
           <svg className="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
             <path strokeLinecap="round" strokeLinejoin="round" d="M18.364 5.636a9 9 0 010 12.728M15.536 8.464a5 5 0 010 7.072M12 12h.01" />
           </svg>
@@ -581,18 +616,28 @@ export default function NewQuotePage() {
                 <SelectValue placeholder="Choose a customer" />
               </SelectTrigger>
               <SelectContent>
-                {customers.map((c) => (
-                  <SelectItem key={c.id} value={c.id}>
-                    {c.name}
-                  </SelectItem>
-                ))}
+                {customers.map((c) => {
+                  const lastQuote = c.quotes?.[0]?.createdAt;
+                  const quoteCount = c._count?.quotes ?? 0;
+                  return (
+                    <SelectItem key={c.id} value={c.id}>
+                      {c.name}
+                      {quoteCount > 0 && (
+                        <span className="text-muted-foreground text-xs ml-2">
+                          {quoteCount} quote{quoteCount !== 1 ? "s" : ""}
+                          {lastQuote && ` · ${new Date(lastQuote).toLocaleDateString()}`}
+                        </span>
+                      )}
+                    </SelectItem>
+                  );
+                })}
               </SelectContent>
             </Select>
             <p className="text-sm text-muted-foreground">
               Or{" "}
               <button
                 type="button"
-                className="text-blue-500 hover:underline"
+                className="text-primary hover:underline"
                 onClick={() => setAddCustomerOpen(true)}
               >
                 add a new customer
@@ -615,7 +660,7 @@ export default function NewQuotePage() {
                     <button
                       key={t.id}
                       onClick={() => applyTemplate(t)}
-                      className="w-full text-left p-3 rounded-lg border border-border hover:border-blue-500/50 hover:bg-secondary transition-colors"
+                      className="w-full text-left p-3 rounded-lg border border-border hover:border-primary/50 hover:bg-secondary transition-colors"
                     >
                       <p className="font-medium text-sm">{t.name}</p>
                       <p className="text-xs text-muted-foreground capitalize">
@@ -711,11 +756,381 @@ export default function NewQuotePage() {
         </DialogContent>
       </Dialog>
 
-      {/* Step 2: Room Dimensions */}
+      {/* Step 2: Job Type */}
       {step === 2 && (
         <Card>
           <CardHeader>
-            <CardTitle>Step 2: Room Dimensions</CardTitle>
+            <CardTitle>Step 2: Job Type</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="grid grid-cols-3 gap-3">
+              {(["flooring", "painting", "drywall"] as const).map((t) => (
+                <button
+                  key={t}
+                  type="button"
+                  onClick={() => setTrade(t)}
+                  className={`p-4 rounded-lg border text-center font-medium capitalize transition-colors ${
+                    trade === t
+                      ? "bg-primary text-white border-primary"
+                      : "bg-secondary text-muted-foreground border-border hover:text-foreground"
+                  }`}
+                >
+                  {t}
+                </button>
+              ))}
+            </div>
+            {/* ── Room Entry (inline) ── */}
+            <div className="pt-3 border-t border-border">
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="font-medium">Rooms</h3>
+                <div className="flex items-center gap-2">
+                  <div className="flex rounded-md border border-border overflow-hidden text-xs">
+                    <button
+                      type="button"
+                      onClick={() => setEntryMode("sqft")}
+                      className={`px-3 py-1 transition-colors ${
+                        entryMode === "sqft"
+                          ? "bg-primary text-white"
+                          : "bg-secondary text-muted-foreground"
+                      }`}
+                    >
+                      Sqft
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setEntryMode("dimensions")}
+                      className={`px-3 py-1 transition-colors ${
+                        entryMode === "dimensions"
+                          ? "bg-primary text-white"
+                          : "bg-secondary text-muted-foreground"
+                      }`}
+                    >
+                      L × W
+                    </button>
+                  </div>
+                  <Button variant="outline" size="sm" onClick={addRoom} className="text-xs">
+                    + Room
+                  </Button>
+                </div>
+              </div>
+
+              {/* LiDAR Scanner */}
+              {lidarAvailable && (
+                <div className="bg-primary/8 border border-primary/30 rounded-lg p-3 text-center space-y-2 mb-3">
+                  <Button
+                    onClick={() => startLidarScan()}
+                    disabled={scanning}
+                    size="sm"
+                    className="w-full"
+                  >
+                    {scanning ? "Scanning..." : scanAttempts > 0 ? "Scan Again" : "Scan Room with LiDAR"}
+                  </Button>
+                  {scanError && (
+                    <p className="text-xs text-red-400">{scanError}</p>
+                  )}
+                </div>
+              )}
+
+              {/* Scan Confidence Panel */}
+              {lastScanResult && (
+                <div className="mb-3">
+                  <ScanConfidencePanel
+                    scanResult={lastScanResult}
+                    onCalibrate={(calibrated) => {
+                      setLastScanResult(calibrated);
+                      const scannedRooms = calibrated.rooms.map((r: ScannedRoom) => ({
+                        name: r.name,
+                        length: r.floorArea,
+                        width: 0,
+                        height: trade === "flooring" ? 0 : r.height,
+                        notes: "",
+                      }));
+                      setRooms(scannedRooms);
+                    }}
+                    onRescan={() => startLidarScan()}
+                  />
+                </div>
+              )}
+
+              <div className="space-y-3">
+                {rooms.map((room, i) => (
+                  <div key={i} className="border rounded-lg p-3 space-y-2">
+                    <div className="flex items-center justify-between">
+                      <Input
+                        value={room.name}
+                        onChange={(e) => updateRoom(i, "name", e.target.value)}
+                        aria-label={`Room ${i + 1} name`}
+                        className="font-medium max-w-40 h-8 text-sm"
+                      />
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs text-muted-foreground font-mono">
+                          {entryMode === "sqft"
+                            ? `${Math.round(room.length || 0)} sqft`
+                            : `${Math.round(room.length * room.width)} sqft`}
+                        </span>
+                        {rooms.length > 1 && (
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => removeRoom(i)}
+                            className="text-red-500 h-7 px-2 text-xs"
+                          >
+                            Remove
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+
+                    {entryMode === "sqft" ? (
+                      <div className={`grid ${trade === "flooring" ? "grid-cols-1" : "grid-cols-2"} gap-2`}>
+                        <div>
+                          <Label className="text-xs">Square Footage</Label>
+                          <Input
+                            type="number"
+                            min={0}
+                            value={room.length || ""}
+                            onChange={(e) => updateRoom(i, "length", parseFloat(e.target.value) || 0)}
+                            placeholder="0"
+                            className="h-8"
+                          />
+                        </div>
+                        {trade !== "flooring" && (
+                          <div>
+                            <Label className="text-xs">Ceiling Height (ft)</Label>
+                            <Input
+                              type="number"
+                              min={0}
+                              value={room.height || ""}
+                              onChange={(e) => updateRoom(i, "height", parseFloat(e.target.value) || 0)}
+                              placeholder="8"
+                              className="h-8"
+                            />
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <div className={`grid ${trade === "flooring" ? "grid-cols-2" : "grid-cols-3"} gap-2`}>
+                        <div>
+                          <Label className="text-xs">Length (ft)</Label>
+                          <Input
+                            type="number"
+                            min={0}
+                            value={room.length || ""}
+                            onChange={(e) => updateRoom(i, "length", parseFloat(e.target.value) || 0)}
+                            placeholder="0"
+                            className="h-8"
+                          />
+                        </div>
+                        <div>
+                          <Label className="text-xs">Width (ft)</Label>
+                          <Input
+                            type="number"
+                            min={0}
+                            value={room.width || ""}
+                            onChange={(e) => updateRoom(i, "width", parseFloat(e.target.value) || 0)}
+                            placeholder="0"
+                            className="h-8"
+                          />
+                        </div>
+                        {trade !== "flooring" && (
+                          <div>
+                            <Label className="text-xs">Height (ft)</Label>
+                            <Input
+                              type="number"
+                              min={0}
+                              value={room.height || ""}
+                              onChange={(e) => updateRoom(i, "height", parseFloat(e.target.value) || 0)}
+                              placeholder="8"
+                              className="h-8"
+                            />
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    <textarea
+                      value={room.notes || ""}
+                      onChange={(e) => updateRoom(i, "notes", e.target.value)}
+                      placeholder={`Notes: transitions, obstacles, closets, damage...`}
+                      rows={2}
+                      className="w-full rounded-md border border-border bg-background px-3 py-1.5 text-xs placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring resize-y"
+                    />
+                  </div>
+                ))}
+              </div>
+
+              {/* Total sqft summary */}
+              <div className="flex justify-between items-center mt-2 px-1">
+                <span className="text-sm text-muted-foreground">Total</span>
+                <span className="font-mono font-semibold">{Math.round(totalSqft).toLocaleString()} sqft</span>
+              </div>
+            </div>
+
+            {/* Material options */}
+            {trade === "flooring" && (
+              <div className="pt-2 border-t border-border">
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <Label className="text-xs">Material</Label>
+                    <Select value={flooringMaterial} onValueChange={(v) => setFlooringMaterial(v as FlooringMaterial)}>
+                      <SelectTrigger className="h-8 text-sm"><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="hardwood">Hardwood ($5/sqft)</SelectItem>
+                        <SelectItem value="laminate">Laminate ($2.50/sqft)</SelectItem>
+                        <SelectItem value="tile">Tile ($4/sqft)</SelectItem>
+                        <SelectItem value="carpet">Carpet ($3/sqft)</SelectItem>
+                        <SelectItem value="vinyl">Vinyl ($2/sqft)</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <Label className="text-xs">Pattern</Label>
+                    <Select value={installPattern} onValueChange={(v) => setInstallPattern(v as InstallPattern)}>
+                      <SelectTrigger className="h-8 text-sm"><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="straight">Straight (10% waste)</SelectItem>
+                        <SelectItem value="diagonal">Diagonal (15% waste)</SelectItem>
+                        <SelectItem value="herringbone">Herringbone (20% waste)</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* AI Shortcuts (collapsed) */}
+            <details className="pt-2 border-t border-border">
+              <summary className="text-sm text-muted-foreground cursor-pointer hover:text-foreground">
+                AI Tools & Shortcuts
+              </summary>
+              <div className="mt-3 space-y-3">
+
+            {/* AI Photo Estimate */}
+            <div>
+              <p className="text-sm text-muted-foreground mb-2">AI estimate from a photo:</p>
+              <AIEstimate
+                trade={trade}
+                onApply={(aiMaterials, aiRooms) => {
+                  setMaterials(aiMaterials);
+                  const sub = aiMaterials.reduce((s, l) => s + l.cost, 0);
+                  setSubtotal(sub);
+                  if (aiRooms.length > 0) {
+                    setRooms(aiRooms.map((r) => ({
+                      name: r.name,
+                      length: r.sqft,
+                      width: 0,
+                      height: 8,
+                      notes: "",
+                    })));
+                    setEntryMode("sqft");
+                  }
+                  setStep(4);
+                }}
+              />
+            </div>
+
+            {/* Voice-to-Quote */}
+            <div>
+              <p className="text-sm text-muted-foreground mb-2">Dictate room details hands-free:</p>
+              <VoiceToQuote
+                trade={trade}
+                onApply={(aiMaterials, aiRooms) => {
+                  setMaterials(aiMaterials);
+                  const sub = aiMaterials.reduce((s, l) => s + l.cost, 0);
+                  setSubtotal(sub);
+                  if (aiRooms.length > 0) {
+                    setRooms(aiRooms.map((r) => ({
+                      name: r.name,
+                      length: r.sqft,
+                      width: 0,
+                      height: 8,
+                      notes: "",
+                    })));
+                    setEntryMode("sqft");
+                  }
+                  setStep(4);
+                }}
+              />
+            </div>
+
+            {/* Competitor Quote Comparison */}
+            <div>
+              <p className="text-sm text-muted-foreground mb-2">Compare to a competitor&apos;s quote:</p>
+              <QuoteComparison
+                onCreateCounterQuote={(counterItems) => {
+                  setMaterials(counterItems);
+                  const sub = counterItems.reduce((s, l) => s + l.cost, 0);
+                  setSubtotal(sub);
+                  setStep(4);
+                }}
+              />
+            </div>
+
+            {/* Floor Plan Editor */}
+            <div>
+              <p className="text-sm text-muted-foreground mb-2">Draw a floor plan:</p>
+              <FloorplanEditor
+                onApply={(floorRooms) => {
+                  setRooms(floorRooms.map((r) => ({
+                    name: r.name,
+                    length: r.sqft,
+                    width: 0,
+                    height: 8,
+                    notes: "",
+                  })));
+                  setEntryMode("sqft");
+                  setStep(3);
+                }}
+              />
+            </div>
+
+            {/* AR Material Preview */}
+            {(trade === "flooring" || trade === "painting") && (
+              <div>
+                <p className="text-sm text-muted-foreground mb-2">Preview materials in your space:</p>
+                <ARMaterialPreviewButton trade={trade} />
+              </div>
+            )}
+
+              </div>
+            </details>
+
+            {/* Job Notes */}
+            <div className="pt-2 border-t border-border">
+              <Label htmlFor="job-notes" className="text-sm text-muted-foreground">Notes</Label>
+              <textarea
+                id="job-notes"
+                value={jobNotes}
+                onChange={(e) => setJobNotes(e.target.value)}
+                placeholder="Current flooring condition, furniture to move, access issues, subfloor concerns..."
+                rows={3}
+                className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring resize-y"
+              />
+            </div>
+
+            <div className="flex gap-3">
+              <Button variant="outline" onClick={() => setStep(1)}>
+                Back
+              </Button>
+              {materials.length > 0 ? (
+                <Button onClick={addTradeToExisting} className="flex-1" disabled={totalSqft === 0}>
+                  Add Trade to Quote
+                </Button>
+              ) : (
+                <Button onClick={calculateMaterials} className="flex-1" disabled={totalSqft === 0}>
+                  Calculate & Review
+                </Button>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Step 3: Dimensions + Material */}
+      {step === 3 && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Step 3: {trade === "flooring" ? "Floor Area" : "Room Dimensions"}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             {/* Entry mode toggle */}
@@ -725,7 +1140,7 @@ export default function NewQuotePage() {
                 onClick={() => setEntryMode("sqft")}
                 className={`flex-1 px-4 py-2 text-sm font-medium transition-colors ${
                   entryMode === "sqft"
-                    ? "bg-blue-500 text-white"
+                    ? "bg-primary text-white"
                     : "bg-secondary text-muted-foreground hover:text-foreground"
                 }`}
               >
@@ -736,7 +1151,7 @@ export default function NewQuotePage() {
                 onClick={() => setEntryMode("dimensions")}
                 className={`flex-1 px-4 py-2 text-sm font-medium transition-colors ${
                   entryMode === "dimensions"
-                    ? "bg-blue-500 text-white"
+                    ? "bg-primary text-white"
                     : "bg-secondary text-muted-foreground hover:text-foreground"
                 }`}
               >
@@ -746,26 +1161,45 @@ export default function NewQuotePage() {
 
             {/* LiDAR Scanner */}
             {lidarAvailable && (
-              <div className="bg-blue-500/10 border border-blue-500/30 rounded-lg p-4 text-center space-y-2">
+              <div className="bg-primary/8 border border-primary/30 rounded-lg p-4 text-center space-y-2">
                 <p className="text-sm font-medium">LiDAR Scanner Available</p>
                 <p className="text-xs text-muted-foreground">
-                  Scan the room with your device&apos;s LiDAR sensor to auto-fill dimensions
+                  Scan the room with LiDAR to auto-fill square footage
                 </p>
                 <Button
-                  onClick={() => {
-                    setEntryMode("dimensions");
-                    startLidarScan();
-                  }}
+                  onClick={() => startLidarScan()}
                   disabled={scanning}
                   aria-busy={scanning}
                   className="w-full"
                 >
-                  {scanning ? "Scanning..." : "Scan Room with LiDAR"}
+                  {scanning ? "Scanning..." : scanAttempts > 0 ? "Try Again" : "Scan Room with LiDAR"}
                 </Button>
                 {scanError && (
-                  <p role="alert" className="text-xs text-red-400">{scanError}</p>
+                  <div role="alert" className="text-xs text-red-400 space-y-1">
+                    <p>{scanError}</p>
+                    <p className="text-muted-foreground">Or enter square footage manually below.</p>
+                  </div>
                 )}
               </div>
+            )}
+
+            {/* Scan Confidence Panel */}
+            {lastScanResult && (
+              <ScanConfidencePanel
+                scanResult={lastScanResult}
+                onCalibrate={(calibrated) => {
+                  setLastScanResult(calibrated);
+                  const scannedRooms = calibrated.rooms.map((r: ScannedRoom) => ({
+                    name: r.name,
+                    length: r.floorArea,
+                    width: 0,
+                    height: trade === "flooring" ? 0 : r.height,
+                    notes: "",
+                  }));
+                  setRooms(scannedRooms);
+                }}
+                onRescan={() => startLidarScan()}
+              />
             )}
 
             {rooms.map((room, i) => (
@@ -791,7 +1225,7 @@ export default function NewQuotePage() {
                 </div>
 
                 {entryMode === "sqft" ? (
-                  <div className="grid grid-cols-2 gap-3">
+                  <div className={`grid ${trade === "flooring" ? "grid-cols-1" : "grid-cols-2"} gap-3`}>
                     <div>
                       <Label htmlFor={`room-${i}-sqft`} className="text-xs">Square Footage</Label>
                       <Input
@@ -805,22 +1239,24 @@ export default function NewQuotePage() {
                         placeholder="0"
                       />
                     </div>
-                    <div>
-                      <Label htmlFor={`room-${i}-height-sqft`} className="text-xs">Ceiling Height (ft)</Label>
-                      <Input
-                        id={`room-${i}-height-sqft`}
-                        type="number"
-                        min={0}
-                        value={room.height || ""}
-                        onChange={(e) =>
-                          updateRoom(i, "height", parseFloat(e.target.value) || 0)
-                        }
-                        placeholder="8"
-                      />
-                    </div>
+                    {trade !== "flooring" && (
+                      <div>
+                        <Label htmlFor={`room-${i}-height-sqft`} className="text-xs">Ceiling Height (ft)</Label>
+                        <Input
+                          id={`room-${i}-height-sqft`}
+                          type="number"
+                          min={0}
+                          value={room.height || ""}
+                          onChange={(e) =>
+                            updateRoom(i, "height", parseFloat(e.target.value) || 0)
+                          }
+                          placeholder="8"
+                        />
+                      </div>
+                    )}
                   </div>
                 ) : (
-                  <div className="grid grid-cols-3 gap-3">
+                  <div className={`grid ${trade === "flooring" ? "grid-cols-2" : "grid-cols-3"} gap-3`}>
                     <div>
                       <Label htmlFor={`room-${i}-length`} className="text-xs">Length (ft)</Label>
                       <Input
@@ -847,84 +1283,69 @@ export default function NewQuotePage() {
                         placeholder="0"
                       />
                     </div>
-                    <div>
-                      <Label htmlFor={`room-${i}-height`} className="text-xs">Height (ft)</Label>
-                      <Input
-                        id={`room-${i}-height`}
-                        type="number"
-                        min={0}
-                        value={room.height || ""}
-                        onChange={(e) =>
-                          updateRoom(i, "height", parseFloat(e.target.value) || 0)
-                        }
-                        placeholder="8"
-                      />
-                    </div>
+                    {trade !== "flooring" && (
+                      <div>
+                        <Label htmlFor={`room-${i}-height`} className="text-xs">Height (ft)</Label>
+                        <Input
+                          id={`room-${i}-height`}
+                          type="number"
+                          min={0}
+                          value={room.height || ""}
+                          onChange={(e) =>
+                            updateRoom(i, "height", parseFloat(e.target.value) || 0)
+                          }
+                          placeholder="8"
+                        />
+                      </div>
+                    )}
                   </div>
                 )}
 
                 <p className="text-sm text-muted-foreground">
                   {entryMode === "sqft" ? (
-                    <>
-                      {room.length || 0} sqft floor &middot;{" "}
-                      {Math.round(2 * (Math.sqrt(room.length || 0) + Math.sqrt(room.length || 0)) * room.height)} sqft walls
-                    </>
+                    trade === "flooring" ? (
+                      <>{Math.round(room.length || 0)} sqft</>
+                    ) : (
+                      <>
+                        {Math.round(room.length || 0)} sqft floor &middot;{" "}
+                        {Math.round(2 * (Math.sqrt(room.length || 0) * 2) * room.height)} sqft walls
+                      </>
+                    )
                   ) : (
-                    <>
-                      {room.length * room.width} sqft floor &middot;{" "}
-                      {2 * (room.length + room.width) * room.height} sqft walls
-                    </>
+                    trade === "flooring" ? (
+                      <>{Math.round(room.length * room.width)} sqft</>
+                    ) : (
+                      <>
+                        {Math.round(room.length * room.width)} sqft floor &middot;{" "}
+                        {Math.round(2 * (room.length + room.width) * room.height)} sqft walls
+                      </>
+                    )
                   )}
                 </p>
+
+                {/* Per-room notes */}
+                <textarea
+                  value={room.notes || ""}
+                  onChange={(e) => updateRoom(i, "notes", e.target.value)}
+                  placeholder={`Notes for ${room.name}: transitions, obstacles, closets, existing damage...`}
+                  rows={2}
+                  className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring resize-y"
+                />
               </div>
             ))}
             <Button variant="outline" onClick={addRoom} className="w-full">
               + Add Room
             </Button>
-            <div className="bg-blue-500/10 p-3 rounded-md text-sm">
-              <strong>Total:</strong> {Math.round(totalSqft)} sqft floor &middot;{" "}
-              {Math.round(totalWallSqft)} sqft walls
-            </div>
-            <div className="flex gap-3">
-              <Button variant="outline" onClick={() => setStep(1)}>
-                Back
-              </Button>
-              <Button
-                onClick={() => setStep(3)}
-                disabled={totalSqft === 0}
-                className="flex-1"
-              >
-                Next
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Step 3: Trade & Material Selection */}
-      {step === 3 && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Step 3: Trade & Material</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label>Trade Type</Label>
-              <Select
-                value={trade}
-                onValueChange={(v) => setTrade(v as typeof trade)}
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="flooring">Flooring</SelectItem>
-                  <SelectItem value="painting">Painting</SelectItem>
-                  <SelectItem value="drywall">Drywall</SelectItem>
-                </SelectContent>
-              </Select>
+            <div className="bg-primary/8 p-3 rounded-md text-sm">
+              {trade === "flooring" ? (
+                <><strong>Total:</strong> {Math.round(totalSqft)} sqft</>
+              ) : (
+                <><strong>Total:</strong> {Math.round(totalSqft)} sqft floor &middot;{" "}
+                {Math.round(totalWallSqft)} sqft walls</>
+              )}
             </div>
 
+            {/* Material options */}
             {trade === "flooring" && (
               <>
                 <div className="space-y-2">
@@ -1017,6 +1438,19 @@ export default function NewQuotePage() {
                 </Select>
               </div>
             )}
+
+            {/* Measurement notes */}
+            <div className="pt-2 border-t border-border">
+              <Label htmlFor="dim-notes" className="text-sm text-muted-foreground">Measurement Notes</Label>
+              <textarea
+                id="dim-notes"
+                value={dimensionNotes}
+                onChange={(e) => setDimensionNotes(e.target.value)}
+                placeholder="Irregular areas, stairs, hallways not measured yet, areas to exclude..."
+                rows={3}
+                className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring resize-y"
+              />
+            </div>
 
             <div className="flex gap-3">
               <Button variant="outline" onClick={() => setStep(2)}>
@@ -1150,6 +1584,24 @@ export default function NewQuotePage() {
                 <span>Total</span>
                 <span>${getTotal().toLocaleString()}</span>
               </div>
+            </div>
+
+            {/* Project Notes */}
+            <div className="pt-2 border-t border-border">
+              <Label htmlFor="project-notes" className="text-sm font-medium">Project Notes</Label>
+              <textarea
+                id="project-notes"
+                value={projectNotes}
+                onChange={(e) => setProjectNotes(e.target.value)}
+                placeholder="Scope of work, special instructions, site conditions, timeline, material specs, customer preferences..."
+                rows={4}
+                className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring resize-y"
+              />
+              {(jobNotes || dimensionNotes || rooms.some(r => r.notes)) && (
+                <p className="text-xs text-muted-foreground mt-1">
+                  Notes from previous steps will be included automatically.
+                </p>
+              )}
             </div>
 
             <div className="flex flex-col gap-2">

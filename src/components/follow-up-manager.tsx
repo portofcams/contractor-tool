@@ -10,6 +10,8 @@ interface FollowUp {
   reminderDate: string;
   message: string | null;
   status: string;
+  isAuto?: boolean;
+  stepIndex?: number | null;
 }
 
 function statusColor(status: string): string {
@@ -39,6 +41,9 @@ export function FollowUpManager({
   const [dismissingId, setDismissingId] = useState<string | null>(null);
   const [statusMessage, setStatusMessage] = useState("");
   const [showForm, setShowForm] = useState(false);
+
+  const pendingAuto = followUps.filter((f) => f.isAuto && f.status === "pending");
+  const hasAutoSequence = pendingAuto.length > 0;
 
   async function addReminder() {
     if (!reminderDate) return;
@@ -96,18 +101,57 @@ export function FollowUpManager({
     setDismissingId(null);
   }
 
+  async function dismissAllAuto() {
+    setStatusMessage("");
+    const ids = pendingAuto.map((f) => f.id);
+    for (const id of ids) {
+      await fetch("/api/follow-ups", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, status: "dismissed" }),
+      });
+    }
+    setFollowUps((prev) =>
+      prev.map((f) =>
+        ids.includes(f.id) ? { ...f, status: "dismissed" } : f
+      )
+    );
+    setStatusMessage("Auto follow-ups dismissed.");
+  }
+
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-medium">Follow-up Reminders</h3>
-        <Button
-          size="sm"
-          variant="outline"
-          onClick={() => setShowForm(!showForm)}
-        >
-          {showForm ? "Cancel" : "Add Reminder"}
-        </Button>
+        <div className="flex gap-2">
+          {hasAutoSequence && (
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={dismissAllAuto}
+              className="text-xs text-muted-foreground"
+            >
+              Stop Auto
+            </Button>
+          )}
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => setShowForm(!showForm)}
+          >
+            {showForm ? "Cancel" : "Add Reminder"}
+          </Button>
+        </div>
       </div>
+
+      {/* Auto sequence indicator */}
+      {hasAutoSequence && (
+        <div className="flex items-center gap-2 p-2 bg-primary/8 border border-primary/20 rounded-lg">
+          <span className="text-xs text-blue-400">
+            Auto sequence active — {pendingAuto.length} reminder{pendingAuto.length !== 1 ? "s" : ""} scheduled
+          </span>
+        </div>
+      )}
 
       {/* Add reminder form */}
       {showForm && (
@@ -165,6 +209,11 @@ export function FollowUpManager({
                   >
                     {followUp.status}
                   </span>
+                  {followUp.isAuto && (
+                    <span className="text-xs px-1.5 py-0.5 rounded bg-primary/10 text-blue-400 border border-primary/30">
+                      Auto
+                    </span>
+                  )}
                 </div>
                 {followUp.message && (
                   <p className="text-sm text-muted-foreground truncate">

@@ -4,15 +4,30 @@ import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { TimelapseCapture } from "@/components/timelapse-capture";
+import { TimelapseViewer } from "@/components/timelapse-viewer";
+import { CalendarSync } from "@/components/calendar-sync";
+import { ReceiptScanner } from "@/components/receipt-scanner";
+import { SMSButton } from "@/components/sms-button";
+import { ProfitCalculator } from "@/components/profit-calculator";
+
+interface TimelapsePhoto {
+  id: string;
+  fileUrl: string;
+  caption: string | null;
+  takenAt: string;
+}
 
 interface Job {
   id: string;
   jobNumber: string;
+  customerId?: string;
   status: "scheduled" | "in_progress" | "completed" | "cancelled";
   scheduledDate: string;
   completedDate?: string;
   notes?: string;
   crew?: string;
+  quoteId?: string;
   quote?: {
     quoteNumber: string;
     trade: string;
@@ -23,10 +38,11 @@ interface Job {
       email?: string;
     };
   };
+  timelapsePhotos?: TimelapsePhoto[];
 }
 
 const STATUS_COLORS: Record<string, string> = {
-  scheduled: "bg-blue-600",
+  scheduled: "bg-primary",
   in_progress: "bg-yellow-500",
   completed: "bg-green-600",
   cancelled: "bg-red-600",
@@ -159,7 +175,7 @@ export default function JobsCalendarPage() {
         <h1 className="text-2xl font-bold">Jobs Calendar</h1>
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-1 text-xs text-muted-foreground">
-            <span className="inline-block w-3 h-3 rounded-full bg-blue-600" />{" "}
+            <span className="inline-block w-3 h-3 rounded-full bg-primary" />{" "}
             Scheduled
             <span className="inline-block w-3 h-3 rounded-full bg-yellow-500 ml-2" />{" "}
             In Progress
@@ -320,6 +336,53 @@ export default function JobsCalendarPage() {
               <div>
                 <p className="text-sm text-muted-foreground">Notes</p>
                 <p className="text-sm">{selectedJob.notes}</p>
+              </div>
+            )}
+
+            {/* Timelapse */}
+            {selectedJob.status === "in_progress" && selectedJob.quoteId && (
+              <div className="pt-2 border-t border-border">
+                <TimelapseCapture
+                  jobId={selectedJob.id}
+                  quoteId={selectedJob.quoteId}
+                  existingPhotos={selectedJob.timelapsePhotos || []}
+                />
+              </div>
+            )}
+            {selectedJob.status === "completed" &&
+              selectedJob.timelapsePhotos &&
+              selectedJob.timelapsePhotos.length >= 2 && (
+                <div className="pt-2 border-t border-border">
+                  <TimelapseViewer photos={selectedJob.timelapsePhotos} />
+                </div>
+              )}
+
+            {/* Calendar Sync + SMS Reminder */}
+            <div className="flex flex-wrap gap-2 pt-2 border-t border-border">
+              <CalendarSync jobId={selectedJob.id} />
+              {selectedJob.quote?.customer?.phone && selectedJob.customerId && selectedJob.status === "scheduled" && (
+                <SMSButton
+                  type="job_reminder"
+                  customerId={selectedJob.customerId}
+                  jobId={selectedJob.id}
+                  customerPhone={selectedJob.quote.customer.phone}
+                  label="SMS Reminder"
+                />
+              )}
+            </div>
+
+            {/* Receipt Scanner — available during/after job */}
+            {(selectedJob.status === "in_progress" || selectedJob.status === "completed") && (
+              <div className="pt-2 border-t border-border">
+                <p className="text-sm font-medium mb-2">Expense Receipts</p>
+                <ReceiptScanner jobId={selectedJob.id} />
+              </div>
+            )}
+
+            {/* Profit Calculator */}
+            {(selectedJob.status === "in_progress" || selectedJob.status === "completed") && (
+              <div className="pt-2 border-t border-border">
+                <ProfitCalculator jobId={selectedJob.id} />
               </div>
             )}
 

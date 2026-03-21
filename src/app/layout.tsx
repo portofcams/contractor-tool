@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter } from "next/font/google";
+import { Geist_Mono } from "next/font/google";
 import { Providers } from "@/components/providers";
 import { CapacitorProvider } from "@/components/capacitor-provider";
+import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
 });
 
@@ -27,13 +29,27 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#0071e3" />
+        <link rel="apple-touch-icon" href="/icon-192.png" />
+        <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js" async />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem("theme");if(t==="light")return;if(t==="system"&&!window.matchMedia("(prefers-color-scheme: dark)").matches)return;document.documentElement.classList.add("dark")}catch(e){}})()`
+              + `;if("serviceWorker"in navigator)navigator.serviceWorker.register("/sw.js")`,
+          }}
+        />
+      </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${inter.variable} ${geistMono.variable} antialiased`}
       >
-        <Providers>
-          <CapacitorProvider>{children}</CapacitorProvider>
-        </Providers>
+        <ThemeProvider>
+          <Providers>
+            <CapacitorProvider>{children}</CapacitorProvider>
+          </Providers>
+        </ThemeProvider>
         <Toaster />
       </body>
     </html>

@@ -23,6 +23,8 @@ interface QuoteWithRelations {
   taxRate: number;
   total: number;
   createdAt: Date;
+  signatureData?: string | null;
+  acceptedAt?: Date | null;
   customer: {
     name: string;
     email: string | null;
@@ -35,6 +37,14 @@ interface QuoteWithRelations {
     phone: string | null;
     logoUrl: string | null;
   };
+  sitePhotos?: {
+    fileUrl: string;
+    caption: string | null;
+    photoType: string;
+  }[];
+  roomScans?: {
+    roomsData: unknown;
+  }[];
 }
 
 interface MaterialLine {
@@ -48,10 +58,26 @@ interface MaterialLine {
 export async function renderQuotePDF(quote: QuoteWithRelations): Promise<Buffer> {
   const materials = quote.materials as unknown as MaterialLine[];
 
-  // Build absolute logo URL for @react-pdf/renderer (needs full URL or file path)
+  // Build logo path: if it's a full URL (R2), use as-is; if local path, resolve to filesystem
   const logoUrl = quote.contractor.logoUrl
-    ? `${process.cwd()}/public${quote.contractor.logoUrl}`
+    ? quote.contractor.logoUrl.startsWith("http")
+      ? quote.contractor.logoUrl
+      : `${process.cwd()}/public${quote.contractor.logoUrl}`
     : undefined;
+
+  // Extract room data from room scans
+  const rooms: { name: string; sqft: number }[] = [];
+  if (quote.roomScans) {
+    for (const scan of quote.roomScans) {
+      const scanRooms = scan.roomsData as { name: string; floorArea?: number; length?: number; width?: number }[];
+      if (Array.isArray(scanRooms)) {
+        for (const r of scanRooms) {
+          const sqft = r.floorArea ?? ((r.length ?? 0) * (r.width ?? 0));
+          if (r.name && sqft > 0) rooms.push({ name: r.name, sqft: Math.round(sqft) });
+        }
+      }
+    }
+  }
 
   const data: QuotePDFData = {
     companyName: quote.contractor.companyName,
@@ -72,6 +98,18 @@ export async function renderQuotePDF(quote: QuoteWithRelations): Promise<Buffer>
     laborCost: quote.laborCost ?? undefined,
     taxRate: quote.taxRate,
     total: quote.total,
+    rooms: rooms.length > 0 ? rooms : undefined,
+    photos: quote.sitePhotos?.map((p) => ({
+      src: p.fileUrl.startsWith("http")
+        ? p.fileUrl
+        : `${process.cwd()}/public${p.fileUrl}`,
+      caption: p.caption ?? undefined,
+      photoType: p.photoType,
+    })),
+    signatureData: quote.signatureData ?? undefined,
+    acceptedAt: quote.acceptedAt
+      ? format(quote.acceptedAt, "MMMM d, yyyy")
+      : undefined,
   };
 
   // QuotePDF returns a <Document> — cast through any to satisfy renderToBuffer's strict generic

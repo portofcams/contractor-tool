@@ -46,7 +46,7 @@ export function UsageIndicator({
                 ? "bg-red-500"
                 : isWarning
                 ? "bg-yellow-500"
-                : "bg-blue-500"
+                : "bg-primary"
             }`}
             style={{ width: `${percentage}%` }}
           />
@@ -88,7 +88,7 @@ export function UsageIndicator({
                 ? "bg-red-500"
                 : isWarning
                 ? "bg-yellow-500"
-                : "bg-blue-500"
+                : "bg-primary"
             }`}
             style={{ width: `${percentage}%` }}
           />

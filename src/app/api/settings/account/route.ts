@@ -41,6 +41,9 @@ export async function DELETE(req: Request) {
     return NextResponse.json({ error: "Account not found" }, { status: 404 });
   }
 
+  if (!contractor.passwordHash) {
+    return NextResponse.json({ error: "Account uses Google sign-in" }, { status: 403 });
+  }
   const valid = await bcrypt.compare(password, contractor.passwordHash);
   if (!valid) {
     return NextResponse.json({ error: "Incorrect password" }, { status: 403 });

@@ -10,7 +10,8 @@ datasource db {
 model Contractor {
   id               String   @id @default(uuid())
   email            String   @unique
-  passwordHash     String
+  passwordHash     String?
+  googleId         String?  @unique
   companyName      String
   trade            String   // 'flooring', 'painting', 'drywall'
   phone            String?
@@ -20,6 +21,9 @@ model Contractor {
   defaultLaborCost Float    @default(0)
   notifyOnAccept   Boolean  @default(true)
   notifyOnDecline  Boolean  @default(true)
+  notifyOnView     Boolean  @default(true)
+  autoFollowUp     Boolean  @default(true)
+  followUpSequence Json?    // [{delayDays: 3, message: "..."}, ...] — auto follow-up steps
   subscriptionPlan String   @default("free") // 'free', 'pro', 'business'
   stripeCustomerId String?
   createdAt        DateTime @default(now())
@@ -37,6 +41,9 @@ model Contractor {
   invoices       Invoice[]
   crewMembers    CrewMember[]
   actualCosts    ActualCost[]
+  reviews        Review[]
+  projects       Project[]
+  subcontractors Subcontractor[]
 }
 
 model Customer {
@@ -48,6 +55,7 @@ model Customer {
   phone        String?
   address      String?
   notes        String?
+  portalToken  String?    @unique @default(uuid())
   createdAt    DateTime   @default(now())
 
   quotes     Quote[]
@@ -58,6 +66,8 @@ model Customer {
   voiceNotes VoiceNote[]
   jobs       Job[]
   invoices   Invoice[]
+  reviews    Review[]
+  projects   Project[]
 
   @@index([contractorId])
 }
@@ -101,6 +111,12 @@ model Quote {
   taxRate       Float  @default(0)
   total         Float
 
+  // Estimate details
+  projectName   String?   // "Smith Kitchen Reno"
+  address       String?   // Job site address
+  sqft          Float?    // Total project sqft
+  notes         String?   // Scope of work, site conditions
+
   // Metadata
   pdfUrl        String?
   sentAt        DateTime?
@@ -109,17 +125,46 @@ model Quote {
   signatureData String?   // base64 PNG of customer signature
   createdAt     DateTime  @default(now())
 
+  // Project link
+  projectId    String?
+  project      Project? @relation(fields: [projectId], references: [id])
+
+  // Recurrence
+  recurrence       String?   // 'weekly', 'monthly', 'quarterly', null = one-time
+  nextRecurrenceAt DateTime? // When to create next recurring quote
+
+  // Versioning
+  version    Int @default(1)
+
   roomScans  RoomScan[]
   sitePhotos SitePhoto[]
   siteNotes  SiteNote[]
   voiceNotes VoiceNote[]
   followUps  FollowUp[]
+  revisions  QuoteRevision[]
   job        Job?
   invoices   Invoice[]
 
   @@index([contractorId, createdAt])
   @@index([contractorId, status])
   @@index([customerId])
+}
+
+model QuoteRevision {
+  id            String   @id @default(uuid())
+  quoteId       String
+  quote         Quote    @relation(fields: [quoteId], references: [id], onDelete: Cascade)
+  version       Int
+  materials     Json
+  subtotal      Float
+  laborCost     Float?
+  markupPercent Float
+  taxRate       Float
+  total         Float
+  changeNote    String?
+  createdAt     DateTime @default(now())
+
+  @@index([quoteId])
 }
 
 model QuoteTemplate {
@@ -141,14 +186,65 @@ model MaterialCost {
   id           String  @id @default(uuid())
   contractorId String? // null = default pricing
   contractor   Contractor? @relation(fields: [contractorId], references: [id])
-  category     String  // 'flooring', 'paint', 'drywall'
+  category     String  // 'flooring', 'paint', 'drywall', 'misc'
   materialType String  // 'hardwood', 'interior_paint', 'drywall_sheet'
-  unit         String  // 'sqft', 'gallon', 'sheet'
+  name         String  @default("") // Display name: "Evolv LVP - Sandstone Oak"
+  itemType     String  @default("material") // 'material', 'labor', 'misc'
+  unit         String  // 'sqft', 'gallon', 'sheet', 'ea'
   costPerUnit  Float
+  wasteFactor  Float   @default(0) // 0.08 = 8% waste (flooring materials only)
+  defaultQty   Float?  // Optional default qty for per-each items
+  sortOrder    Int     @default(0)
+  active       Boolean @default(true)
   updatedAt    DateTime @updatedAt
 
   @@index([contractorId])
   @@index([category])
+  @@index([contractorId, active])
+}
+
+model PriceHistory {
+  id           String   @id @default(uuid())
+  materialType String
+  price        Float
+  source       String   // 'manual', 'sync', 'ai'
+  recordedAt   DateTime @default(now())
+
+  @@index([materialType, recordedAt])
+}
+
+model Review {
+  id           String     @id @default(uuid())
+  contractorId String
+  contractor   Contractor @relation(fields: [contractorId], references: [id], onDelete: Cascade)
+  customerId   String
+  customer     Customer   @relation(fields: [customerId], references: [id])
+  quoteId      String
+  token        String     @unique @default(uuid())
+  rating       Int?       // 1-5 stars
+  comment      String?
+  createdAt    DateTime   @default(now())
+  submittedAt  DateTime?
+
+  @@index([contractorId])
+  @@index([token])
+}
+
+model SharedTemplate {
+  id           String   @id @default(uuid())
+  authorName   String
+  name         String
+  trade        String
+  materials    Json
+  markupPercent Float   @default(50)
+  laborCost    Float?
+  taxRate      Float    @default(0)
+  description  String?
+  downloads    Int      @default(0)
+  createdAt    DateTime @default(now())
+
+  @@index([trade])
+  @@index([downloads])
 }
 
 model RoomScan {
@@ -161,6 +257,7 @@ model RoomScan {
   quote        Quote?     @relation(fields: [quoteId], references: [id], onDelete: SetNull)
   roomsData    Json       // [{ name, length, width, height, floorArea, wallArea }]
   surfaceCount Int        @default(0)
+  modelUrl     String?    // URL to USDZ 3D model file
   scanDate     DateTime   @default(now())
   notes        String?
 
@@ -229,6 +326,8 @@ model FollowUp {
   reminderDate DateTime
   message      String?
   status       String     @default("pending") // "pending", "sent", "dismissed"
+  isAuto       Boolean    @default(false)     // true = auto-generated from sequence
+  stepIndex    Int?                           // step position in the sequence (0-based)
   createdAt    DateTime   @default(now())
 
   @@index([contractorId])
@@ -244,6 +343,8 @@ model Job {
   quote         Quote      @relation(fields: [quoteId], references: [id], onDelete: Cascade)
   customerId    String
   customer      Customer   @relation(fields: [customerId], references: [id])
+  projectId     String?
+  project       Project?   @relation(fields: [projectId], references: [id])
   scheduledDate DateTime
   scheduledEnd  DateTime?
   status        String     @default("scheduled") // "scheduled", "in_progress", "completed", "cancelled"
@@ -255,6 +356,7 @@ model Job {
 
   @@index([contractorId])
   @@index([customerId])
+  @@index([projectId])
   @@index([scheduledDate])
 }
 
@@ -307,7 +409,8 @@ model CrewMember {
   active       Boolean    @default(true)
   createdAt    DateTime   @default(now())
 
-  assignments JobAssignment[]
+  assignments  JobAssignment[]
+  projectTasks ProjectTask[]
 
   @@index([contractorId])
 }
@@ -324,4 +427,193 @@ model JobAssignment {
 
   @@index([jobId])
   @@index([crewMemberId])
+}
+
+// ── Project Management ──
+
+model Project {
+  id              String    @id @default(uuid())
+  contractorId    String
+  contractor      Contractor @relation(fields: [contractorId], references: [id], onDelete: Cascade)
+  customerId      String?
+  customer        Customer?  @relation(fields: [customerId], references: [id])
+  name            String
+  description     String?
+  address         String?
+  status          String    @default("planning") // planning, active, on_hold, completed, cancelled
+  priority        String    @default("medium")   // low, medium, high, urgent
+  startDate       DateTime?
+  estimatedEnd    DateTime?
+  actualEnd       DateTime?
+  budgetEstimated Float?
+  budgetActual    Float     @default(0)
+  publicToken     String    @unique @default(uuid())
+  notes           String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  phases        ProjectPhase[]
+  tasks         ProjectTask[]
+  dailyLogs     DailyLog[]
+  changeOrders  ChangeOrder[]
+  documents     ProjectDocument[]
+  quotes        Quote[]
+  jobs          Job[]
+
+  @@index([contractorId])
+  @@index([customerId])
+  @@index([status])
+}
+
+model ProjectPhase {
+  id              String    @id @default(uuid())
+  projectId       String
+  project         Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  name            String
+  description     String?
+  order           Int       @default(0)
+  status          String    @default("not_started") // not_started, in_progress, completed, blocked, skipped
+  startDate       DateTime?
+  endDate         DateTime?
+  actualStart     DateTime?
+  actualEnd       DateTime?
+  dependsOnId     String?   // phase that must complete before this one starts
+  dependsOn       ProjectPhase?  @relation("PhaseDependency", fields: [dependsOnId], references: [id])
+  dependents      ProjectPhase[] @relation("PhaseDependency")
+  budgetEstimated Float?
+  budgetActual    Float     @default(0)
+  color           String?   // hex color for timeline display
+  createdAt       DateTime  @default(now())
+
+  tasks           ProjectTask[]
+  subcontractorBids SubcontractorBid[]
+
+  @@index([projectId])
+  @@index([order])
+}
+
+model ProjectTask {
+  id              String    @id @default(uuid())
+  projectId       String
+  project         Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  phaseId         String?
+  phase           ProjectPhase? @relation(fields: [phaseId], references: [id], onDelete: SetNull)
+  title           String
+  description     String?
+  status          String    @default("todo") // todo, in_progress, done, blocked
+  priority        String    @default("medium") // low, medium, high, urgent
+  assigneeType    String?   // crew, subcontractor
+  crewMemberId    String?
+  crewMember      CrewMember? @relation(fields: [crewMemberId], references: [id])
+  subcontractorId String?
+  subcontractor   Subcontractor? @relation(fields: [subcontractorId], references: [id])
+  dueDate         DateTime?
+  completedAt     DateTime?
+  estimatedHours  Float?
+  actualHours     Float?
+  estimatedCost   Float?
+  actualCost      Float?
+  order           Int       @default(0)
+  createdAt       DateTime  @default(now())
+
+  @@index([projectId])
+  @@index([phaseId])
+  @@index([status])
+}
+
+model Subcontractor {
+  id           String     @id @default(uuid())
+  contractorId String
+  contractor   Contractor @relation(fields: [contractorId], references: [id], onDelete: Cascade)
+  companyName  String
+  contactName  String?
+  email        String?
+  phone        String?
+  trade        String     // plumbing, electrical, hvac, roofing, concrete, etc.
+  licenseNumber String?
+  insuranceExpiry DateTime?
+  hourlyRate   Float?
+  rating       Int?       // 1-5 internal rating
+  notes        String?
+  active       Boolean    @default(true)
+  createdAt    DateTime   @default(now())
+
+  bids  SubcontractorBid[]
+  tasks ProjectTask[]
+
+  @@index([contractorId])
+  @@index([trade])
+}
+
+model SubcontractorBid {
+  id              String        @id @default(uuid())
+  subcontractorId String
+  subcontractor   Subcontractor @relation(fields: [subcontractorId], references: [id], onDelete: Cascade)
+  phaseId         String
+  phase           ProjectPhase  @relation(fields: [phaseId], references: [id], onDelete: Cascade)
+  amount          Float
+  description     String?
+  status          String        @default("pending") // pending, accepted, rejected, expired
+  estimatedDays   Int?
+  submittedAt     DateTime      @default(now())
+  expiresAt       DateTime?
+  notes           String?
+
+  @@index([subcontractorId])
+  @@index([phaseId])
+}
+
+model DailyLog {
+  id           String   @id @default(uuid())
+  projectId    String
+  project      Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  date         DateTime @default(now())
+  weather      String?  // sunny, cloudy, rainy, snow, etc.
+  temperature  Float?   // degrees F
+  crewOnSite   Json?    // [{name, role, hoursWorked}]
+  workCompleted String?
+  issues       String?
+  materialsUsed Json?   // [{item, qty, unit}]
+  safetyNotes  String?
+  photos       Json?    // [{url, caption}]
+  delayReason  String?  // weather, material, sub_no_show, permit, inspection, other
+  delayHours   Float?
+  createdAt    DateTime @default(now())
+
+  @@index([projectId])
+  @@index([date])
+}
+
+model ChangeOrder {
+  id           String   @id @default(uuid())
+  projectId    String
+  project      Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  orderNumber  Int
+  title        String
+  description  String
+  reason       String?  // client_request, unforeseen, code_compliance, design_change, error
+  status       String   @default("proposed") // proposed, approved, rejected, completed
+  costImpact   Float    @default(0) // positive = additional cost, negative = credit
+  daysImpact   Int      @default(0) // positive = additional days
+  approvedBy   String?  // client name/signature
+  approvedAt   DateTime?
+  createdAt    DateTime @default(now())
+
+  @@index([projectId])
+  @@index([status])
+}
+
+model ProjectDocument {
+  id        String   @id @default(uuid())
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  name      String
+  fileUrl   String
+  fileType  String   // pdf, image, permit, contract, insurance, plan
+  category  String   @default("general") // permit, contract, insurance, plan, photo, invoice, general
+  notes     String?
+  createdAt DateTime @default(now())
+
+  @@index([projectId])
+  @@index([category])
 }

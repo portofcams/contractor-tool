@@ -4,6 +4,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { TemplateActions } from "./actions";
 import { LoadDefaults } from "./load-defaults";
+import { MarketplaceBrowser } from "@/components/marketplace-browser";
+import { ShareToMarketplace } from "@/components/share-to-marketplace";
 
 interface MaterialLine {
   item: string;
@@ -52,7 +54,15 @@ export default async function TemplatesPage() {
                       {template.trade}
                     </Badge>
                   </div>
-                  <TemplateActions templateId={template.id} />
+                  <TemplateActions
+                    templateId={template.id}
+                    templateName={template.name}
+                    trade={template.trade}
+                    materials={materials}
+                    markupPercent={template.markupPercent}
+                    laborCost={template.laborCost || 0}
+                    taxRate={template.taxRate}
+                  />
                 </CardHeader>
                 <CardContent className="text-sm space-y-2">
                   <div className="space-y-1">
@@ -83,6 +93,16 @@ export default async function TemplatesPage() {
           })}
         </div>
       )}
+
+      {/* Template Marketplace */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Template Marketplace</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <MarketplaceBrowser />
+        </CardContent>
+      </Card>
     </div>
   );
 }

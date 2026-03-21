@@ -9,7 +9,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   output: "standalone",
-  serverExternalPackages: ["bcryptjs"],
+  serverExternalPackages: ["bcryptjs", "zod", "stripe", "resend", "@anthropic-ai/sdk", "twilio"],
   images: {
     remotePatterns: [
       {

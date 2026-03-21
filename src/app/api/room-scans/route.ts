@@ -7,6 +7,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/db";
+import { uploadFile } from "@/lib/storage";
 
 /** Validate that customerId/quoteId belong to this contractor */
 async function verifyOwnership(
@@ -42,12 +43,13 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
   }
 
-  const { customerId, quoteId, roomsData, surfaceCount, notes } = body as {
+  const { customerId, quoteId, roomsData, surfaceCount, notes, usdzBase64 } = body as {
     customerId?: string;
     quoteId?: string;
     roomsData?: unknown[];
     surfaceCount?: number;
     notes?: string;
+    usdzBase64?: string;
   };
 
   if (!roomsData || !Array.isArray(roomsData) || roomsData.length === 0) {
@@ -82,6 +84,17 @@ export async function POST(req: NextRequest) {
   }
 
   try {
+    // Upload USDZ model if provided
+    let modelUrl: string | null = null;
+    if (usdzBase64 && typeof usdzBase64 === "string") {
+      const buffer = Buffer.from(usdzBase64, "base64");
+      // Max 50MB for USDZ files
+      if (buffer.length <= 50 * 1024 * 1024) {
+        const result = await uploadFile(buffer, "models", "usdz", "model/vnd.usdz+zip");
+        modelUrl = result.url;
+      }
+    }
+
     const scan = await prisma.roomScan.create({
       data: {
         contractorId: session.user.id,
@@ -89,6 +102,7 @@ export async function POST(req: NextRequest) {
         quoteId: quoteId || null,
         roomsData: roomsData as object[],
         surfaceCount: typeof surfaceCount === "number" ? Math.max(0, Math.floor(surfaceCount)) : 0,
+        modelUrl,
         notes: notes || null,
       },
     });

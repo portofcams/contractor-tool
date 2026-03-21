@@ -18,7 +18,7 @@ export const authOptions: NextAuthOptions = {
           where: { email: credentials.email },
         });
 
-        if (!contractor) return null;
+        if (!contractor || !contractor.passwordHash) return null;
 
         const passwordMatch = await bcrypt.compare(
           credentials.password,
@@ -54,6 +54,5 @@ export const authOptions: NextAuthOptions = {
   },
   pages: {
     signIn: "/login",
-    newUser: "/signup",
   },
 };

@@ -4,5 +4,6 @@ import Capacitor
 class BridgeViewController: CAPBridgeViewController {
     override open func capacitorDidLoad() {
         bridge?.registerPluginInstance(RoomScannerPlugin())
+        bridge?.registerPluginInstance(ARMaterialPreviewPlugin())
     }
 }

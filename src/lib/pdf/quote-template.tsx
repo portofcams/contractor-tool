@@ -31,6 +31,7 @@ export interface QuotePDFData {
   companyEmail: string;
   companyPhone?: string;
   companyLogo?: string;
+  companyAddress?: string;
 
   // Quote
   quoteNumber: string;
@@ -59,6 +60,16 @@ export interface QuotePDFData {
   laborCost?: number;
   taxRate: number;
   total: number;
+
+  // Rooms
+  rooms?: { name: string; sqft: number }[];
+
+  // Photos
+  photos?: { src: string; caption?: string; photoType: string }[];
+
+  // Signature
+  signatureData?: string;
+  acceptedAt?: string;
 }
 
 // ── Styles ──
@@ -75,7 +86,7 @@ const colors = {
 
 const styles = StyleSheet.create({
   page: {
-    padding: 32,
+    padding: 40,
     fontSize: 11,
     fontFamily: "Helvetica",
     color: colors.dark,
@@ -265,13 +276,16 @@ export function QuotePDF({ data }: { data: QuotePDFData }) {
         <View style={styles.header}>
           <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
             {data.companyLogo && (
-              <Image src={data.companyLogo} style={{ width: 50, height: 50, objectFit: "contain" }} />
+              <Image src={data.companyLogo} style={{ width: 80, height: 80, objectFit: "contain" }} />
             )}
             <View>
               <Text style={styles.companyName}>{data.companyName}</Text>
               <Text style={styles.infoTextLight}>{data.companyEmail}</Text>
               {data.companyPhone && (
                 <Text style={styles.infoTextLight}>{data.companyPhone}</Text>
+              )}
+              {data.companyAddress && (
+                <Text style={styles.infoTextLight}>{data.companyAddress}</Text>
               )}
             </View>
           </View>
@@ -282,6 +296,24 @@ export function QuotePDF({ data }: { data: QuotePDFData }) {
             <Text style={styles.headerDate}>
               {data.trade.charAt(0).toUpperCase() + data.trade.slice(1)}
             </Text>
+            {(data.status === "accepted" || data.status === "sent") && (
+              <View style={{
+                marginTop: 6,
+                paddingVertical: 3,
+                paddingHorizontal: 10,
+                backgroundColor: data.status === "accepted" ? "#dcfce7" : "#dbeafe",
+                borderRadius: 4,
+              }}>
+                <Text style={{
+                  fontSize: 9,
+                  fontFamily: "Helvetica-Bold",
+                  color: data.status === "accepted" ? "#16a34a" : "#2563eb",
+                  textTransform: "uppercase",
+                }}>
+                  {data.status}
+                </Text>
+              </View>
+            )}
           </View>
         </View>
 
@@ -309,6 +341,35 @@ export function QuotePDF({ data }: { data: QuotePDFData }) {
             </Text>
           </View>
         </View>
+
+        {/* ── Room Dimensions ── */}
+        {data.rooms && data.rooms.length > 0 && (
+          <View style={{ marginBottom: 20 }}>
+            <Text style={styles.infoLabel}>Room Breakdown</Text>
+            <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 6 }}>
+              {data.rooms.map((room, i) => (
+                <View key={i} style={{
+                  paddingVertical: 6,
+                  paddingHorizontal: 10,
+                  backgroundColor: colors.lightGray,
+                  borderRadius: 4,
+                  borderWidth: 1,
+                  borderColor: colors.border,
+                }}>
+                  <Text style={{ fontSize: 10, fontFamily: "Helvetica-Bold", color: colors.dark }}>
+                    {room.name}
+                  </Text>
+                  <Text style={{ fontSize: 9, color: colors.gray }}>
+                    {room.sqft} sq ft
+                  </Text>
+                </View>
+              ))}
+            </View>
+            <Text style={{ fontSize: 9, color: colors.gray, marginTop: 4 }}>
+              Total: {data.rooms.reduce((sum, r) => sum + r.sqft, 0).toLocaleString()} sq ft
+            </Text>
+          </View>
+        )}
 
         {/* ── Materials Table ── */}
         <View style={styles.table}>
@@ -374,6 +435,35 @@ export function QuotePDF({ data }: { data: QuotePDFData }) {
             </View>
           </View>
         </View>
+
+        {/* ── Site Photos ── */}
+        {data.photos && data.photos.length > 0 && (
+          <View style={{ marginBottom: 20 }}>
+            <Text style={{ fontSize: 12, fontFamily: "Helvetica-Bold", color: colors.dark, marginBottom: 10 }}>
+              Site Photos
+            </Text>
+            <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
+              {data.photos.slice(0, 4).map((photo, i) => (
+                <View key={i} style={{ width: "48%" }}>
+                  <Image src={photo.src} style={{ width: "100%", height: 120, objectFit: "cover", borderRadius: 4 }} />
+                  {photo.caption && (
+                    <Text style={{ fontSize: 8, color: colors.gray, marginTop: 2 }}>{photo.caption}</Text>
+                  )}
+                </View>
+              ))}
+            </View>
+          </View>
+        )}
+
+        {/* ── Signature ── */}
+        {data.signatureData && (
+          <View style={{ marginBottom: 20, paddingTop: 10, borderTopWidth: 1, borderTopColor: colors.border }}>
+            <Text style={{ fontSize: 10, color: colors.gray, marginBottom: 6 }}>
+              Accepted by {data.customerName}{data.acceptedAt ? ` on ${data.acceptedAt}` : ""}
+            </Text>
+            <Image src={data.signatureData} style={{ width: 150, height: 50, objectFit: "contain" }} />
+          </View>
+        )}
 
         {/* ── Footer ── */}
         <View style={styles.footer}>

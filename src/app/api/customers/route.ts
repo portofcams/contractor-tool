@@ -23,7 +23,19 @@ export async function GET() {
     orderBy: { createdAt: "desc" },
     include: {
       _count: { select: { quotes: true } },
+      quotes: {
+        orderBy: { createdAt: "desc" },
+        take: 1,
+        select: { createdAt: true },
+      },
     },
+  });
+
+  // Sort by most recent quote (customers with recent quotes first)
+  customers.sort((a, b) => {
+    const aDate = a.quotes[0]?.createdAt ?? a.createdAt;
+    const bDate = b.quotes[0]?.createdAt ?? b.createdAt;
+    return new Date(bDate).getTime() - new Date(aDate).getTime();
   });
 
   return NextResponse.json(customers);

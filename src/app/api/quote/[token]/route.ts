@@ -10,6 +10,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { sendQuoteNotification } from "@/lib/email";
+import { dismissAutoFollowUps } from "@/lib/follow-up-sequence";
 import { rateLimit } from "@/lib/rate-limit";
 
 const limiter = rateLimit({ interval: 60_000, limit: 10 });
@@ -70,6 +71,11 @@ export async function POST(
       data: { status: "rejected" },
     });
   }
+
+  // Auto-dismiss pending follow-ups since the quote has been responded to
+  dismissAutoFollowUps(quote.id).catch((err) =>
+    console.error("Failed to dismiss auto follow-ups:", err)
+  );
 
   // Send email notification to contractor (respecting preferences)
   const shouldNotify =

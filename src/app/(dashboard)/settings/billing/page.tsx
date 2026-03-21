@@ -86,7 +86,7 @@ export default async function BillingPage({
                       ? "bg-red-500"
                       : remaining <= 2
                       ? "bg-yellow-500"
-                      : "bg-blue-500"
+                      : "bg-primary"
                   }`}
                   style={{
                     width: `${Math.min(
@@ -135,7 +135,7 @@ export default async function BillingPage({
               key={plan.id}
               className={
                 plan.id === currentPlan.id
-                  ? "border-blue-500 border-2"
+                  ? "border-primary border-2"
                   : ""
               }
             >
@@ -157,7 +157,7 @@ export default async function BillingPage({
                   )}
                 </div>
                 {plan.price > 0 && (
-                  <p className="text-xs text-blue-500">14-day free trial</p>
+                  <p className="text-xs text-primary">14-day free trial</p>
                 )}
                 <ul className="space-y-1 text-sm">
                   {plan.features.map((f) => (

@@ -46,6 +46,8 @@ export default function InvoicesPage() {
   const [paymentAmount, setPaymentAmount] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [statusMessage, setStatusMessage] = useState("");
+  const [generatingLink, setGeneratingLink] = useState<string | null>(null);
+  const [copiedLink, setCopiedLink] = useState<string | null>(null);
 
   useEffect(() => {
     fetchInvoices();
@@ -63,6 +65,31 @@ export default function InvoicesPage() {
     } finally {
       setLoading(false);
     }
+  }
+
+  async function generatePaymentLink(invoiceId: string) {
+    setGeneratingLink(invoiceId);
+    try {
+      const res = await fetch(`/api/invoices/${invoiceId}/checkout`, {
+        method: "POST",
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.url) {
+          await navigator.clipboard.writeText(data.url);
+          setCopiedLink(invoiceId);
+          setStatusMessage("Payment link copied to clipboard");
+          setTimeout(() => setCopiedLink(null), 3000);
+          await fetchInvoices();
+        }
+      } else {
+        const data = await res.json();
+        setStatusMessage(data.error || "Failed to generate link");
+      }
+    } catch {
+      setStatusMessage("Failed to generate payment link");
+    }
+    setGeneratingLink(null);
   }
 
   async function recordPayment(invoiceId: string) {
@@ -200,9 +227,9 @@ export default function InvoicesPage() {
                     </TableCell>
                     <TableCell className="text-right">
                       {invoice.status !== "paid" && (
-                        <>
+                        <div className="flex items-center gap-2 justify-end">
                           {paymentInvoiceId === invoice.id ? (
-                            <div className="flex items-center gap-2 justify-end">
+                            <>
                               <Input
                                 type="number"
                                 placeholder="Amount"
@@ -232,19 +259,33 @@ export default function InvoicesPage() {
                               >
                                 Cancel
                               </Button>
-                            </div>
+                            </>
                           ) : (
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              onClick={() =>
-                                setPaymentInvoiceId(invoice.id)
-                              }
-                            >
-                              Record Payment
-                            </Button>
+                            <>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() =>
+                                  setPaymentInvoiceId(invoice.id)
+                                }
+                              >
+                                Record Payment
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                disabled={generatingLink === invoice.id}
+                                onClick={() => generatePaymentLink(invoice.id)}
+                              >
+                                {generatingLink === invoice.id
+                                  ? "Generating..."
+                                  : copiedLink === invoice.id
+                                  ? "Copied!"
+                                  : "Payment Link"}
+                              </Button>
+                            </>
                           )}
-                        </>
+                        </div>
                       )}
                     </TableCell>
                   </TableRow>

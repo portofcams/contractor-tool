@@ -22,6 +22,11 @@ const quoteSchema = z.object({
   taxRate: z.number().default(0),
   total: z.number(),
   floorPlanId: z.string().uuid().optional(),
+  // Estimate builder fields
+  projectName: z.string().max(200).optional(),
+  address: z.string().max(500).optional(),
+  sqft: z.number().min(0).optional(),
+  notes: z.string().max(10000).optional(),
 });
 
 function generateQuoteNumber(): string {
@@ -105,6 +110,10 @@ export async function POST(req: Request) {
         taxRate: data.taxRate,
         total: data.total,
         floorPlanId: data.floorPlanId ?? null,
+        projectName: data.projectName ?? null,
+        address: data.address ?? null,
+        sqft: data.sqft ?? null,
+        notes: data.notes ?? null,
       },
     });
 

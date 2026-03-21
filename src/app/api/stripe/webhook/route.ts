@@ -48,6 +48,34 @@ export async function POST(req: Request) {
   switch (event.type) {
     case "checkout.session.completed": {
       const session = event.data.object as Stripe.Checkout.Session;
+
+      // Invoice payment
+      if (session.metadata?.type === "invoice_payment") {
+        const invoiceId = session.metadata.invoiceId;
+        if (invoiceId && session.payment_status === "paid") {
+          const invoice = await prisma.invoice.findUnique({
+            where: { id: invoiceId },
+          });
+          if (invoice) {
+            const amountPaid = (session.amount_total || 0) / 100;
+            const newPaidAmount = invoice.paidAmount + amountPaid;
+            await prisma.invoice.update({
+              where: { id: invoiceId },
+              data: {
+                paidAmount: newPaidAmount,
+                status: newPaidAmount >= invoice.amount ? "paid" : "partial",
+                paidAt: newPaidAmount >= invoice.amount ? new Date() : undefined,
+              },
+            });
+            console.log(
+              `Invoice payment: ${invoice.invoiceNumber} → $${amountPaid} paid`
+            );
+          }
+        }
+        break;
+      }
+
+      // Subscription checkout
       const contractorId = session.metadata?.contractorId;
       const planId = session.metadata?.planId;
       const stripeCustomerId =

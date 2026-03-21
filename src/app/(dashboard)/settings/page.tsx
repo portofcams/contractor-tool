@@ -5,6 +5,8 @@ import { SettingsForm } from "./settings-form";
 import { MaterialPricing } from "./material-pricing";
 import { DeleteAccount } from "./delete-account";
 import { NotificationPrefs } from "./notification-prefs";
+import { ThemeToggle } from "@/components/theme-toggle";
+import { FollowUpSequenceEditor } from "./follow-up-sequence";
 
 export default async function SettingsPage() {
   const contractor = await getContractor();
@@ -77,12 +79,34 @@ export default async function SettingsPage() {
 
       <Card>
         <CardHeader>
+          <CardTitle>Appearance</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ThemeToggle />
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
           <CardTitle>Notifications</CardTitle>
         </CardHeader>
         <CardContent>
           <NotificationPrefs
             notifyOnAccept={fullContractor.notifyOnAccept}
             notifyOnDecline={fullContractor.notifyOnDecline}
+            notifyOnView={fullContractor.notifyOnView}
+          />
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Auto Follow-Ups</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <FollowUpSequenceEditor
+            autoFollowUp={fullContractor.autoFollowUp}
+            followUpSequence={fullContractor.followUpSequence as { delayDays: number; message: string }[] | null}
           />
         </CardContent>
       </Card>

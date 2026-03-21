@@ -51,7 +51,7 @@ export default function LandingPage() {
       {/* Nav */}
       <nav className="border-b border-[#334155]">
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-          <span className="text-xl font-bold text-blue-500">ContractorCalc</span>
+          <span className="text-xl font-bold text-primary">ContractorCalc</span>
           <div className="flex items-center gap-3">
             <Link href="/login">
               <Button variant="ghost" className="text-gray-400 hover:text-gray-200">Sign In</Button>
@@ -74,7 +74,7 @@ export default function LandingPage() {
             <br />
             Send quotes.
             <br />
-            <span className="text-blue-500">Close jobs faster.</span>
+            <span className="text-primary">Close jobs faster.</span>
           </h1>
           <p className="mt-6 text-lg text-gray-400 max-w-xl mx-auto">
             Enter room dimensions, pick your materials, and generate a
@@ -103,9 +103,9 @@ export default function LandingPage() {
             {features.map((f) => (
               <Card key={f.title} className="border-[#334155] bg-[#1e293b]">
                 <CardContent className="pt-6">
-                  <div className="w-10 h-10 bg-blue-500/15 rounded-lg flex items-center justify-center mb-4">
+                  <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
                     <svg
-                      className="w-5 h-5 text-blue-500"
+                      className="w-5 h-5 text-primary"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -162,7 +162,7 @@ export default function LandingPage() {
                     {[...Array(5)].map((_, i) => (
                       <svg
                         key={i}
-                        className="w-4 h-4 text-blue-500"
+                        className="w-4 h-4 text-primary"
                         aria-hidden="true"
                         fill="currentColor"
                         viewBox="0 0 20 20"
@@ -201,11 +201,11 @@ export default function LandingPage() {
               return (
                 <Card
                   key={planId}
-                  className={isPro ? "border-blue-500 border-2 relative bg-[#1e293b]" : "border-[#334155] bg-[#1e293b]"}
+                  className={isPro ? "border-primary border-2 relative bg-[#1e293b]" : "border-[#334155] bg-[#1e293b]"}
                 >
                   {isPro && (
                     <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                      <Badge className="bg-blue-500 text-[#0f172a]">Most Popular</Badge>
+                      <Badge className="bg-primary text-[#0f172a]">Most Popular</Badge>
                     </div>
                   )}
                   <CardHeader className="text-center pb-2">
@@ -265,7 +265,7 @@ export default function LandingPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-20 px-4 bg-blue-600">
+      <section className="py-20 px-4 bg-primary">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-3xl font-bold text-white mb-4">
             Stop guessing. Start quoting.
@@ -277,7 +277,7 @@ export default function LandingPage() {
           <Link href="/signup">
             <Button
               size="lg"
-              className="bg-[#0f172a] text-blue-500 hover:bg-[#1e293b] text-base px-8"
+              className="bg-[#0f172a] text-primary hover:bg-[#1e293b] text-base px-8"
             >
               Create Your Free Account
             </Button>

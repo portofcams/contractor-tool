@@ -8,6 +8,14 @@ import { SitePhotos } from "@/components/site-photos";
 import { SiteNotes } from "@/components/site-notes";
 import { VoiceRecorder } from "@/components/voice-recorder";
 import { FollowUpManager } from "@/components/follow-up-manager";
+import { RecurrenceSelector } from "@/components/recurrence-selector";
+import { RevisionHistory } from "@/components/revision-history";
+import { BeforeAfterGallery } from "@/components/before-after-slider";
+import { Room3DViewer } from "@/components/room-3d-viewer";
+import { ARMaterialPreviewButton } from "@/components/ar-material-preview";
+import { QuoteComparison } from "@/components/quote-comparison";
+import { SMSButton } from "@/components/sms-button";
+import { ReviewRequest } from "@/components/review-request";
 
 interface MaterialLine {
   item: string;
@@ -35,7 +43,7 @@ export default async function QuoteDetailPage({
   const materials = quote.materials as unknown as MaterialLine[];
 
   // Fetch site photos, notes, voice notes, and follow-ups for this quote
-  const [sitePhotos, siteNotes, voiceNotes, followUps] = await Promise.all([
+  const [sitePhotos, siteNotes, voiceNotes, followUps, roomScans] = await Promise.all([
     prisma.sitePhoto.findMany({
       where: { quoteId: id, contractorId: contractor.id },
       orderBy: { takenAt: "desc" },
@@ -52,6 +60,11 @@ export default async function QuoteDetailPage({
       where: { quoteId: id, contractorId: contractor.id },
       orderBy: { reminderDate: "asc" },
     }),
+    prisma.roomScan.findMany({
+      where: { quoteId: id, contractorId: contractor.id, modelUrl: { not: null } },
+      select: { id: true, modelUrl: true },
+      take: 1,
+    }),
   ]);
 
   return (
@@ -63,6 +76,15 @@ export default async function QuoteDetailPage({
             {quote.customer.name} &middot;{" "}
             <span className="capitalize">{quote.trade}</span>
           </p>
+          {quote.projectName && (
+            <p className="text-sm font-medium mt-1">{quote.projectName}</p>
+          )}
+          {quote.address && (
+            <p className="text-sm text-muted-foreground">{quote.address}</p>
+          )}
+          {quote.sqft && (
+            <p className="text-sm text-muted-foreground">{quote.sqft.toLocaleString()} sqft</p>
+          )}
         </div>
         <Badge
           variant={
@@ -114,6 +136,12 @@ export default async function QuoteDetailPage({
         </CardContent>
       </Card>
 
+      {/* AR Material Preview — flooring/painting only */}
+      <ARMaterialPreviewButton trade={quote.trade} />
+
+      {/* Competitor Quote Comparison */}
+      <QuoteComparison myMaterials={materials} />
+
       <Card>
         <CardHeader>
           <CardTitle>Pricing</CardTitle>
@@ -154,6 +182,17 @@ export default async function QuoteDetailPage({
           </div>
         </CardContent>
       </Card>
+
+      {quote.notes && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Project Notes</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-sm whitespace-pre-wrap">{quote.notes}</p>
+          </CardContent>
+        </Card>
+      )}
 
       <Card>
         <CardHeader>
@@ -213,6 +252,25 @@ export default async function QuoteDetailPage({
           </CardContent>
         </Card>
       )}
+
+      {/* 3D Room Model */}
+      {roomScans[0]?.modelUrl && (
+        <Card>
+          <CardContent className="pt-6">
+            <Room3DViewer modelUrl={roomScans[0].modelUrl} />
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Before/After Comparison */}
+      <BeforeAfterGallery
+        photos={sitePhotos.map((p) => ({
+          id: p.id,
+          fileUrl: p.fileUrl,
+          caption: p.caption,
+          photoType: p.photoType,
+        }))}
+      />
 
       {/* Site Photos */}
       <Card>
@@ -285,10 +343,52 @@ export default async function QuoteDetailPage({
               reminderDate: f.reminderDate.toISOString(),
               message: f.message,
               status: f.status,
+              isAuto: f.isAuto,
+              stepIndex: f.stepIndex,
             }))}
           />
         </CardContent>
       </Card>
+
+      {/* Revision History */}
+      <Card>
+        <CardContent className="pt-6">
+          <RevisionHistory quoteId={quote.id} currentVersion={quote.version} />
+        </CardContent>
+      </Card>
+
+      <RecurrenceSelector
+        quoteId={quote.id}
+        currentRecurrence={quote.recurrence}
+        nextRecurrenceAt={quote.nextRecurrenceAt?.toISOString() ?? null}
+      />
+
+      {/* SMS & Review Actions */}
+      {(quote.customer.phone || quote.customer.email) && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Quick Actions</CardTitle>
+          </CardHeader>
+          <CardContent className="flex flex-wrap gap-2">
+            {quote.status === "sent" && (
+              <SMSButton
+                type="quote_sent"
+                customerId={quote.customerId}
+                quoteId={quote.id}
+                customerPhone={quote.customer.phone ?? undefined}
+                label="SMS Quote Link"
+              />
+            )}
+            {quote.status === "accepted" && (
+              <ReviewRequest
+                customerId={quote.customerId}
+                quoteId={quote.id}
+                customerEmail={quote.customer.email ?? undefined}
+              />
+            )}
+          </CardContent>
+        </Card>
+      )}
 
       <QuoteActions
         quoteId={quote.id}

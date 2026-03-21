@@ -2,8 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/db";
-import { writeFile, mkdir, unlink } from "fs/promises";
-import path from "path";
+import { uploadFile, deleteFile } from "@/lib/storage";
 
 export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions);
@@ -51,12 +50,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "File content does not match an allowed audio type" }, { status: 400 });
   }
 
-  const ext = detected.ext;
-  const fileName = `${crypto.randomUUID()}.${ext}`;
-  const uploadDir = path.join(process.cwd(), "public", "uploads", "voice");
-  const filePath = path.join(uploadDir, fileName);
-  await mkdir(uploadDir, { recursive: true });
-  await writeFile(filePath, buffer);
+  const { url: fileUrl } = await uploadFile(buffer, "voice", detected.ext, detected.type);
 
   try {
     const note = await prisma.voiceNote.create({
@@ -64,13 +58,13 @@ export async function POST(req: NextRequest) {
         contractorId: session.user.id,
         customerId: customerId || null,
         quoteId: quoteId || null,
-        fileUrl: `/uploads/voice/${fileName}`,
+        fileUrl,
         duration,
       },
     });
     return NextResponse.json(note, { status: 201 });
   } catch {
-    await unlink(filePath).catch(() => {});
+    await deleteFile(fileUrl).catch(() => {});
     return NextResponse.json({ error: "Failed to save" }, { status: 500 });
   }
 }

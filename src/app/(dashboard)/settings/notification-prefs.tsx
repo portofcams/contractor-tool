@@ -7,18 +7,21 @@ import { Label } from "@/components/ui/label";
 interface NotificationPrefsProps {
   notifyOnAccept: boolean;
   notifyOnDecline: boolean;
+  notifyOnView: boolean;
 }
 
-export function NotificationPrefs({ notifyOnAccept, notifyOnDecline }: NotificationPrefsProps) {
+export function NotificationPrefs({ notifyOnAccept, notifyOnDecline, notifyOnView }: NotificationPrefsProps) {
   const router = useRouter();
   const [accept, setAccept] = useState(notifyOnAccept);
   const [decline, setDecline] = useState(notifyOnDecline);
+  const [view, setView] = useState(notifyOnView);
   const [saving, setSaving] = useState(false);
   const [result, setResult] = useState<{ success?: boolean; message?: string }>({});
 
-  async function handleToggle(field: "notifyOnAccept" | "notifyOnDecline", value: boolean) {
+  async function handleToggle(field: "notifyOnAccept" | "notifyOnDecline" | "notifyOnView", value: boolean) {
     if (field === "notifyOnAccept") setAccept(value);
-    else setDecline(value);
+    else if (field === "notifyOnDecline") setDecline(value);
+    else setView(value);
 
     setSaving(true);
     setResult({});
@@ -37,12 +40,14 @@ export function NotificationPrefs({ notifyOnAccept, notifyOnDecline }: Notificat
         setResult({ success: false, message: "Failed to save" });
         // Revert
         if (field === "notifyOnAccept") setAccept(!value);
-        else setDecline(!value);
+        else if (field === "notifyOnDecline") setDecline(!value);
+        else setView(!value);
       }
     } catch {
       setResult({ success: false, message: "Network error" });
       if (field === "notifyOnAccept") setAccept(!value);
-      else setDecline(!value);
+      else if (field === "notifyOnDecline") setDecline(!value);
+      else setView(!value);
     }
     setSaving(false);
     setTimeout(() => setResult({}), 2000);
@@ -72,7 +77,7 @@ export function NotificationPrefs({ notifyOnAccept, notifyOnDecline }: Notificat
           disabled={saving}
           onClick={() => handleToggle("notifyOnAccept", !accept)}
           className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors ${
-            accept ? "bg-blue-500" : "bg-secondary"
+            accept ? "bg-primary" : "bg-secondary"
           }`}
         >
           <span
@@ -95,12 +100,35 @@ export function NotificationPrefs({ notifyOnAccept, notifyOnDecline }: Notificat
           disabled={saving}
           onClick={() => handleToggle("notifyOnDecline", !decline)}
           className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors ${
-            decline ? "bg-blue-500" : "bg-secondary"
+            decline ? "bg-primary" : "bg-secondary"
           }`}
         >
           <span
             className={`pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow-sm transition-transform ${
               decline ? "translate-x-5" : "translate-x-0"
+            }`}
+          />
+        </button>
+      </div>
+
+      <div className="flex items-center justify-between">
+        <div>
+          <Label className="text-sm font-medium">Quote Viewed</Label>
+          <p className="text-xs text-muted-foreground">Email me when a customer opens a quote</p>
+        </div>
+        <button
+          type="button"
+          role="switch"
+          aria-checked={view}
+          disabled={saving}
+          onClick={() => handleToggle("notifyOnView", !view)}
+          className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors ${
+            view ? "bg-primary" : "bg-secondary"
+          }`}
+        >
+          <span
+            className={`pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow-sm transition-transform ${
+              view ? "translate-x-5" : "translate-x-0"
             }`}
           />
         </button>

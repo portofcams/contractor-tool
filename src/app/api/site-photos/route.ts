@@ -7,8 +7,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/db";
-import { writeFile, mkdir, unlink } from "fs/promises";
-import path from "path";
+import { uploadFile, deleteFile } from "@/lib/storage";
 
 /** Strict map from validated MIME type to file extension */
 const EXT_MAP: Record<string, string> = {
@@ -115,13 +114,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: ownershipError }, { status: 404 });
   }
 
-  const fileName = `${crypto.randomUUID()}.${safeExt}`;
-  const uploadDir = path.join(process.cwd(), "public", "uploads", "photos");
-  const filePath = path.join(uploadDir, fileName);
-  await mkdir(uploadDir, { recursive: true });
-  await writeFile(filePath, buffer);
-
-  const fileUrl = `/uploads/photos/${fileName}`;
+  const { url: fileUrl } = await uploadFile(buffer, "photos", safeExt, detectedType);
 
   try {
     const photo = await prisma.sitePhoto.create({
@@ -137,8 +130,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(photo, { status: 201 });
   } catch {
-    // Clean up orphaned file if DB insert fails
-    await unlink(filePath).catch(() => {});
+    await deleteFile(fileUrl).catch(() => {});
     return NextResponse.json({ error: "Failed to save photo" }, { status: 500 });
   }
 }

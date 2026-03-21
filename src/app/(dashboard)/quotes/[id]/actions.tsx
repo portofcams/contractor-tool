@@ -2,6 +2,9 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Capacitor } from "@capacitor/core";
+import { Filesystem, Directory } from "@capacitor/filesystem";
+import { Share } from "@capacitor/share";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -11,6 +14,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { notifySuccess, notifyError, tapMedium } from "@/lib/haptics";
 
 export function QuoteActions({
   quoteId,
@@ -63,6 +67,54 @@ export function QuoteActions({
     setLoading("");
   }
 
+  async function sharePDF() {
+    setLoading("share");
+    try {
+      const res = await fetch(`/api/quotes/${quoteId}/pdf`);
+      if (!res.ok) throw new Error("PDF generation failed");
+      const blob = await res.blob();
+      const filename =
+        res.headers.get("Content-Disposition")?.split("filename=")[1]?.replace(/"/g, "") ||
+        "quote.pdf";
+
+      if (Capacitor.isNativePlatform()) {
+        // Save to temp file, then share via native share sheet
+        const reader = new FileReader();
+        const base64 = await new Promise<string>((resolve) => {
+          reader.onloadend = () => resolve((reader.result as string).split(",")[1]);
+          reader.readAsDataURL(blob);
+        });
+        const saved = await Filesystem.writeFile({
+          path: filename,
+          data: base64,
+          directory: Directory.Cache,
+        });
+        await Share.share({
+          title: filename,
+          url: saved.uri,
+        });
+        notifySuccess();
+      } else if (navigator.share) {
+        const file = new File([blob], filename, { type: "application/pdf" });
+        await navigator.share({ files: [file], title: filename });
+      } else {
+        // Fallback: just download
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }
+    } catch (err) {
+      notifyError();
+      console.error("Share error:", err);
+    }
+    setLoading("");
+  }
+
   async function downloadPDF() {
     setLoading("pdf");
     try {
@@ -70,16 +122,34 @@ export function QuoteActions({
       if (!res.ok) throw new Error("PDF generation failed");
 
       const blob = await res.blob();
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download =
+      const filename =
         res.headers.get("Content-Disposition")?.split("filename=")[1]?.replace(/"/g, "") ||
         "quote.pdf";
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
+
+      if (Capacitor.isNativePlatform()) {
+        // Save to Documents and open with native viewer via share sheet
+        const reader = new FileReader();
+        const base64 = await new Promise<string>((resolve) => {
+          reader.onloadend = () => resolve((reader.result as string).split(",")[1]);
+          reader.readAsDataURL(blob);
+        });
+        const saved = await Filesystem.writeFile({
+          path: filename,
+          data: base64,
+          directory: Directory.Documents,
+        });
+        // Open the file using share sheet (which offers "Open in..." options)
+        await Share.share({ title: filename, url: saved.uri });
+      } else {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }
     } catch (err) {
       console.error("PDF download error:", err);
     }
@@ -102,12 +172,15 @@ export function QuoteActions({
 
       if (res.ok) {
         setEmailResult({ success: true, message: `Quote sent to ${data.sentTo}` });
+        notifySuccess();
         router.refresh();
       } else {
         setEmailResult({ success: false, message: data.error || "Failed to send" });
+        notifyError();
       }
     } catch {
       setEmailResult({ success: false, message: "Network error" });
+      notifyError();
     }
     setLoading("");
   }
@@ -150,6 +223,11 @@ export function QuoteActions({
         {/* PDF Download — always available */}
         <Button variant="outline" onClick={downloadPDF} disabled={!!loading}>
           {loading === "pdf" ? "Generating..." : "Download PDF"}
+        </Button>
+
+        {/* Share PDF via native share sheet or Web Share API */}
+        <Button variant="outline" onClick={sharePDF} disabled={!!loading}>
+          {loading === "share" ? "Sharing..." : "Share"}
         </Button>
 
         {/* Copy Public Link */}

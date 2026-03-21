@@ -3,6 +3,7 @@ import { getContractor } from "@/lib/session";
 import { prisma } from "@/lib/db";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { CSVImport } from "@/components/csv-import";
 
 export default async function CustomersPage() {
   const contractor = await getContractor();
@@ -19,9 +20,12 @@ export default async function CustomersPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">Customers</h1>
-        <Link href="/customers/new">
-          <Button>Add Customer</Button>
-        </Link>
+        <div className="flex items-center gap-2">
+          <CSVImport />
+          <Link href="/customers/new">
+            <Button>Add Customer</Button>
+          </Link>
+        </div>
       </div>
 
       {customers.length === 0 ? (

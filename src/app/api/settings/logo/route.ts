@@ -10,9 +10,7 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/db";
-import { writeFile, mkdir } from "fs/promises";
-import path from "path";
-import { randomUUID } from "crypto";
+import { uploadFile } from "@/lib/storage";
 
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
@@ -49,14 +47,9 @@ export async function POST(req: Request) {
     "image/svg+xml": "svg",
   };
   const ext = extMap[file.type] || "png";
-  const fileName = `${randomUUID()}.${ext}`;
-  const uploadDir = path.join(process.cwd(), "public", "uploads", "logos");
-  await mkdir(uploadDir, { recursive: true });
 
   const bytes = await file.arrayBuffer();
-  await writeFile(path.join(uploadDir, fileName), Buffer.from(bytes));
-
-  const logoUrl = `/uploads/logos/${fileName}`;
+  const { url: logoUrl } = await uploadFile(Buffer.from(bytes), "logos", ext, file.type);
 
   await prisma.contractor.update({
     where: { id: session.user.id },

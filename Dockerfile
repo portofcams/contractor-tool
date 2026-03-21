@@ -37,6 +37,7 @@ RUN adduser --system --uid 1001 nextjs
 
 # Copy built assets
 COPY --from=builder /app/public ./public
+RUN mkdir -p /app/public/uploads/pdfs && chown -R nextjs:nodejs /app/public/uploads
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
@@ -47,6 +48,12 @@ COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
 
 # Copy server external packages not traced by standalone build
 COPY --from=builder /app/node_modules/bcryptjs ./node_modules/bcryptjs
+COPY --from=builder /app/node_modules/zod ./node_modules/zod
+COPY --from=builder /app/node_modules/stripe ./node_modules/stripe
+COPY --from=builder /app/node_modules/resend ./node_modules/resend
+COPY --from=builder /app/node_modules/postal-mime ./node_modules/postal-mime
+COPY --from=builder /app/node_modules/@anthropic-ai ./node_modules/@anthropic-ai
+COPY --from=builder /app/node_modules/twilio ./node_modules/twilio
 
 USER nextjs
 

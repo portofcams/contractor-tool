@@ -76,7 +76,7 @@ export function OfflineBanner() {
       aria-live="polite"
       aria-atomic="true"
       className={`text-white text-center text-sm py-2 px-4 ${
-        isOffline ? "bg-blue-700" : syncResult ? "bg-green-700" : "bg-blue-700/90"
+        isOffline ? "bg-red-600" : syncResult ? "bg-green-600" : "bg-yellow-600"
       }`}
     >
       <span className="inline-flex items-center gap-2">

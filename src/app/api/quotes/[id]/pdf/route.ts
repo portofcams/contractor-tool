@@ -10,8 +10,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { renderQuotePDF } from "@/lib/pdf/render";
-import { writeFile, mkdir } from "fs/promises";
-import path from "path";
+import { uploadFile } from "@/lib/storage";
 
 export async function GET(
   _req: Request,
@@ -25,7 +24,12 @@ export async function GET(
 
   const quote = await prisma.quote.findFirst({
     where: { id, contractorId: session.user.id },
-    include: { customer: true, contractor: true },
+    include: {
+      customer: true,
+      contractor: true,
+      sitePhotos: { orderBy: { takenAt: "desc" }, take: 4 },
+      roomScans: { select: { roomsData: true } },
+    },
   });
 
   if (!quote) {
@@ -34,12 +38,8 @@ export async function GET(
 
   const pdfBuffer = await renderQuotePDF(quote);
 
-  // Save PDF to disk and store URL on the quote record
-  const pdfDir = path.join(process.cwd(), "public", "uploads", "pdfs");
-  await mkdir(pdfDir, { recursive: true });
   const fileName = `${quote.quoteNumber}.pdf`;
-  await writeFile(path.join(pdfDir, fileName), pdfBuffer);
-  const pdfUrl = `/uploads/pdfs/${fileName}`;
+  const { url: pdfUrl } = await uploadFile(Buffer.from(pdfBuffer), "pdfs", "pdf", "application/pdf");
 
   if (quote.pdfUrl !== pdfUrl) {
     await prisma.quote.update({

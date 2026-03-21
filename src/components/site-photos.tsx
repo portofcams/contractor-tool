@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { PhotoMarkup } from "@/components/photo-markup";
 
 interface SitePhoto {
   id: string;
@@ -27,6 +28,7 @@ export function SitePhotos({
   const [photoType, setPhotoType] = useState("general");
   const [filterType, setFilterType] = useState("all");
   const [selectedPhoto, setSelectedPhoto] = useState<SitePhoto | null>(null);
+  const [markupPhoto, setMarkupPhoto] = useState<SitePhoto | null>(null);
   const [statusMessage, setStatusMessage] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
   const lightboxRef = useRef<HTMLDivElement>(null);
@@ -116,7 +118,7 @@ export function SitePhotos({
                 onClick={() => setFilterType(t)}
                 aria-pressed={filterType === t}
                 className={`text-xs px-2 py-0.5 rounded-full border ${
-                  filterType === t ? "bg-blue-500 text-white border-blue-500" : "border-border text-muted-foreground"
+                  filterType === t ? "bg-primary text-white border-primary" : "border-border text-muted-foreground"
                 }`}
               >
                 {t === "all" ? "All" : t.charAt(0).toUpperCase() + t.slice(1)}
@@ -180,7 +182,7 @@ export function SitePhotos({
                 setSelectedPhoto(photo);
               }}
               aria-label={`View photo${photo.caption ? `: ${photo.caption}` : ""}`}
-              className="relative aspect-square rounded-lg overflow-hidden border border-border hover:border-blue-500 transition-colors"
+              className="relative aspect-square rounded-lg overflow-hidden border border-border hover:border-primary transition-colors"
             >
               <img
                 src={photo.fileUrl}
@@ -225,16 +227,48 @@ export function SitePhotos({
             <img
               src={selectedPhoto.fileUrl}
               alt={selectedPhoto.caption || "Site photo"}
-              className="max-w-full max-h-[80vh] object-contain rounded-lg"
+              className="max-w-full max-h-[70vh] object-contain rounded-lg"
             />
-            {selectedPhoto.caption && (
-              <p className="text-white text-center mt-2">{selectedPhoto.caption}</p>
-            )}
+            <div className="flex items-center justify-center gap-3 mt-3">
+              {selectedPhoto.caption && (
+                <p className="text-white text-sm">{selectedPhoto.caption}</p>
+              )}
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setMarkupPhoto(selectedPhoto);
+                  setSelectedPhoto(null);
+                }}
+              >
+                Annotate
+              </Button>
+            </div>
             <p className="text-muted-foreground text-xs text-center mt-1">
               {new Date(selectedPhoto.takenAt).toLocaleDateString()}
             </p>
           </div>
         </div>
+      )}
+
+      {/* Photo Markup */}
+      {markupPhoto && (
+        <PhotoMarkup
+          imageUrl={markupPhoto.fileUrl}
+          photoId={markupPhoto.id}
+          customerId={customerId}
+          quoteId={quoteId}
+          onSave={(newUrl, newId) => {
+            setPhotos((prev) => [
+              { id: newId, fileUrl: newUrl, caption: "Annotated photo", photoType: "general", takenAt: new Date().toISOString() },
+              ...prev,
+            ]);
+            setMarkupPhoto(null);
+            setStatusMessage("Annotated photo saved.");
+          }}
+          onClose={() => setMarkupPhoto(null)}
+        />
       )}
 
       {/* Live region for status announcements */}

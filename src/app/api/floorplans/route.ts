@@ -1,9 +1,7 @@
 import { NextResponse } from "next/server";
 import { getContractor } from "@/lib/session";
 import { prisma } from "@/lib/db";
-import { writeFile, mkdir } from "fs/promises";
-import path from "path";
-import { randomUUID } from "crypto";
+import { uploadFile } from "@/lib/storage";
 
 export async function GET(req: Request) {
   try {
@@ -78,7 +76,6 @@ export async function POST(req: Request) {
       );
     }
 
-    // Save file with safe extension
     const extMap: Record<string, string> = {
       "image/jpeg": "jpg",
       "image/png": "png",
@@ -86,15 +83,9 @@ export async function POST(req: Request) {
       "application/pdf": "pdf",
     };
     const ext = extMap[file.type] || "bin";
-    const fileName = `${randomUUID()}.${ext}`;
-    const uploadDir = path.join(process.cwd(), "public", "uploads");
-    await mkdir(uploadDir, { recursive: true });
-    const filePath = path.join(uploadDir, fileName);
 
     const bytes = await file.arrayBuffer();
-    await writeFile(filePath, Buffer.from(bytes));
-
-    const fileUrl = `/uploads/${fileName}`;
+    const { url: fileUrl } = await uploadFile(Buffer.from(bytes), "floorplans", ext, file.type);
     const fileType = file.type === "application/pdf" ? "pdf" : "image";
 
     const floorPlan = await prisma.floorPlan.create({

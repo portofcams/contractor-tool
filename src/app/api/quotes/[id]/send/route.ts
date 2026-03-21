@@ -15,6 +15,7 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { renderQuotePDF } from "@/lib/pdf/render";
 import { sendQuoteEmail } from "@/lib/email";
+import { createAutoFollowUps } from "@/lib/follow-up-sequence";
 import { rateLimit } from "@/lib/rate-limit";
 
 const limiter = rateLimit({ interval: 60_000, limit: 10 });
@@ -34,7 +35,11 @@ export async function POST(
 
   const quote = await prisma.quote.findFirst({
     where: { id, contractorId: session.user.id },
-    include: { customer: true, contractor: true },
+    include: {
+      customer: true,
+      contractor: true,
+      sitePhotos: { orderBy: { takenAt: "desc" }, take: 4 },
+    },
   });
 
   if (!quote) {
@@ -92,6 +97,11 @@ export async function POST(
       sentAt: new Date(),
     },
   });
+
+  // Auto-create follow-up sequence (non-blocking)
+  createAutoFollowUps(quote.id, session.user.id).catch((err) =>
+    console.error("Auto follow-up creation error:", err)
+  );
 
   return NextResponse.json({
     success: true,
