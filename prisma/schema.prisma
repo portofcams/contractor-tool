@@ -26,6 +26,8 @@ model Contractor {
   followUpSequence Json?    // [{delayDays: 3, message: "..."}, ...] — auto follow-up steps
   subscriptionPlan String   @default("free") // 'free', 'pro', 'business'
   stripeCustomerId String?
+  role             String   @default("manager") // 'admin', 'owner', 'manager'
+  lastLoginAt      DateTime?
   createdAt        DateTime @default(now())
 
   customers      Customer[]
@@ -44,6 +46,7 @@ model Contractor {
   reviews        Review[]
   projects       Project[]
   subcontractors Subcontractor[]
+  teamMembers    TeamMember[]
 }
 
 model Customer {
@@ -275,8 +278,8 @@ model SitePhoto {
   quote        Quote?     @relation(fields: [quoteId], references: [id], onDelete: SetNull)
   fileUrl      String
   caption      String?
+  roomName     String?
   photoType    String     @default("general") // "general", "before", "after"
-  roomName     String?    // Tag photo to a specific room (e.g., "Living Room")
   takenAt      DateTime   @default(now())
 
   @@index([contractorId])
@@ -453,13 +456,15 @@ model Project {
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
 
-  phases        ProjectPhase[]
-  tasks         ProjectTask[]
-  dailyLogs     DailyLog[]
-  changeOrders  ChangeOrder[]
-  documents     ProjectDocument[]
-  quotes        Quote[]
-  jobs          Job[]
+  phases             ProjectPhase[]
+  tasks              ProjectTask[]
+  dailyLogs          DailyLog[]
+  changeOrders       ChangeOrder[]
+  documents          ProjectDocument[]
+  quotes             Quote[]
+  jobs               Job[]
+  projectAssignments ProjectAssignment[]
+  projectPhotos      ProjectPhoto[]
 
   @@index([contractorId])
   @@index([customerId])
@@ -617,4 +622,52 @@ model ProjectDocument {
 
   @@index([projectId])
   @@index([category])
+}
+
+// ── Team / Project Lead ──
+
+model TeamMember {
+  id           String   @id @default(cuid())
+  email        String
+  name         String?
+  role         String   @default("lead") // "owner", "manager", "lead"
+  status       String   @default("invited") // "invited", "active"
+  inviteToken  String?  @unique @default(cuid())
+  contractorId String
+  contractor   Contractor @relation(fields: [contractorId], references: [id], onDelete: Cascade)
+  assignments  ProjectAssignment[]
+  photos       ProjectPhoto[]
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@unique([email, contractorId])
+  @@index([contractorId])
+  @@index([inviteToken])
+}
+
+model ProjectAssignment {
+  id           String   @id @default(cuid())
+  teamMemberId String
+  teamMember   TeamMember @relation(fields: [teamMemberId], references: [id], onDelete: Cascade)
+  projectId    String
+  project      Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  assignedAt   DateTime @default(now())
+
+  @@unique([teamMemberId, projectId])
+  @@index([teamMemberId])
+  @@index([projectId])
+}
+
+model ProjectPhoto {
+  id           String   @id @default(cuid())
+  url          String
+  caption      String?
+  projectId    String
+  project      Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  teamMemberId String?
+  teamMember   TeamMember? @relation(fields: [teamMemberId], references: [id], onDelete: SetNull)
+  createdAt    DateTime @default(now())
+
+  @@index([projectId])
+  @@index([teamMemberId])
 }
