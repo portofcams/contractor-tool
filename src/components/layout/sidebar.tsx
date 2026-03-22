@@ -16,6 +16,8 @@ const navItems = [
   { href: "/estimates/new", label: "New Estimate", icon: "clipboard" },
   { href: "/scan", label: "Room Scanner", icon: "scan" },
   { href: "/jobs", label: "Jobs", icon: "calendar" },
+  { href: "/time-tracking", label: "Time Tracking", icon: "clock" },
+  { href: "/receipts", label: "Receipts", icon: "camera" },
   { href: "/invoices", label: "Invoices", icon: "receipt" },
   { href: "/team", label: "Team", icon: "hard-hat" },
   { href: "/subcontractors", label: "Subcontractors", icon: "truck" },
@@ -48,6 +50,10 @@ const iconMap: Record<string, string> = {
     "M7 7h10v10H7V7zM4 4v4M4 16v4M20 4v4M20 16v4M4 4h4M16 4h4M4 20h4M16 20h4",
   book:
     "M4 19.5A2.5 2.5 0 016.5 17H20 M4 4.5A2.5 2.5 0 016.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15z",
+  clock:
+    "M12 2a10 10 0 100 20 10 10 0 000-20zm0 6v4l3 3",
+  camera:
+    "M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2zM12 17a4 4 0 100-8 4 4 0 000 8z",
   settings:
     "M12 15a3 3 0 100-6 3 3 0 000 6z M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z",
 };

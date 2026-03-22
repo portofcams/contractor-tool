@@ -47,6 +47,8 @@ model Contractor {
   projects       Project[]
   subcontractors Subcontractor[]
   teamMembers    TeamMember[]
+  timeEntries    TimeEntry[]
+  receipts       Receipt[]
 }
 
 model Customer {
@@ -357,6 +359,8 @@ model Job {
 
   assignments JobAssignment[]
   actualCosts ActualCost[]
+  timeEntries TimeEntry[]
+  receipts    Receipt[]
 
   @@index([contractorId])
   @@index([customerId])
@@ -415,6 +419,7 @@ model CrewMember {
 
   assignments  JobAssignment[]
   projectTasks ProjectTask[]
+  timeEntries  TimeEntry[]
 
   @@index([contractorId])
 }
@@ -431,6 +436,55 @@ model JobAssignment {
 
   @@index([jobId])
   @@index([crewMemberId])
+}
+
+// ── Time Tracking ──
+
+model TimeEntry {
+  id           String     @id @default(uuid())
+  contractorId String
+  contractor   Contractor @relation(fields: [contractorId], references: [id], onDelete: Cascade)
+  jobId        String?
+  job          Job?       @relation(fields: [jobId], references: [id], onDelete: SetNull)
+  crewMemberId String?
+  crewMember   CrewMember? @relation(fields: [crewMemberId], references: [id], onDelete: SetNull)
+  date         DateTime   @default(now())
+  clockIn      DateTime
+  clockOut     DateTime?
+  hours        Float?     // computed from clockIn/clockOut, or entered manually
+  hourlyRate   Float?     // snapshot from crew member or manual entry
+  description  String?
+  billable     Boolean    @default(true)
+  createdAt    DateTime   @default(now())
+
+  @@index([contractorId])
+  @@index([jobId])
+  @@index([crewMemberId])
+  @@index([date])
+}
+
+// ── Receipts ──
+
+model Receipt {
+  id           String     @id @default(uuid())
+  contractorId String
+  contractor   Contractor @relation(fields: [contractorId], references: [id], onDelete: Cascade)
+  jobId        String?
+  job          Job?       @relation(fields: [jobId], references: [id], onDelete: SetNull)
+  imageUrl     String?    // stored receipt photo
+  store        String?
+  receiptDate  DateTime?
+  items        Json?      // [{description, amount, category}]
+  subtotal     Float?
+  tax          Float?
+  total        Float
+  category     String     @default("materials") // "materials", "labor", "other"
+  notes        String?
+  createdAt    DateTime   @default(now())
+
+  @@index([contractorId])
+  @@index([jobId])
+  @@index([receiptDate])
 }
 
 // ── Project Management ──

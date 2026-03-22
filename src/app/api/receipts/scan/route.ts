@@ -5,6 +5,7 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import { prisma } from "@/lib/db";
 import Anthropic from "@anthropic-ai/sdk";
 
 const anthropic = process.env.ANTHROPIC_API_KEY
@@ -90,6 +91,39 @@ Rules:
     }
 
     const receipt = JSON.parse(jsonMatch[0]);
+
+    // Optionally save to DB if jobId provided
+    const { jobId, save } = body;
+    if (save && receipt.total) {
+      const saved = await prisma.receipt.create({
+        data: {
+          contractorId: session.user.id,
+          jobId: jobId || null,
+          store: receipt.store || null,
+          receiptDate: receipt.date ? new Date(receipt.date) : null,
+          items: receipt.items || null,
+          subtotal: receipt.subtotal ?? null,
+          tax: receipt.tax ?? null,
+          total: receipt.total,
+          category: "materials",
+        },
+      });
+      receipt.savedId = saved.id;
+
+      // Also create ActualCost if linked to a job
+      if (jobId) {
+        await prisma.actualCost.create({
+          data: {
+            contractorId: session.user.id,
+            jobId,
+            description: receipt.store ? `Receipt: ${receipt.store}` : "Scanned receipt",
+            amount: receipt.total,
+            category: "materials",
+          },
+        });
+      }
+    }
+
     return NextResponse.json(receipt);
   } catch (err) {
     console.error("Receipt scan error:", err);
