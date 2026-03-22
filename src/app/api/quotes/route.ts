@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { z } from "zod";
+import { canSeePrices, canEditQuotes, stripPrices } from "@/lib/permissions";
 
 const quoteSchema = z.object({
   customerId: z.string().uuid(),
@@ -51,6 +52,12 @@ export async function GET() {
     include: { customer: true },
   });
 
+  // Strip prices for leads
+  const role = session.user.role || "manager";
+  if (!canSeePrices(role)) {
+    return NextResponse.json(quotes.map(stripPrices));
+  }
+
   return NextResponse.json(quotes);
 }
 
@@ -58,6 +65,10 @@ export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  if (!canEditQuotes(session.user.role || "manager")) {
+    return NextResponse.json({ error: "Leads cannot create quotes" }, { status: 403 });
   }
 
   try {

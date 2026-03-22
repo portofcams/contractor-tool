@@ -683,6 +683,7 @@ model ProjectDocument {
 model TeamMember {
   id           String   @id @default(cuid())
   email        String
+  passwordHash String?
   name         String?
   role         String   @default("lead") // "owner", "manager", "lead"
   status       String   @default("invited") // "invited", "active"

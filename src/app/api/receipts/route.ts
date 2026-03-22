@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { z } from "zod";
+import { canSeePrices, stripReceiptPrices } from "@/lib/permissions";
 
 const receiptSchema = z.object({
   jobId: z.string().uuid().optional(),
@@ -40,6 +41,11 @@ export async function GET(req: Request) {
     },
     orderBy: { createdAt: "desc" },
   });
+
+  const role = session.user.role || "manager";
+  if (!canSeePrices(role)) {
+    return NextResponse.json(receipts.map(stripReceiptPrices));
+  }
 
   return NextResponse.json(receipts);
 }
