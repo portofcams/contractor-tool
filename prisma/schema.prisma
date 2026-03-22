@@ -278,15 +278,19 @@ model SitePhoto {
   customer     Customer?  @relation(fields: [customerId], references: [id], onDelete: SetNull)
   quoteId      String?
   quote        Quote?     @relation(fields: [quoteId], references: [id], onDelete: SetNull)
+  jobId        String?
+  job          Job?       @relation(fields: [jobId], references: [id], onDelete: SetNull)
+  uploadedBy   String?    // team member name or "owner"
   fileUrl      String
   caption      String?
   roomName     String?
-  photoType    String     @default("general") // "general", "before", "after"
+  photoType    String     @default("general") // "general", "before", "after", "progress", "damage"
   takenAt      DateTime   @default(now())
 
   @@index([contractorId])
   @@index([customerId])
   @@index([quoteId])
+  @@index([jobId])
 }
 
 model SiteNote {
@@ -361,6 +365,7 @@ model Job {
   actualCosts ActualCost[]
   timeEntries TimeEntry[]
   receipts    Receipt[]
+  sitePhotos  SitePhoto[]
 
   @@index([contractorId])
   @@index([customerId])

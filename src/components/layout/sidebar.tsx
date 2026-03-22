@@ -18,6 +18,7 @@ const navItems = [
   { href: "/jobs", label: "Jobs", icon: "calendar" },
   { href: "/time-tracking", label: "Time Tracking", icon: "clock" },
   { href: "/receipts", label: "Receipts", icon: "camera" },
+  { href: "/photos", label: "Job Photos", icon: "image" },
   { href: "/invoices", label: "Invoices", icon: "receipt" },
   { href: "/team", label: "Team", icon: "hard-hat" },
   { href: "/subcontractors", label: "Subcontractors", icon: "truck" },
@@ -54,6 +55,8 @@ const iconMap: Record<string, string> = {
     "M12 2a10 10 0 100 20 10 10 0 000-20zm0 6v4l3 3",
   camera:
     "M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2zM12 17a4 4 0 100-8 4 4 0 000 8z",
+  image:
+    "M21 3H3a2 2 0 00-2 2v14a2 2 0 002 2h18a2 2 0 002-2V5a2 2 0 00-2-2zM8.5 8.5a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM21 19H3l4.5-6 3 3.5L15 12l6 7z",
   settings:
     "M12 15a3 3 0 100-6 3 3 0 000 6z M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z",
 };

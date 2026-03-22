@@ -71,10 +71,11 @@ export async function POST(req: NextRequest) {
   const file = formData.get("file") as File | null;
   const customerId = formData.get("customerId") as string | null;
   const quoteId = formData.get("quoteId") as string | null;
+  const jobId = formData.get("jobId") as string | null;
   const caption = formData.get("caption") as string | null;
   const photoType = formData.get("photoType") as string | null;
   const roomName = formData.get("roomName") as string | null;
-  const validPhotoTypes = ["general", "before", "after"];
+  const validPhotoTypes = ["general", "before", "after", "progress", "damage"];
   const safePhotoType = photoType && validPhotoTypes.includes(photoType) ? photoType : "general";
 
   if (!file) {
@@ -123,6 +124,8 @@ export async function POST(req: NextRequest) {
         contractorId: session.user.id,
         customerId: customerId || null,
         quoteId: quoteId || null,
+        jobId: jobId || null,
+        uploadedBy: session.user.name || "unknown",
         fileUrl,
         caption: caption || null,
         photoType: safePhotoType,
@@ -146,10 +149,12 @@ export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const customerId = searchParams.get("customerId");
   const quoteId = searchParams.get("quoteId");
+  const jobId = searchParams.get("jobId");
 
   const where: Record<string, unknown> = { contractorId: session.user.id };
   if (customerId) where.customerId = customerId;
   if (quoteId) where.quoteId = quoteId;
+  if (jobId) where.jobId = jobId;
 
   try {
     const photos = await prisma.sitePhoto.findMany({
