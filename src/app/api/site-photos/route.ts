@@ -73,6 +73,7 @@ export async function POST(req: NextRequest) {
   const quoteId = formData.get("quoteId") as string | null;
   const caption = formData.get("caption") as string | null;
   const photoType = formData.get("photoType") as string | null;
+  const roomName = formData.get("roomName") as string | null;
   const validPhotoTypes = ["general", "before", "after"];
   const safePhotoType = photoType && validPhotoTypes.includes(photoType) ? photoType : "general";
 
@@ -125,6 +126,7 @@ export async function POST(req: NextRequest) {
         fileUrl,
         caption: caption || null,
         photoType: safePhotoType,
+        roomName: roomName?.slice(0, 100) || null,
       },
     });
 

@@ -22,12 +22,12 @@ export async function POST(req: NextRequest) {
     });
 
     await transporter.sendMail({
-      from: `ContractorCalc <${process.env.GMAIL_USER || "portofcams@gmail.com"}>`,
+      from: `ProBuildCalc <${process.env.GMAIL_USER || "portofcams@gmail.com"}>`,
       to: "portofcams@gmail.com",
       replyTo: email,
-      subject: `ContractorCalc Contact: ${name}${company ? ` (${company})` : ""}`,
+      subject: `ProBuildCalc Contact: ${name}${company ? ` (${company})` : ""}`,
       html: `
-        <h3>New Contact from ContractorCalc</h3>
+        <h3>New Contact from ProBuildCalc</h3>
         <p><strong>Name:</strong> ${name}</p>
         <p><strong>Email:</strong> ${email}</p>
         ${company ? `<p><strong>Company:</strong> ${company}</p>` : ""}

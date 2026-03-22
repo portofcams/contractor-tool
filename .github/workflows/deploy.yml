@@ -1,5 +1,5 @@
 # ─────────────────────────────────────────────────────────────
-# GitHub Actions — ContractorCalc Deploy Pipeline
+# GitHub Actions — ProBuildCalc Deploy Pipeline
 # ─────────────────────────────────────────────────────────────
 #
 # Trigger: Push to `main` branch
@@ -16,7 +16,7 @@
 #   VULTR_SSH_KEY       — Private SSH key for deployment
 #   DATABASE_URL        — Production PostgreSQL connection string
 #   NEXTAUTH_SECRET     — Production auth secret
-#   NEXTAUTH_URL        — Production URL (https://contractorcalc.com)
+#   NEXTAUTH_URL        — Production URL (https://probuildcalc.com)
 #
 # Optional Secrets (add when ready):
 #   STRIPE_SECRET_KEY, STRIPE_PUBLISHABLE_KEY, STRIPE_WEBHOOK_SECRET

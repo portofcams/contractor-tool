@@ -1,7 +1,7 @@
 import type { CapacitorConfig } from "@capacitor/cli";
 
 /**
- * Capacitor Configuration — ContractorCalc iOS App
+ * Capacitor Configuration — ProBuildCalc iOS App
  *
  * Architecture:
  *   The iOS app is a native shell that loads the web app from the server.
@@ -19,21 +19,21 @@ import type { CapacitorConfig } from "@capacitor/cli";
  *   → loads from http://localhost:3000 with live reload
  *
  * Production:
- *   → loads from https://contractorcalc.com (deployed on Vultr)
+ *   → loads from https://probuildcalc.com (deployed on Vultr)
  *   → Offline: falls back to locally cached data via offline-storage.ts
  */
 
 const isDev = process.env.CAPACITOR_DEV === "true";
 
 const config: CapacitorConfig = {
-  appId: "com.contractorcalc.app",
-  appName: "ContractorCalc",
+  appId: "com.probuildcalc.app",
+  appName: "ProBuildCalc",
   webDir: "public", // Minimal fallback shell; real app loads from server
 
   server: {
     url: isDev
       ? "http://localhost:3000"
-      : "https://contractor.portofcams.com",
+      : "https://probuildcalc.com",
     cleartext: isDev, // Allow HTTP only in dev
   },
 
@@ -50,7 +50,7 @@ const config: CapacitorConfig = {
   },
 
   ios: {
-    scheme: "ContractorCalc",
+    scheme: "ProBuildCalc",
     allowsLinkPreview: true,
     contentInset: "always",
   },

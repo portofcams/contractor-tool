@@ -183,7 +183,7 @@ export default async function CustomerPortalPage({
         </Card>
 
         <p className="text-center text-xs text-muted-foreground pb-8">
-          Powered by ContractorCalc
+          Powered by ProBuildCalc
         </p>
       </div>
     </div>

@@ -1,5 +1,5 @@
 /**
- * Inspection Report PDF Template — ContractorCalc
+ * Inspection Report PDF Template — ProBuildCalc
  *
  * Auto-generated site inspection report from LiDAR scan data.
  * Includes room dimensions, wall/floor areas, door/window details,
@@ -473,7 +473,7 @@ export function InspectionPDF({ data }: { data: InspectionPDFData }) {
         {/* ── Footer ── */}
         <View style={s.footer}>
           <Text style={{ fontSize: 11, fontFamily: "Helvetica-Bold", color: c.primary, textAlign: "center", marginBottom: 8 }}>
-            Measured with LiDAR — ContractorCalc
+            Measured with LiDAR — ProBuildCalc
           </Text>
           <Text style={{ fontSize: 8, color: c.gray, textAlign: "center", lineHeight: 1.6 }}>
             This inspection report was generated using Apple LiDAR technology (RoomPlan API). Measurements are estimates

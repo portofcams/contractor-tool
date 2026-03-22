@@ -45,7 +45,7 @@ export async function POST(
 
   try {
     const stripe = getStripe();
-    const baseUrl = process.env.NEXTAUTH_URL || "https://contractorcalc.com";
+    const baseUrl = process.env.NEXTAUTH_URL || "https://probuildcalc.com";
 
     const checkoutSession = await stripe.checkout.sessions.create({
       mode: "payment",

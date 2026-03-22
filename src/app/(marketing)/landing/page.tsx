@@ -667,7 +667,7 @@ export default function LandingPage() {
       {/* ══════ FOOTER ══════ */}
       <footer className="py-8 px-6 md:px-12 border-t border-white/[0.06]">
         <div className="max-w-[1200px] mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-          <span className="text-xs text-[#f5f0e8]/25 font-mono">&copy; {new Date().getFullYear()} ContractorCalc</span>
+          <span className="text-xs text-[#f5f0e8]/25 font-mono">&copy; {new Date().getFullYear()} ProBuildCalc</span>
           <div className="flex gap-6 text-xs text-[#f5f0e8]/25">
             <Link href="/privacy" className="hover:text-[#f5f0e8]/60 transition-colors">Privacy</Link>
             <Link href="/terms" className="hover:text-[#f5f0e8]/60 transition-colors">Terms</Link>

@@ -73,7 +73,7 @@ interface DraftState {
 
 // ── Constants ──
 
-const DRAFT_KEY = "contractorcalc_estimate_draft";
+const DRAFT_KEY = "probuildcalc_estimate_draft";
 const AUTO_SAVE_INTERVAL = 30_000; // 30 seconds
 
 // ── Helpers ──

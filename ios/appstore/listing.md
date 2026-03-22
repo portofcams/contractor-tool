@@ -1,7 +1,7 @@
-# App Store Listing — ContractorCalc
+# App Store Listing — ProBuildCalc
 
 ## App Name
-ContractorCalc - Quote Builder
+ProBuildCalc - Quote Builder
 
 ## Subtitle (30 chars max)
 Quotes & Estimates in Seconds
@@ -14,7 +14,7 @@ Primary: Business
 Secondary: Productivity
 
 ## Description
-ContractorCalc is the fastest way for contractors to create professional quotes and win more jobs. Measure rooms with LiDAR, calculate materials instantly, and email branded PDF quotes — all from your iPhone.
+ProBuildCalc is the fastest way for contractors to create professional quotes and win more jobs. Measure rooms with LiDAR, calculate materials instantly, and email branded PDF quotes — all from your iPhone.
 
 Built for flooring, painting, and drywall contractors who need accurate estimates on the job site.
 
@@ -51,10 +51,10 @@ Create professional contractor quotes in seconds. LiDAR room scanning, AI floor 
 Version 1.0 — Initial release with LiDAR room scanning, AI floor plan extraction, smart material calculators, professional PDF quotes, customer portal with digital signatures, job tracking, invoicing, team management, and offline support.
 
 ## Support URL
-https://contractorcalc.com
+https://probuildcalc.com
 
 ## Privacy Policy URL
-https://contractorcalc.com/privacy
+https://probuildcalc.com/privacy
 
 ## Age Rating
 4+

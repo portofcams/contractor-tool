@@ -1,5 +1,5 @@
 /**
- * Quote PDF Template — ContractorCalc
+ * Quote PDF Template — ProBuildCalc
  *
  * Renders a professional quote PDF using @react-pdf/renderer.
  * Used by the /api/quotes/[id]/pdf route to generate downloadable PDFs

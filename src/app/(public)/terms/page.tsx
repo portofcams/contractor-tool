@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Terms of Service — ContractorCalc",
+  title: "Terms of Service — ProBuildCalc",
 };
 
 export default function TermsPage() {
@@ -15,8 +15,8 @@ export default function TermsPage() {
           <section>
             <h2 className="text-xl font-semibold mt-8 mb-3">1. Acceptance of Terms</h2>
             <p className="text-muted-foreground leading-relaxed">
-              By creating an account or using ContractorCalc, you agree to these Terms of Service.
-              If you do not agree, do not use the service. ContractorCalc is intended for use by
+              By creating an account or using ProBuildCalc, you agree to these Terms of Service.
+              If you do not agree, do not use the service. ProBuildCalc is intended for use by
               contractors and construction professionals for creating quotes, managing customers,
               and tracking jobs.
             </p>
@@ -34,7 +34,7 @@ export default function TermsPage() {
           <section>
             <h2 className="text-xl font-semibold mt-8 mb-3">3. Subscription & Billing</h2>
             <p className="text-muted-foreground leading-relaxed">
-              ContractorCalc offers a free tier (5 quotes/month) and paid plans (Pro at $29/month,
+              ProBuildCalc offers a free tier (5 quotes/month) and paid plans (Pro at $29/month,
               Business at $49/month). Paid plans include a 14-day free trial. Subscriptions renew
               automatically unless cancelled. Refunds are available within 30 days of purchase.
               Payments are processed securely via Stripe.
@@ -44,7 +44,7 @@ export default function TermsPage() {
           <section>
             <h2 className="text-xl font-semibold mt-8 mb-3">4. Acceptable Use</h2>
             <p className="text-muted-foreground leading-relaxed">
-              You may not use ContractorCalc for any illegal purpose, to harass others, to distribute
+              You may not use ProBuildCalc for any illegal purpose, to harass others, to distribute
               malware, or to attempt to gain unauthorized access to our systems. We reserve the right
               to suspend or terminate accounts that violate these terms.
             </p>
@@ -53,7 +53,7 @@ export default function TermsPage() {
           <section>
             <h2 className="text-xl font-semibold mt-8 mb-3">5. Your Data</h2>
             <p className="text-muted-foreground leading-relaxed">
-              You retain ownership of all data you create in ContractorCalc including quotes, customer
+              You retain ownership of all data you create in ProBuildCalc including quotes, customer
               information, photos, and files. We do not claim any intellectual property rights over your
               content. You grant us a license to store and process your data solely for providing the service.
             </p>
@@ -71,7 +71,7 @@ export default function TermsPage() {
           <section>
             <h2 className="text-xl font-semibold mt-8 mb-3">7. Limitation of Liability</h2>
             <p className="text-muted-foreground leading-relaxed">
-              ContractorCalc is provided &ldquo;as is&rdquo; without warranties of any kind.
+              ProBuildCalc is provided &ldquo;as is&rdquo; without warranties of any kind.
               We are not liable for any indirect, incidental, or consequential damages arising from
               use of the service. Our total liability is limited to the amount you have paid us in
               the 12 months preceding the claim.
@@ -98,7 +98,7 @@ export default function TermsPage() {
           <section>
             <h2 className="text-xl font-semibold mt-8 mb-3">10. Contact</h2>
             <p className="text-muted-foreground leading-relaxed">
-              For questions about these terms, contact us at support@contractorcalc.com.
+              For questions about these terms, contact us at support@probuildcalc.com.
             </p>
           </section>
         </div>

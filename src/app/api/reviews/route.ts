@@ -73,7 +73,7 @@ export async function POST(req: Request) {
   });
 
   // Send review request email
-  const reviewUrl = `${process.env.NEXTAUTH_URL || "https://contract.portofcams.com"}/review/${review.token}`;
+  const reviewUrl = `${process.env.NEXTAUTH_URL || "https://probuildcalc.com"}/review/${review.token}`;
   await sendReviewRequestEmail({
     to: customer.email,
     customerName: customer.name,

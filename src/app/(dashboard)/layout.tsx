@@ -18,7 +18,7 @@ export default async function DashboardLayout({
       <OfflineBanner />
       <div className="flex flex-1">
         <Sidebar />
-        <main className="flex-1 p-4 md:px-10 md:py-8 pb-24 md:pb-8">
+        <main className="flex-1 px-4 pt-4 md:px-10 md:py-8 mobile-main-padding">
           <PullToRefresh>{children}</PullToRefresh>
         </main>
         <MobileNav />

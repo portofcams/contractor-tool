@@ -213,7 +213,7 @@ export default function NewQuotePage() {
       const { latitude, longitude } = pos.coords;
       const res = await fetch(
         `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`,
-        { headers: { "User-Agent": "ContractorCalc/1.0" } }
+        { headers: { "User-Agent": "ProBuildCalc/1.0" } }
       );
       if (res.ok) {
         const data = await res.json();

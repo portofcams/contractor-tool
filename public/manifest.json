@@ -1,6 +1,6 @@
 {
-  "name": "ContractorCalc",
-  "short_name": "ContractorCalc",
+  "name": "ProBuildCalc",
+  "short_name": "ProBuildCalc",
   "description": "Professional quotes & estimates for contractors",
   "start_url": "/dashboard",
   "display": "standalone",

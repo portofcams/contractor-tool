@@ -62,7 +62,7 @@ export function Sidebar() {
     >
       <div className="p-6 pb-4 flex items-center justify-between">
         <Link href="/dashboard" className="text-lg font-semibold tracking-tight text-foreground">
-          ContractorCalc
+          ProBuildCalc
         </Link>
         <SyncBadge />
       </div>

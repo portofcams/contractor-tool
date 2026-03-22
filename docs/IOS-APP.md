@@ -1,4 +1,4 @@
-# ContractorCalc — iOS App Guide
+# ProBuildCalc — iOS App Guide
 
 ## Overview
 
@@ -37,7 +37,7 @@ npm run ios
 │                                    │
 │  ┌──────────────────────────────┐  │
 │  │  WKWebView                   │  │
-│  │  Loads: https://contractorcalc.com  │
+│  │  Loads: https://probuildcalc.com  │
 │  │  (or localhost:3000 in dev)  │  │
 │  └──────────────────────────────┘  │
 │                                    │
@@ -57,7 +57,7 @@ npm run ios
 | Mode       | Server URL              | Use Case                |
 |-----------|-------------------------|-------------------------|
 | Dev        | http://localhost:3000   | Local development       |
-| Production | https://contractorcalc.com | App Store release    |
+| Production | https://probuildcalc.com | App Store release    |
 
 Toggle via `CAPACITOR_DEV` environment variable in `capacitor.config.ts`.
 
@@ -123,7 +123,7 @@ npx cap open ios
 
 # 4. In Xcode:
 #    - Select your team/signing certificate
-#    - Set bundle ID: com.contractorcalc.app
+#    - Set bundle ID: com.probuildcalc.app
 #    - Product → Archive
 #    - Distribute App → App Store Connect
 
@@ -138,9 +138,9 @@ File: `capacitor.config.ts`
 
 | Setting              | Value                | Purpose                    |
 |---------------------|----------------------|----------------------------|
-| appId               | com.contractorcalc.app | Bundle identifier         |
-| appName             | ContractorCalc       | Display name               |
-| scheme              | ContractorCalc       | URL scheme for deep links  |
+| appId               | com.probuildcalc.app | Bundle identifier         |
+| appName             | ProBuildCalc         | Display name               |
+| scheme              | ProBuildCalc         | URL scheme for deep links  |
 | SplashScreen color  | #1e40af (blue-800)   | Brand color on launch      |
 | contentInset        | always               | Safe area handling         |
 

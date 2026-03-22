@@ -1,9 +1,9 @@
-# ContractorCalc
+# ProBuildCalc
 
 ## Overview
 B2B SaaS for flooring/renovation contractors. Calculate materials, generate quotes, manage projects, track jobs and invoices. Built for field use — mobile-first with offline support and auto-save.
 
-**Live**: `https://contract.portofcams.com`
+**Live**: `https://probuildcalc.com` (currently `https://contract.portofcams.com`)
 **Login**: `portofcams@gmail.com` / `Cameraman1$` (credentials auth, Google OAuth removed)
 
 ## Tech Stack

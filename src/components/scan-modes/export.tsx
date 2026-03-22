@@ -32,7 +32,7 @@ export function ExportMode({ scan }: Props) {
       ctx.font = "bold 18px system-ui, -apple-system, sans-serif";
       ctx.fillStyle = "#1d1d1f";
       ctx.textAlign = "left";
-      ctx.fillText("Floor Plan — ContractorCalc", PADDING, 30);
+      ctx.fillText("Floor Plan — ProBuildCalc", PADDING, 30);
       ctx.font = "11px system-ui, -apple-system, sans-serif";
       ctx.fillStyle = "#86868b";
       ctx.fillText(`${rooms.length} rooms · ${Math.round(rooms.reduce((s, r) => s + r.floorArea, 0))} total sqft · ${new Date().toLocaleDateString()}`, PADDING, 48);

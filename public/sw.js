@@ -1,4 +1,4 @@
-const CACHE_NAME = "contractorcalc-v1";
+const CACHE_NAME = "probuildcalc-v1";
 const STATIC_ASSETS = [
   "/login",
   "/signup",

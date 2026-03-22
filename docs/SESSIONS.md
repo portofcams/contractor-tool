@@ -1,4 +1,4 @@
-# ContractorCalc — Session Log
+# ProBuildCalc — Session Log
 
 Tracks what was built in each development session for continuity.
 

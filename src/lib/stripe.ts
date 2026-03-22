@@ -1,13 +1,13 @@
 /**
- * Stripe Configuration — ContractorCalc
+ * Stripe Configuration — ProBuildCalc
  *
  * Centralizes Stripe SDK setup and plan definitions.
  *
  * Setup:
  *   1. Create a Stripe account at stripe.com
  *   2. In the Stripe Dashboard, create two Products:
- *      - "ContractorCalc Pro"     → $29/mo recurring price
- *      - "ContractorCalc Business" → $49/mo recurring price
+ *      - "ProBuildCalc Pro"     → $29/mo recurring price
+ *      - "ProBuildCalc Business" → $49/mo recurring price
  *   3. Copy the Price IDs (price_xxx) into your .env:
  *      STRIPE_PRICE_PRO=price_xxx
  *      STRIPE_PRICE_BUSINESS=price_xxx

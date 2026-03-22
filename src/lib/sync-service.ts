@@ -1,5 +1,5 @@
 /**
- * Sync Service — ContractorCalc
+ * Sync Service — ProBuildCalc
  *
  * Handles bidirectional sync between the local offline store and the server API.
  *

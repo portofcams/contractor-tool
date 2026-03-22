@@ -1,4 +1,4 @@
-# ContractorCalc — Architecture Overview
+# ProBuildCalc — Architecture Overview
 
 ## What This Is
 B2B SaaS tool that helps flooring, painting, and drywall contractors calculate materials from floor plans in 30 seconds, generate professional quotes, manage jobs, track invoices, and coordinate crews.

@@ -17,8 +17,14 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover" as const,
+};
+
 export const metadata: Metadata = {
-  title: "ContractorCalc - Measurement & Material Calculator",
+  title: "ProBuildCalc - Measurement & Material Calculator",
   description:
     "Calculate materials needed from floor plans in 30 seconds. Professional quotes for flooring, painting, and drywall contractors.",
 };

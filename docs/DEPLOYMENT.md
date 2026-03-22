@@ -1,4 +1,4 @@
-# ContractorCalc — Deployment Guide
+# ProBuildCalc — Deployment Guide
 
 ## Overview
 
@@ -46,7 +46,7 @@ Go to: Repository → Settings → Secrets and variables → Actions
 | `VULTR_SSH_KEY`    | Private SSH key (full PEM content)  | `-----BEGIN OPENSSH...`    |
 | `DATABASE_URL`     | Production DB connection string     | `postgresql://user:pass@localhost:5432/db` |
 | `NEXTAUTH_SECRET`  | Auth encryption key                 | `openssl rand -hex 32`     |
-| `NEXTAUTH_URL`     | Production URL                      | `https://contractorcalc.com` |
+| `NEXTAUTH_URL`     | Production URL                      | `https://probuildcalc.com` |
 
 ### 3. CI/CD Pipelines
 
@@ -112,7 +112,7 @@ pm2 save
 
 ```bash
 # Point your domain's A record to the Vultr IP first, then:
-sudo certbot --nginx -d contractorcalc.com -d www.contractorcalc.com
+sudo certbot --nginx -d probuildcalc.com -d www.probuildcalc.com
 ```
 
 ### 5. Verify
@@ -120,7 +120,7 @@ sudo certbot --nginx -d contractorcalc.com -d www.contractorcalc.com
 ```bash
 # Check app is running
 pm2 status
-curl https://contractorcalc.com
+curl https://probuildcalc.com
 
 # Check logs
 pm2 logs contractorcalc

@@ -1,5 +1,5 @@
 /**
- * Email Service — ContractorCalc
+ * Email Service — ProBuildCalc
  *
  * Sends transactional emails via Resend.
  * Primary use: emailing quote PDFs to customers.
@@ -134,7 +134,7 @@ export async function sendQuoteEmail(params: SendQuoteEmailParams): Promise<{ su
           <tr>
             <td style="background-color:#f9fafb; padding:20px 40px; border-top:1px solid #e5e7eb;">
               <p style="margin:0; color:#9ca3af; font-size:12px; text-align:center;">
-                Sent via ContractorCalc &mdash; Professional quotes in 30 seconds
+                Sent via ProBuildCalc &mdash; Professional quotes in 30 seconds
               </p>
             </td>
           </tr>
@@ -215,7 +215,7 @@ export async function sendQuoteViewedNotification(params: QuoteViewedParams): Pr
         <table width="600" cellpadding="0" cellspacing="0" style="background-color:#1e293b; border-radius:8px; overflow:hidden;">
           <tr>
             <td style="background-color:#1e293b; padding:30px 40px; border-bottom:1px solid #334155;">
-              <h1 style="margin:0; color:#3b82f6; font-size:20px; font-weight:700;">ContractorCalc</h1>
+              <h1 style="margin:0; color:#3b82f6; font-size:20px; font-weight:700;">ProBuildCalc</h1>
             </td>
           </tr>
           <tr>
@@ -241,7 +241,7 @@ export async function sendQuoteViewedNotification(params: QuoteViewedParams): Pr
           <tr>
             <td style="background-color:#020617; padding:20px 40px; border-top:1px solid #334155;">
               <p style="margin:0; color:#6b7280; font-size:12px; text-align:center;">
-                ContractorCalc &mdash; Professional quotes in 30 seconds
+                ProBuildCalc &mdash; Professional quotes in 30 seconds
               </p>
             </td>
           </tr>
@@ -317,7 +317,7 @@ export async function sendQuoteNotification(params: QuoteNotificationParams): Pr
           <!-- Header -->
           <tr>
             <td style="background-color:#1e293b; padding:30px 40px; border-bottom:1px solid #334155;">
-              <h1 style="margin:0; color:#3b82f6; font-size:20px; font-weight:700;">ContractorCalc</h1>
+              <h1 style="margin:0; color:#3b82f6; font-size:20px; font-weight:700;">ProBuildCalc</h1>
             </td>
           </tr>
 
@@ -357,7 +357,7 @@ export async function sendQuoteNotification(params: QuoteNotificationParams): Pr
           <tr>
             <td style="background-color:#020617; padding:20px 40px; border-top:1px solid #334155;">
               <p style="margin:0; color:#6b7280; font-size:12px; text-align:center;">
-                ContractorCalc &mdash; Professional quotes in 30 seconds
+                ProBuildCalc &mdash; Professional quotes in 30 seconds
               </p>
             </td>
           </tr>
@@ -452,7 +452,7 @@ export async function sendReviewRequestEmail(params: ReviewRequestParams): Promi
           <tr>
             <td style="background-color:#f9fafb; padding:20px 40px; border-top:1px solid #e5e7eb;">
               <p style="margin:0; color:#9ca3af; font-size:12px; text-align:center;">
-                Sent via ContractorCalc
+                Sent via ProBuildCalc
               </p>
             </td>
           </tr>
@@ -526,7 +526,7 @@ export async function sendWeeklyPnLEmail(params: WeeklyPnLParams): Promise<{ suc
     <tr><td align="center">
       <table width="600" cellpadding="0" cellspacing="0" style="background-color:#1e293b;border-radius:8px;overflow:hidden;">
         <tr><td style="background-color:#1e293b;padding:30px 40px;border-bottom:1px solid #334155;">
-          <h1 style="margin:0;color:#3b82f6;font-size:20px;font-weight:700;">ContractorCalc</h1>
+          <h1 style="margin:0;color:#3b82f6;font-size:20px;font-weight:700;">ProBuildCalc</h1>
           <p style="margin:4px 0 0;color:#94a3b8;font-size:13px;">${weekStart} &mdash; ${weekEnd}</p>
         </td></tr>
         <tr><td style="padding:40px;">
@@ -575,7 +575,7 @@ export async function sendWeeklyPnLEmail(params: WeeklyPnLParams): Promise<{ suc
           </table>
         </td></tr>
         <tr><td style="background-color:#020617;padding:20px 40px;border-top:1px solid #334155;">
-          <p style="margin:0;color:#6b7280;font-size:12px;text-align:center;">ContractorCalc &mdash; Professional quotes in 30 seconds</p>
+          <p style="margin:0;color:#6b7280;font-size:12px;text-align:center;">ProBuildCalc &mdash; Professional quotes in 30 seconds</p>
         </td></tr>
       </table>
     </td></tr>
@@ -642,7 +642,7 @@ export async function sendFollowUpReminder(params: FollowUpReminderParams): Prom
         <table width="600" cellpadding="0" cellspacing="0" style="background-color:#1e293b; border-radius:8px; overflow:hidden;">
           <tr>
             <td style="background-color:#1e293b; padding:30px 40px; border-bottom:1px solid #334155;">
-              <h1 style="margin:0; color:#3b82f6; font-size:20px; font-weight:700;">ContractorCalc</h1>
+              <h1 style="margin:0; color:#3b82f6; font-size:20px; font-weight:700;">ProBuildCalc</h1>
             </td>
           </tr>
           <tr>
@@ -669,7 +669,7 @@ export async function sendFollowUpReminder(params: FollowUpReminderParams): Prom
           <tr>
             <td style="background-color:#020617; padding:20px 40px; border-top:1px solid #334155;">
               <p style="margin:0; color:#6b7280; font-size:12px; text-align:center;">
-                ContractorCalc &mdash; Professional quotes in 30 seconds
+                ProBuildCalc &mdash; Professional quotes in 30 seconds
               </p>
             </td>
           </tr>

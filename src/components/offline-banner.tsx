@@ -5,7 +5,7 @@ import { offlineStore } from "@/lib/offline-storage";
 import { fullSync } from "@/lib/sync-service";
 
 const API_BASE =
-  process.env.NEXT_PUBLIC_API_URL || "https://contractorcalc.com";
+  process.env.NEXT_PUBLIC_API_URL || "https://probuildcalc.com";
 
 export function OfflineBanner() {
   const [isOffline, setIsOffline] = useState(false);

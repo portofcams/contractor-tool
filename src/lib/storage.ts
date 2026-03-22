@@ -6,7 +6,7 @@ const R2_ACCOUNT_ID = process.env.R2_ACCOUNT_ID;
 const R2_ACCESS_KEY = process.env.R2_ACCESS_KEY_ID;
 const R2_SECRET_KEY = process.env.R2_SECRET_ACCESS_KEY;
 const R2_BUCKET = process.env.R2_BUCKET || "contractorcalc";
-const R2_PUBLIC_URL = process.env.R2_PUBLIC_URL; // e.g. https://files.contractorcalc.com
+const R2_PUBLIC_URL = process.env.R2_PUBLIC_URL; // e.g. https://files.probuildcalc.com
 
 // Fall back to local storage if R2 is not configured
 const useR2 = !!(R2_ACCOUNT_ID && R2_ACCESS_KEY && R2_SECRET_KEY);

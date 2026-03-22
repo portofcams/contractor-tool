@@ -276,6 +276,7 @@ model SitePhoto {
   fileUrl      String
   caption      String?
   photoType    String     @default("general") // "general", "before", "after"
+  roomName     String?    // Tag photo to a specific room (e.g., "Living Room")
   takenAt      DateTime   @default(now())
 
   @@index([contractorId])

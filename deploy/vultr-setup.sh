@@ -1,6 +1,6 @@
 #!/bin/bash
 # ─────────────────────────────────────────────────────────────
-# Vultr VPS Initial Setup — ContractorCalc
+# Vultr VPS Initial Setup — ProBuildCalc
 # ─────────────────────────────────────────────────────────────
 #
 # Run this ONCE on a fresh Vultr Ubuntu 22.04+ VPS.
@@ -22,12 +22,12 @@
 #   2. Create .env on the server: /opt/contractorcalc/.env
 #   3. Run first migration: cd /opt/contractorcalc && npx prisma migrate deploy
 #   4. Point your domain DNS to the Vultr IP
-#   5. Run: sudo certbot --nginx -d contractorcalc.com
+#   5. Run: sudo certbot --nginx -d probuildcalc.com
 # ─────────────────────────────────────────────────────────────
 
 set -euo pipefail
 
-DOMAIN="${1:-contractorcalc.com}"
+DOMAIN="${1:-probuildcalc.com}"
 DEPLOY_USER="deploy"
 APP_DIR="/opt/contractorcalc"
 DB_NAME="contractor_tool"
@@ -35,7 +35,7 @@ DB_USER="contractorcalc"
 DB_PASS=$(openssl rand -hex 16)
 
 echo "═══════════════════════════════════════"
-echo "  ContractorCalc — Vultr VPS Setup"
+echo "  ProBuildCalc — Vultr VPS Setup"
 echo "═══════════════════════════════════════"
 
 # ── 1. System Updates ──

@@ -1,5 +1,5 @@
 /**
- * Offline Storage Layer — ContractorCalc
+ * Offline Storage Layer — ProBuildCalc
  *
  * Provides local-first data persistence for the iOS app.
  * Data is stored in Capacitor Preferences (key-value) and Filesystem.
@@ -193,7 +193,7 @@ export const offlineStore = {
     }
 
     const result = await Filesystem.writeFile({
-      path: `contractorcalc/${fileName}`,
+      path: `probuildcalc/${fileName}`,
       data: base64Data,
       directory: Directory.Documents,
       recursive: true,
@@ -209,7 +209,7 @@ export const offlineStore = {
 
     try {
       const result = await Filesystem.readFile({
-        path: `contractorcalc/${fileName}`,
+        path: `probuildcalc/${fileName}`,
         directory: Directory.Documents,
       });
       return typeof result.data === "string" ? result.data : null;
@@ -225,7 +225,7 @@ export const offlineStore = {
     }
 
     await Filesystem.deleteFile({
-      path: `contractorcalc/${fileName}`,
+      path: `probuildcalc/${fileName}`,
       directory: Directory.Documents,
     });
   },

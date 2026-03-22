@@ -7,7 +7,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>ContractorCalc</string>
+	<string>ProBuildCalc</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -25,9 +25,9 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>ContractorCalc uses the camera for LiDAR room scanning and job site photos.</string>
+	<string>ProBuildCalc uses the camera for LiDAR room scanning and job site photos.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>ContractorCalc needs photo library access to save and attach job site photos.</string>
+	<string>ProBuildCalc needs photo library access to save and attach job site photos.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

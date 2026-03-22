@@ -1,5 +1,5 @@
 /**
- * PDF Render Utility — ContractorCalc
+ * PDF Render Utility — ProBuildCalc
  *
  * Server-side rendering of quote PDFs.
  * Uses @react-pdf/renderer's renderToBuffer to produce a PDF in memory,

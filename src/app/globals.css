@@ -159,4 +159,40 @@
   a, button, [role="button"] {
     transition: all 0.2s ease;
   }
+
+  /* iOS safe area padding for mobile nav */
+  @supports (padding-bottom: env(safe-area-inset-bottom)) {
+    .safe-area-pb {
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+  }
+}
+
+/* Main content padding — accounts for mobile nav + safe area */
+.mobile-main-padding {
+  padding-bottom: calc(5rem + env(safe-area-inset-bottom, 0px));
+}
+@media (min-width: 768px) {
+  .mobile-main-padding {
+    padding-bottom: 2rem;
+  }
+}
+
+/* Mobile fixes */
+@media (max-width: 767px) {
+  /* Prevent horizontal overflow on small screens */
+  html, body {
+    overflow-x: hidden;
+  }
+
+  /* Tighten card padding on mobile */
+  [data-slot="card"] {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  /* Fix input/button sizing on iOS */
+  input, select, textarea, button {
+    font-size: 16px; /* Prevents iOS zoom on focus */
+  }
 }

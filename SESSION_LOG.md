@@ -1,4 +1,4 @@
-# ContractorCalc — Session Log
+# ProBuildCalc — Session Log
 
 ## Session 1–5 (Pre-context, Feb 2026)
 Built core app: Next.js 16 + Prisma + Capacitor iOS. Features include:

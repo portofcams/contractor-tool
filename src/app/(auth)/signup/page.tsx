@@ -80,7 +80,7 @@ export default function SignupPage() {
     <div className="min-h-screen flex items-center justify-center bg-background px-4">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold text-primary">ContractorCalc</CardTitle>
+          <CardTitle className="text-2xl font-bold text-primary">ProBuildCalc</CardTitle>
           <CardDescription>Create your account — 14-day free trial</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">

@@ -43,7 +43,7 @@ export async function POST(req: Request) {
     if (!quote) {
       return NextResponse.json({ error: "Quote not found" }, { status: 404 });
     }
-    const publicUrl = `${process.env.NEXTAUTH_URL || "https://contract.portofcams.com"}/quote/${quote.publicToken}`;
+    const publicUrl = `${process.env.NEXTAUTH_URL || "https://probuildcalc.com"}/quote/${quote.publicToken}`;
     message = formatQuoteSentSMS(
       contractor.companyName,
       customer.name,

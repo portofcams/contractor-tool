@@ -1,5 +1,5 @@
 /**
- * Capacitor App Initialization — ContractorCalc
+ * Capacitor App Initialization — ProBuildCalc
  *
  * This file is imported once in the root layout (client-side only).
  * It bootstraps native plugins and sets up auto-sync.
@@ -19,7 +19,7 @@ import { setupAutoSync } from "./sync-service";
 import { offlineStore } from "./offline-storage";
 
 const API_BASE =
-  process.env.NEXT_PUBLIC_API_URL || "https://contractorcalc.com";
+  process.env.NEXT_PUBLIC_API_URL || "https://probuildcalc.com";
 
 export async function initCapacitor(): Promise<void> {
   if (!Capacitor.isNativePlatform()) return;
