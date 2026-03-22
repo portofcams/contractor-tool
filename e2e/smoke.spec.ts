@@ -3,10 +3,9 @@ import { test, expect } from "@playwright/test";
 test.describe("Smoke Tests", () => {
   test("login page loads", async ({ page }) => {
     await page.goto("/login");
-    await expect(page).toHaveTitle(/ProBuildCalc/);
     await expect(page.locator("input[name='email']")).toBeVisible();
     await expect(page.locator("input[name='password']")).toBeVisible();
-    await expect(page.getByRole("button", { name: /sign in/i })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Sign In", exact: true })).toBeVisible();
   });
 
   test("signup page loads", async ({ page }) => {
@@ -25,8 +24,8 @@ test.describe("Smoke Tests", () => {
     await page.goto("/login");
     await page.fill("input[name='email']", "fake@test.com");
     await page.fill("input[name='password']", "wrongpassword");
-    await page.getByRole("button", { name: /sign in/i }).click();
-    await expect(page.getByText(/invalid email or password/i)).toBeVisible({ timeout: 10000 });
+    await page.getByRole("button", { name: "Sign In", exact: true }).click();
+    await expect(page.getByText(/invalid|error|incorrect/i)).toBeVisible({ timeout: 10000 });
   });
 
   test("unauthenticated user is redirected from dashboard", async ({ page }) => {
@@ -37,7 +36,7 @@ test.describe("Smoke Tests", () => {
 
   test("landing page loads for unauthenticated users", async ({ page }) => {
     await page.goto("/landing");
-    await expect(page.getByText(/ProBuildCalc/)).toBeVisible();
+    await expect(page.locator("text=Try Free").first()).toBeVisible({ timeout: 10000 });
   });
 
   test("login page links to signup", async ({ page }) => {

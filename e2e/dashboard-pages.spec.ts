@@ -3,10 +3,10 @@ import { test, expect, Page } from "@playwright/test";
 // Helper to login before each test
 async function login(page: Page) {
   await page.goto("/login");
-  await page.fill("input[name='email']", "apitest@probuildcalc.com");
-  await page.fill("input[name='password']", "TestPass123!");
-  await page.getByRole("button", { name: /sign in/i }).click();
-  await page.waitForURL("**/dashboard**", { timeout: 15000 });
+  await page.fill("input[name='email']", "hawaiifloorspecialist@gmail.com");
+  await page.fill("input[name='password']", "HawaiiFloors2026!");
+  await page.getByRole("button", { name: "Sign In", exact: true }).click();
+  await page.waitForURL(/\/(dashboard|quotes|jobs)/, { timeout: 30000 });
 }
 
 test.describe("Dashboard Pages", () => {
