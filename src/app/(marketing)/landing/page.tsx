@@ -91,6 +91,8 @@ const features = [
   { title: "Inspection Reports", desc: "One tap generates a professional PDF — room measurements, material estimates, door/window details, confidence ratings.", icon: "M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25zM6.75 12h.008v.008H6.75V12zm0 3h.008v.008H6.75V15zm0 3h.008v.008H6.75V18z", tag: "New" },
   { title: "Voice-to-Quote", desc: "Walk a job site, dictate what you see. \"12x14 living room, hardwood, two coats.\" We turn it into a detailed quote.", icon: "M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z", tag: null },
   { title: "AR Material Preview", desc: "Show clients what hardwood, tile, or paint looks like in their actual room. Point your phone, see the finished result.", icon: "M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z", tag: null },
+  { title: "Time Tracking", desc: "Clock in/out per job and crew member. Live timer, manual entries, daily and weekly hour totals. Know exactly where your labor costs go.", icon: "M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z", tag: "New" },
+  { title: "Receipt Scanner", desc: "Snap a photo of any receipt. AI extracts store, items, and totals. Auto-links to jobs as actual costs — no manual data entry.", icon: "M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z M15 13a3 3 0 11-6 0 3 3 0 016 0z", tag: "New" },
   { title: "Works Offline", desc: "Full functionality without cell service. Create quotes in basements, rural job sites, anywhere. Syncs when you're back online.", icon: "M18.364 5.636a9 9 0 010 12.728m0 0l-2.829-2.829m2.829 2.829L21 21M15.536 8.464a5 5 0 010 7.072m0 0l-2.829-2.829m-4.243 2.829a4.978 4.978 0 01-1.414-2.83m-1.414 5.658a9 9 0 01-2.167-9.238m7.824 2.167a1 1 0 111.414 1.414m-1.414-1.414L3 3", tag: null },
 ];
 
@@ -112,7 +114,7 @@ export default function LandingPage() {
       <nav className="sticky top-0 z-50 bg-[#060606]/80 backdrop-blur-xl border-b border-white/[0.06]">
         <div className="max-w-[1200px] mx-auto px-6 md:px-12 py-3.5 flex items-center justify-between">
           <Link href="/" className="text-lg font-semibold tracking-tight">
-            Contractor<span className="text-[#0a84ff]">Calc</span>
+            ProBuild<span className="text-[#0a84ff]">Calc</span>
           </Link>
           <div className="flex items-center gap-2">
             <Link href="/login">
