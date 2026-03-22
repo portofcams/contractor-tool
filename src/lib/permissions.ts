@@ -35,7 +35,7 @@ export function canViewInvoices(role: string): boolean {
 }
 
 export function canManageTeam(role: string): boolean {
-  return role === "owner" || role === "admin";
+  return role === "owner" || role === "manager" || role === "admin";
 }
 
 export function canEditSettings(role: string): boolean {
