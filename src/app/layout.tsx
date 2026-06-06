@@ -23,10 +23,30 @@ export const viewport = {
   viewportFit: "cover" as const,
 };
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://probuildcalc.com";
+
 export const metadata: Metadata = {
-  title: "ProBuildCalc - Measurement & Material Calculator",
+  metadataBase: new URL(SITE_URL),
+  title: "ProBuildCalc — Measurement & Material Calculator",
   description:
     "Calculate materials needed from floor plans in 30 seconds. Professional quotes for flooring, painting, and drywall contractors.",
+  applicationName: "ProBuildCalc",
+  openGraph: {
+    type: "website",
+    siteName: "ProBuildCalc",
+    title: "ProBuildCalc — Measurement & Material Calculator",
+    description:
+      "Calculate materials needed from floor plans in 30 seconds. Professional quotes for flooring, painting, and drywall contractors.",
+    url: SITE_URL,
+    images: [{ url: "/icon-512.png", width: 512, height: 512, alt: "ProBuildCalc" }],
+  },
+  twitter: {
+    card: "summary",
+    title: "ProBuildCalc — Measurement & Material Calculator",
+    description:
+      "Calculate materials from a floor plan or LiDAR scan in 30 seconds — built for contractors.",
+    images: ["/icon-512.png"],
+  },
 };
 
 export default function RootLayout({
