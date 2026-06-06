@@ -41,6 +41,13 @@ const TOOLS = [
   { href: "/tools/stud-calculator", name: "Stud & Framing Calculator", desc: "Studs and plate material for a stud wall." },
   { href: "/tools/plywood-calculator", name: "Plywood & Sheathing Calculator", desc: "Sheets of plywood, OSB, or subfloor." },
   { href: "/tools/sod-calculator", name: "Sod Calculator", desc: "Square feet, yards, and pallets of sod." },
+  { href: "/tools/wallpaper-calculator", name: "Wallpaper Calculator", desc: "Rolls of wallpaper for a room, with pattern waste." },
+  { href: "/tools/brick-calculator", name: "Brick & Block Calculator", desc: "Bricks or blocks plus mortar for a wall." },
+  { href: "/tools/rebar-calculator", name: "Rebar Calculator", desc: "Grid rebar length and bar count for a slab." },
+  { href: "/tools/stair-calculator", name: "Stair Calculator", desc: "Steps, riser height, and run from total rise." },
+  { href: "/tools/paver-calculator", name: "Paver Calculator", desc: "Pavers, base, and sand for a patio." },
+  { href: "/tools/asphalt-calculator", name: "Asphalt Calculator", desc: "Tons of asphalt for a driveway or lot." },
+  { href: "/tools/retaining-wall-calculator", name: "Retaining Wall Calculator", desc: "Blocks, caps, and base for a retaining wall." },
 ];
 
 export default function ToolsIndexPage() {

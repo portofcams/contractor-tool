@@ -15,9 +15,8 @@ export const metadata: Metadata = {
     title: TITLE,
     description: DESCRIPTION,
     url: `${SITE_URL}/landing`,
-    images: [{ url: "/icon-512.png", width: 512, height: 512, alt: "ProBuildCalc" }],
   },
-  twitter: { card: "summary", title: TITLE, description: DESCRIPTION, images: ["/icon-512.png"] },
+  twitter: { card: "summary_large_image", title: TITLE, description: DESCRIPTION },
 };
 
 // SoftwareApplication structured data → eligible for rich results. No

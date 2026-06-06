@@ -1,5 +1,4 @@
-// Blog post data. Articles are generated as structured content and rendered
-// through src/app/blog/[slug]/page.tsx. Generated 2026-06-06.
+// Blog post data rendered via src/app/blog/[slug]/page.tsx. Generated 2026-06-06.
 
 export type BlogSection = { heading: string; body: string[] };
 export type BlogFaq = { q: string; a: string };
@@ -1342,6 +1341,1340 @@ export const POSTS: BlogPost[] = [
         "href": "/tools",
         "label": "Free calculators"
       },
+      {
+        "href": "/tools/square-footage-calculator",
+        "label": "Square Footage Calculator"
+      }
+    ]
+  },
+  {
+    "slug": "how-to-estimate-carpet",
+    "title": "How to Estimate Carpet for a Room or Whole House",
+    "description": "Learn how to estimate carpet the way pros do: measure in square yards, account for roll width, seams, pattern repeat, and realistic waste factors.",
+    "keywords": [
+      "how to estimate carpet",
+      "carpet square yards",
+      "carpet waste factor",
+      "carpet roll width",
+      "carpet seam layout",
+      "estimating carpet for stairs",
+      "carpet takeoff",
+      "whole house carpet estimate"
+    ],
+    "dek": "Carpet is one of the easiest materials to under-order and one of the costliest to fix once the install is half done. Estimating it well comes down to three things most people skip: buying in square yards off a fixed roll width, planning seams before you measure, and applying a waste factor that matches the room, not a flat guess.",
+    "date": "2026-06-06",
+    "sections": [
+      {
+        "heading": "Square Feet vs. Square Yards: Get the Unit Right First",
+        "body": [
+          "Carpet in the US is sold and installed by the square yard, even though almost everyone measures rooms in square feet. One square yard equals 9 square feet, so to convert, divide your total square footage by 9. A 12 by 15 room is 180 square feet, which is 20 square yards before any waste.",
+          "The catch is that carpet does not come in arbitrary widths. It ships on rolls, and the standard widths are 12 feet, with 13-foot-6 and 15-foot rolls available in some product lines. You pay for the full roll width across the length you pull, regardless of how much you actually lay down. That single fact drives most of the waste on a job, so you cannot just multiply room area by a fudge factor and call it an estimate.",
+          "Always quote and order in square yards. If your supplier prices per square foot, fine, but do the takeoff in yards off the roll so the seam and width math stays honest."
+        ]
+      },
+      {
+        "heading": "Measure the Room, Then Fit It to the Roll",
+        "body": [
+          "Measure each room's maximum length and width and round up to the next inch or two; never round down. Add the depth of any closets, doorway thresholds, bays, or alcoves as separate rectangles, because carpet has to run continuously into them. For an irregular room, break it into rectangles, measure each, and sum them.",
+          "Now lay the room out against the roll width. A room up to 12 feet wide takes carpet straight off a 12-foot roll with no width seam: you just pull the length you need. A room wider than the roll forces a seam, and the leftover strip from the roll either fills that seam or becomes waste. Example: a 14 by 20 room on a 12-foot roll needs a 12-foot-wide piece 20 feet long plus a 2-foot-wide fill strip 20 feet long. Because the roll is 12 feet wide, that fill strip is cut from a 12-foot pull, so you are buying roughly 12 by 26-plus feet of carpet to cover a 14 by 20 room.",
+          "This is exactly where a quick LiDAR scan helps: apps like ProBuildCalc capture room dimensions and odd angles in one pass so you are fitting accurate measurements to the roll instead of re-measuring a crooked room three times."
+        ]
+      },
+      {
+        "heading": "Plan Seams Before You Cut",
+        "body": [
+          "Seams are unavoidable in most rooms wider than the roll, but where they fall matters. Run seams in the direction of the main light source and away from high-traffic pivot points like the foot of a stairway or the center of a hallway. Keep the carpet's pile direction (the nap) running the same way across every piece, or seams will show as a color shift even when the seam itself is tight.",
+          "Avoid placing a seam perpendicular to a doorway where traffic crosses it directly; that is the first place a seam fails. In hallways, run the carpet lengthwise so you have no cross-seams in the run at all if the hall is narrower than the roll.",
+          "Sketch the seam plan on your takeoff. The seam layout determines how many linear feet you pull off the roll, which is the number you actually pay for, so the estimate is only as good as the seam diagram behind it."
+        ]
+      },
+      {
+        "heading": "Pattern Repeat and Waste Factors",
+        "body": [
+          "For a plain or textured carpet with no pattern, add roughly 5 to 10 percent waste for a simple square room, and 10 to 15 percent once you have multiple rooms, closets, and forced seams. Stairs and heavily cut-up layouts can push 15 to 20 percent. These are the standard working ranges; the real number falls out of the roll-fit and seam diagram, so treat the percentage as a sanity check, not the method.",
+          "Patterned carpet is different. You must add the pattern repeat so the design lines up across seams, and that can add another 10 to 20 percent on top of normal waste depending on the repeat length. A long repeat on a large room is one of the most expensive surprises in flooring, so always confirm the repeat dimension from the spec before ordering.",
+          "Keep your usable drops and offcuts in mind too. A 3-foot leftover strip from a 12-foot roll is often wide enough to cover a closet or a small bath, which legitimately lowers your waste on the rest of the job if you plan for it."
+        ]
+      },
+      {
+        "heading": "Estimating Carpet on Stairs",
+        "body": [
+          "Stairs are estimated by the linear run of carpet, then converted. A standard box step needs about 18 to 20 inches of carpet length per step to cover the tread and the riser with enough to wrap and tuck: figure roughly 10 inches for the tread depth plus 7 to 8 inches for the riser, plus tuck allowance. For a typical 13-step flight, that is about 19 to 22 feet of run.",
+          "Code drives the step geometry you are measuring against. The widely used residential limits are a maximum riser of about 7-3/4 inches and a minimum tread depth of about 10 inches, so a step rarely needs more than the 18-to-20-inch allowance above. Confirm the actual rise and run on site, because older homes vary.",
+          "Width matters: most residential stairs are about 36 to 42 inches wide, so a single 12-foot roll width yields three to four stair-width strips side by side. For waterfall installs you use one continuous piece per step face; for upholstered (cap-and-band) installs, add extra length per step for the tighter wrap. Always add a full step's worth of length as insurance, since a short stair piece is unusable."
+        ]
+      },
+      {
+        "heading": "Whole-House Takeoff and Ordering",
+        "body": [
+          "For a whole house, do a room-by-room takeoff, fit each space to the roll width, and then look at the house as a system. Adjacent rooms on the same roll width can sometimes share a single pull, and offcuts from a big room can cover closets and small spaces. Decide one nap direction for the whole job and keep it consistent room to room or transitions will look off.",
+          "Add a single cut-to-length allowance per pull rather than padding every room separately, then carry your overall waste in the 10 to 15 percent range for a typical multi-room job. Order one continuous dye lot for the entire house; carpet color varies between dye lots, and a mid-house reorder rarely matches.",
+          "On price, expect installed residential carpet to land in a broad range from budget builder-grade to higher-end wool and patterned goods, with pad, tack strip, transitions, and labor on top of the carpet itself. Always estimate the pad and trim as separate line items, since they are easy to forget and they are part of every job."
+        ]
+      }
+    ],
+    "faq": [
+      {
+        "q": "Why is carpet sold in square yards instead of square feet?",
+        "a": "It is an industry convention tied to how carpet is manufactured and rolled. To convert, divide your square footage by 9. A 180-square-foot room is 20 square yards. Always do the takeoff in yards so the roll-width and seam math stays accurate, even if your supplier lists a per-square-foot price."
+      },
+      {
+        "q": "How much waste should I add when estimating carpet?",
+        "a": "For a plain carpet in a simple room, 5 to 10 percent is typical. Multiple rooms, closets, and forced seams push it to 10 to 15 percent, and stairs or cut-up layouts can reach 15 to 20 percent. Patterned carpet adds another 10 to 20 percent for the pattern repeat. The percentage is a sanity check; the real waste comes from fitting the room to the roll width and your seam plan."
+      },
+      {
+        "q": "How do I figure carpet for stairs?",
+        "a": "Allow roughly 18 to 20 inches of carpet length per standard step to cover the tread and riser with tuck allowance, so about 19 to 22 feet of run for a typical 13-step flight. Confirm the actual rise and run on site; residential code generally caps the riser near 7-3/4 inches and sets a minimum tread depth near 10 inches. Add one extra step's length as insurance."
+      },
+      {
+        "q": "Why does roll width matter so much in a carpet estimate?",
+        "a": "Carpet ships on fixed-width rolls, most commonly 12 feet, and you pay for the full width you pull regardless of coverage. A room wider than the roll forces a seam and a fill strip cut from another full-width pull, which is where most waste comes from. You cannot estimate accurately by multiplying area by a flat factor; you have to fit the room to the roll."
+      }
+    ],
+    "related": [
+      {
+        "href": "/tools/carpet-calculator",
+        "label": "Carpet Calculator"
+      }
+    ]
+  },
+  {
+    "slug": "how-to-estimate-attic-insulation",
+    "title": "How to Estimate Insulation by R-Value: Attic and Walls",
+    "description": "Step-by-step method to estimate attic and wall insulation by R-value: coverage rates, bag counts, batt math, waste factors, and code minimums.",
+    "keywords": [
+      "how to estimate insulation",
+      "attic insulation R-value",
+      "wall insulation estimate",
+      "blown insulation coverage",
+      "batt insulation takeoff",
+      "insulation waste factor"
+    ],
+    "dek": "Estimating insulation comes down to three numbers: the square footage you need to cover, the R-value the code or job spec calls for, and the coverage rate of the product you're installing. Get those right and the bag count, batt count, and material cost fall out almost automatically. Here's the working method an estimator uses on attics and walls.",
+    "date": "2026-06-06",
+    "sections": [
+      {
+        "heading": "Start with the target R-value",
+        "body": [
+          "The R-value is set by the energy code for the climate zone, not by you. As a working reference, modern residential code (IECC) attic minimums run roughly R-49 to R-60 in most of the US, dropping to about R-30 to R-38 in the hot-south zones. Wood-frame wall cavities typically call for around R-13 to R-21, often written as a combined assembly value like R-20+5 (cavity plus continuous exterior board). Always confirm the number against the local code and the project specs before you price anything.",
+          "Translate R-value into thickness using the material's R-per-inch. Common rules of thumb: fiberglass batt and blown fiberglass are about R-2.5 to R-3.5 per inch, blown cellulose about R-3.2 to R-3.8 per inch, open-cell spray foam about R-3.5 to R-3.7 per inch, and closed-cell spray foam about R-6 to R-7 per inch. So an R-49 blown attic is roughly 14 to 16 inches of loose fill, while an R-13 batt in a 2x4 wall is the standard 3.5-inch product."
+        ]
+      },
+      {
+        "heading": "Measure the area to be covered",
+        "body": [
+          "For an attic, use the building footprint of the heated space, not the roof slope. Multiply length by width for each rectangle, add them up, and subtract large penetrations only if they are significant (chase openings, an open stairwell). Drop soffit and eave area where the roof pitch chokes off full depth. Most estimators measure the gross floor area and let the waste factor absorb minor framing.",
+          "For walls, take the gross wall area (perimeter length times wall height) and subtract window and door openings. A common shortcut is to deduct only openings larger than about 16 square feet and ignore the small ones, since you lose offcuts around every opening anyway. Net wall area is what you insulate; the framing itself displaces some cavity, which is why whole-wall R-value runs lower than the labeled batt R-value.",
+          "Capturing these areas by hand from a tape and a sketch is where most takeoff errors creep in. Scanning the space with a LiDAR tool like ProBuildCalc gives you square footage and wall heights directly off the model, which tightens the area number before you ever apply a coverage rate."
+        ]
+      },
+      {
+        "heading": "Blown attic insulation: bags per square foot",
+        "body": [
+          "Blown insulation is sold by the bag, and every bag is rated for maximum coverage at a target R-value. That coverage number, printed on the bag and on the coverage chart, is the only spread rate you need. As realistic ranges: a bag of blown fiberglass might cover on the order of 40 to 60 square feet at R-30 and proportionally less at R-49; a bag of cellulose often covers somewhat less area per bag at the same R-value because it is denser. Use the actual chart for the product you're buying, never a generic guess.",
+          "The math is simple: bags needed equals net attic square feet divided by the coverage per bag at your target R-value. Example: 1,500 sq ft attic at R-49, and the chart says one bag covers 30 sq ft at R-49, gives 1,500 / 30 = 50 bags. Round up to whole bags and add a small cushion. The same chart also lists minimum installed thickness and minimum bags per 1,000 sq ft, which you should verify so the job actually settles in at the rated R-value rather than below it.",
+          "Add roughly 5 to 10 percent for settling and uneven coverage on a clean attic, more if it's cut up with framing, ducts, and knee walls. Blown material is cheap relative to labor, so erring slightly high beats sending a crew back for two more bags."
+        ]
+      },
+      {
+        "heading": "Batt insulation: count by cavity, not just area",
+        "body": [
+          "Batts are priced by the bag, and each bag lists square-foot coverage for a given width and cavity depth. Match the batt width to the framing: 15-inch batts for 16-inch on-center studs, 23-inch batts for 24-inch on-center. Match the thickness to the cavity and target R-value (R-13 or R-15 for 2x4 walls, R-19 to R-21 for 2x6 walls).",
+          "Estimate by taking net wall area divided by the coverage per bag, then add waste. Walls run about 10 percent waste for cutting around openings, blocking, and partial cavities; complex layouts with lots of windows, fire blocking, and short cripple-stud bays can push 12 to 15 percent. For cathedral ceilings and floors, count the actual joist or rafter bays since odd bay lengths waste more.",
+          "Don't forget the small stuff that the area method misses: rim joists, band joists, and the narrow cavities beside windows and doors. These are easy to under-order and are exactly where comfort complaints and callbacks come from."
+        ]
+      },
+      {
+        "heading": "Apply waste, then price the job",
+        "body": [
+          "General waste guidance by product: blown attic 5 to 10 percent, wall batts about 10 percent, spray foam 5 to 10 percent on the board-foot quantity (a board foot is one square foot at one inch thick). Always round up to whole bags or whole sets, because suppliers won't break a bag.",
+          "For budgeting, think in clearly approximate installed ranges rather than hard prices, since material and labor swing by region and season. As a rough order of magnitude, blown attic insulation is usually the lowest cost per square foot of finished R-value, fiberglass batts sit in the low-to-middle range, and closed-cell spray foam is the most expensive per square foot by a wide margin because of the material and the rig. Quote material and labor as separate lines so you can flex the labor when the attic is tight, the access is bad, or the crew has to work around HVAC.",
+          "Last checks before the number goes out: confirm the code R-value for the actual climate zone, confirm baffles and ventilation at the eaves are in the scope, and confirm you priced air sealing separately. Insulation laid over leaky ceilings underperforms its R-value, and sealing top plates, can lights, and penetrations is its own line item, not something the batts cover."
+        ]
+      }
+    ],
+    "faq": [
+      {
+        "q": "How do I convert R-value into a bag count for a blown attic?",
+        "a": "Use the coverage chart on the bag, which lists maximum square feet covered at your target R-value. Divide net attic square footage by that coverage number, round up to whole bags, and add about 5 to 10 percent for settling. Verify the chart's minimum thickness and minimum bags per 1,000 sq ft so the job settles at the rated R-value, not below it."
+      },
+      {
+        "q": "What R-value do I need for an attic?",
+        "a": "It is set by the energy code for your climate zone, not by preference. As a general reference, most US attics fall around R-49 to R-60, dropping to roughly R-30 to R-38 in the hot-south zones. Always confirm against the local code and the project specifications before estimating."
+      },
+      {
+        "q": "What waste factor should I add for insulation?",
+        "a": "Roughly 5 to 10 percent for blown attic insulation to cover settling and uneven coverage, and about 10 percent for wall batts to cover cutting around openings and partial cavities. Cut-up layouts with many windows or lots of blocking can justify 12 to 15 percent. Always round up to whole bags since suppliers won't split one."
+      },
+      {
+        "q": "Why is whole-wall R-value lower than the batt label?",
+        "a": "Wood framing conducts heat faster than insulation and displaces part of each cavity, an effect called thermal bridging. A wall framed with R-13 batts performs below R-13 across the whole assembly. Continuous exterior insulation board, written as cavity-plus-continuous like R-13+5, is how codes offset that loss."
+      }
+    ],
+    "related": [
+      {
+        "href": "/tools/insulation-calculator",
+        "label": "Insulation Calculator"
+      }
+    ]
+  },
+  {
+    "slug": "wall-framing-stud-spacing-guide",
+    "title": "Wall Framing Stud Spacing, Plates, and Counting Studs",
+    "description": "A contractor's guide to wall framing stud spacing, plate cuts, and counting studs accurately, with real spacing rules, waste factors, and takeoff math.",
+    "keywords": [
+      "wall framing stud spacing",
+      "stud spacing 16 on center",
+      "counting studs framing",
+      "wall plate calculation",
+      "stud takeoff",
+      "framing material estimate",
+      "top and bottom plates",
+      "rough opening framing"
+    ],
+    "dek": "Stud spacing, plate counts, and an honest stud takeoff are where framing jobs are won or lost on material. This guide covers the real spacing rules, the plate and stud math, and the openings and corners most counts miss.",
+    "date": "2026-06-06",
+    "sections": [
+      {
+        "heading": "Stud spacing: 16, 24, and when each applies",
+        "body": [
+          "The two standard layouts are 16 inches on center and 24 inches on center, measured center-to-center. 16 on center is the workhorse for residential load-bearing walls and anywhere you want a stiffer wall or a solid nail base for finishes. 24 on center is common in non-load-bearing partitions and in advanced framing on single-story or top-floor walls where engineering allows. Many jurisdictions cap 2x4 stud height at roughly 10 feet at 16 on center for typical bearing walls; taller or heavily loaded walls push you to 2x6 or tighter spacing, so confirm the prescriptive stud tables or your engineer before going tall.",
+          "Layout starts from one end of the wall. Pull your first mark at 15-1/4 inches and the rest at 16-inch increments so the leading edge of each stud, not its center, lands on a panel edge. That puts stud centers on 16, 32, 48 and so on, and the 48-inch mark catches the seam of a 4x8 sheet of drywall or sheathing. The same logic at 24 on center keeps centers at 24, 48, 72. Snap the layout on both plates at once so top and bottom match.",
+          "Sheet goods are why on-center spacing exists. A 4-foot-wide panel needs framing at 16 or 24 so edges land on a stud without extra blocking. Break that rhythm and you pay for it later in cut sheets, added backing, and popped fasteners."
+        ]
+      },
+      {
+        "heading": "Plates: counting top and bottom rows",
+        "body": [
+          "A standard wall has three plate rows: one bottom (sole) plate and a doubled top plate. So plate stock equals three times the wall length. For 100 linear feet of wall that is 300 linear feet of plate material. Order plates in lengths that minimize splices, and stagger the upper top-plate joints at least one stud bay (commonly 24 inches minimum) away from the lower joints so the lap ties walls together.",
+          "Bottom plates on concrete or any slab-on-grade or below-grade exterior wall must be pressure-treated or otherwise approved for ground contact, and you typically need a capillary break or sill gasket. Budget treated stock separately from your standard plate count so you do not under-order it.",
+          "Single top plates are allowed in some advanced-framing details, but only when the rafters or trusses stack directly over the studs and connectors are detailed. Do not drop the double top plate by default; it carries and distributes load and ties intersecting walls."
+        ]
+      },
+      {
+        "heading": "Counting studs: the working formula",
+        "body": [
+          "Start with the field studs: divide wall length in inches by the spacing and add one for the starting end. A 20-foot wall is 240 inches; at 16 on center that is 15, plus 1, equals 16 field studs. A fast rule of thumb at 16 on center is about three-quarters of a stud per linear foot of wall before extras, which lands close to the same number.",
+          "Then add the parts the spacing formula ignores: corners and partition intersections. A three-stud corner adds two studs beyond the field count at each outside corner, and each interior wall that tees in needs backing, commonly two studs plus blocking or a single stud with drywall clips. Tally every corner and intersection on the plan; this is the single most common source of a short count.",
+          "Openings change the count too. Each door or window needs king studs on both sides, jack (trimmer) studs under the header, cripples above (and below a window sill), and the sill itself on windows. A simple opening adds roughly four to six pieces once you total kings, jacks, and short cripples, and wide openings with built-up headers add more. Scanning the room with a tool like ProBuildCalc captures wall lengths and opening sizes straight off the as-built dimensions, which beats scaling a tape across a rough framed shell and keeps your stud and plate counts tied to reality."
+        ]
+      },
+      {
+        "heading": "Openings, headers, and rough framing pieces",
+        "body": [
+          "Per opening, count it out rather than guessing: two king studs, two jack studs (one each side, doubled for wide or heavy spans), one header sized to the span and load, cripples above the header at your wall spacing, and on windows a sill plate (often doubled) plus cripples down to the bottom plate. Header depth grows with span and tributary load, so confirm the size against the span table or engineering before you cut.",
+          "Rough openings run larger than the unit. A common rule is to add about 2 to 2-1/2 inches to door and window width and roughly 2-1/2 to 3 inches to height for shimming and the frame, but always defer to the manufacturer's stated rough-opening dimensions for the specific unit. Frame to the spec sheet, not a generic add.",
+          "Blocking is the quiet line item: fire blocking in tall or balloon-framed walls, backing for cabinets, grab bars, handrails, and TV mounts, plus mid-height blocking where panel edges or codes require it. Count these as linear feet of blocking stock so they do not vanish from the estimate."
+        ]
+      },
+      {
+        "heading": "Waste, ordering, and a clean takeoff",
+        "body": [
+          "Add waste after the clean count, not before. Plan on roughly 10 percent waste on dimensional studs and plates for typical walls; bump toward 12 to 15 percent on cut-up layouts with many openings, short walls, or where you are buying odd lengths. Sheathing and drywall usually run about 10 to 15 percent depending on wall shape and ceiling height.",
+          "Buy plate stock in lengths that match your walls to cut splices, and buy studs in the precut length your wall height needs. Precut studs (for example 92-5/8 inches for an 8-foot wall with a single bottom and double top plate) save labor over cutting every stud from a longer board. Mixing both is fine, but track them as separate line items.",
+          "A defensible takeoff lists field studs, corner and intersection studs, kings, jacks, cripples, sills, both plate rows tripled, treated bottom plate, headers by size, and blocking, each with its own waste factor. Itemizing this way makes the order auditable and the count easy to defend when material shows up short or long. Approximate framing-lumber costs swing widely by region and market, so price from a current local quote rather than a remembered number."
+        ]
+      }
+    ],
+    "faq": [
+      {
+        "q": "How many studs do I need for a 20-foot wall at 16 inches on center?",
+        "a": "Field studs come to 16: divide 240 inches by 16 to get 15, then add 1 for the starting end. That bare count excludes corners, partition intersections, and opening framing (kings, jacks, cripples, sills), which you add separately. After tallying those extras, apply about 10 percent waste before ordering."
+      },
+      {
+        "q": "How much plate material does a wall need?",
+        "a": "Most walls use three plate rows: one bottom plate and a doubled top plate, so multiply wall length by three. One hundred linear feet of wall needs 300 linear feet of plate. Order bottom plates in pressure-treated stock wherever they sit on concrete or slab, and stagger the two top-plate joints at least one stud bay apart."
+      },
+      {
+        "q": "When should I frame 24 inches on center instead of 16?",
+        "a": "24 on center suits non-load-bearing partitions and advanced-framing situations on single-story or top-floor walls where the engineering and code tables allow it, and it cuts stud count by roughly a third. Stick with 16 on center for typical load-bearing walls, taller walls, and anywhere you want a stiffer finish surface. Confirm the prescriptive stud tables or your engineer before choosing 24 on a bearing wall."
+      },
+      {
+        "q": "What waste factor should I use for framing lumber?",
+        "a": "Around 10 percent is a reasonable default for studs and plates on straightforward walls. Move toward 12 to 15 percent for cut-up layouts with many openings, short walls, or odd buy lengths. Add the waste after your clean itemized count rather than padding the count itself, so the order stays auditable."
+      }
+    ],
+    "related": [
+      {
+        "href": "/tools/stud-calculator",
+        "label": "Stud & Framing Calculator"
+      }
+    ]
+  },
+  {
+    "slug": "how-much-plywood-or-subfloor",
+    "title": "How Much Plywood, OSB, or Subfloor Do I Need?",
+    "description": "Calculate how much plywood, OSB, or subfloor you need: sheet counts, waste factors, span ratings, and the math contractors actually use on the job.",
+    "keywords": [
+      "how much plywood do I need",
+      "plywood sheets calculator",
+      "OSB subfloor estimate",
+      "plywood waste factor",
+      "sheathing square footage",
+      "subfloor span rating"
+    ],
+    "dek": "Estimating sheet goods comes down to one division problem plus a waste factor, but the details that bite you are span ratings, panel orientation, and how much you lose to a busy floor plan. Here is the method estimators use to get the count right the first time.",
+    "date": "2026-06-06",
+    "sections": [
+      {
+        "heading": "The Core Math: Square Footage Divided by Sheet Coverage",
+        "body": [
+          "Every sheet-goods estimate is the same calculation: area to cover, divided by the area of one sheet, times a waste factor. A standard panel is 4 ft by 8 ft, which is 32 square feet of coverage. So the baseline formula is: (total square footage / 32) x (1 + waste percentage), rounded up to the next whole sheet.",
+          "Work in real coverage, not nominal dimensions. A 4x8 sheet is a true 32 sq ft, but tongue-and-groove subfloor loses roughly a half-inch of width to the T&G joint, so net coverage is closer to 31.3 sq ft per sheet. On a small job that rounds away; on 3,000 sq ft of subfloor it is the difference of a sheet or two. For a quick field number, 32 sq ft is fine. For a tight bid, use 31.3 for T&G.",
+          "Example: a 24 ft x 40 ft floor is 960 sq ft. Divided by 32 equals 30 sheets flat. Add 10 percent waste (33 sheets) for a simple rectangle, or 15 percent (35 sheets) if the plan has angles, a stairwell opening, and bump-outs."
+        ]
+      },
+      {
+        "heading": "Waste Factors That Reflect the Real Plan",
+        "body": [
+          "Waste is not a guess, it tracks how much cutting the layout forces. Use roughly 10 percent for simple rectangular rooms and open floors with few obstructions. Step up to about 15 percent for cut-up plans, lots of corners, diagonal walls, or roof sheathing with valleys and hips where you trim every other sheet. Drop toward 5 percent only on long, clear runs like a warehouse deck where panels run nearly full.",
+          "Roofs and walls with many openings behave differently. On walls you generally sheath right over window and door openings and cut them out after, so you do not subtract those areas from the square footage. The cut-out scrap is part of your waste allowance, not a deduction. Subtracting openings is a classic way to come up short.",
+          "Always round up to whole sheets, and add one or two extra to the order beyond the calculated number. A single damaged or miscut sheet on a Saturday can stop the job; the cost of a spare panel is trivial against a return trip to the yard."
+        ]
+      },
+      {
+        "heading": "Subfloor: Thickness and Span Rating Drive the Choice",
+        "body": [
+          "Subfloor panels are sold by span rating, not just thickness. The common single-layer subfloor is 23/32 in (often called 3/4 in) T&G rated for 24 in on center joists; 19/32 to 5/8 in is typical for 16 in OC. The number on the panel stamp, such as 24 oc, tells you the maximum supported spacing. Match the panel to your joist spacing rather than defaulting to a thickness out of habit.",
+          "T&G panels install perpendicular to the joists with end joints staggered, end joints landing on a joist, and the long edges interlocked between joists. Plan for a small expansion gap at panel ends and edges, commonly about 1/8 in, per manufacturer instructions. Glue-and-screw is standard for squeak-free floors. None of this changes the sheet count, but it changes which panel you buy and how the field cuts run.",
+          "If you are building up a two-layer floor, count each layer separately and offset the underlayment joints from the subfloor joints. Two layers means roughly double the sheets plus separate waste for each, since the underlayment cuts will not mirror the subfloor."
+        ]
+      },
+      {
+        "heading": "OSB vs. Plywood: Coverage Is Identical, Behavior Is Not",
+        "body": [
+          "For estimating quantity, OSB and plywood are interchangeable: both come as 4x8 sheets at 32 sq ft, so the sheet count math does not change. The decision is about performance and cost, not coverage. OSB typically runs cheaper per sheet and is dimensionally consistent; plywood handles repeated wetting and drying better and is lighter to handle in the same thickness. Both carry span ratings, so spec by the rating either way.",
+          "Where they diverge in the field is moisture and edge swell. Exposed OSB edges swell more if they sit out in weather before dry-in, which is one reason crews like to load the deck and get it covered. This does not add sheets, but it argues for ordering close to install and not stockpiling sheathing outdoors for weeks.",
+          "For roofs and walls, sheathing thickness follows span and code: 7/16 in is a common wall and roof sheathing for standard framing spacing, with thicker panels where spans or loads increase. Confirm the required rating against your framing spacing and local code before you order."
+        ]
+      },
+      {
+        "heading": "Stairs: A Separate Takeoff With Code Limits",
+        "body": [
+          "Stairs are a frequent subfloor and tread question and they follow code, not rules of thumb. Under the common residential code, maximum riser height is 7 3/4 in and minimum tread depth is 10 in, with a minimum headroom of 6 ft 8 in. Risers and treads must be uniform; the total variation between the largest and smallest riser or tread in a flight is limited to 3/8 in. Verify the figures against the code edition your jurisdiction has adopted.",
+          "To size material: divide total floor-to-floor rise by your target riser height to get the number of risers, then round and recompute the exact riser so it lands within code. The number of treads is usually one less than the number of risers. Multiply tread depth by width to get the tread area, then convert to sheets if you are cutting treads or stringers from plywood.",
+          "Stringers and treads cut from sheet stock waste heavily because of the angles, so budget closer to 20 percent waste on stair material and lay out the cuts before you buy."
+        ]
+      },
+      {
+        "heading": "From Tape Measure to Order: Tightening the Estimate",
+        "body": [
+          "The error that costs money is the floor plan you measured wrong, not the formula. Break complex areas into rectangles, calculate each, and sum them; do not try to eyeball an L-shaped or angled room as one number. Measure to the framing, account for the subfloor running under partition walls, and keep your units consistent (work in feet, convert inches as decimals: 6 in is 0.5 ft).",
+          "Capturing dimensions is where mistakes enter, so verify the field numbers before ordering. A LiDAR scan-to-takeoff tool like ProBuildCalc can measure room areas and generate sheet counts from a phone scan, which is a fast cross-check against your hand measurements on a cut-up plan. Treat any digital area as a starting figure and still apply your own waste factor for the layout.",
+          "Final order sequence: total square footage, divide by 32 (or 31.3 for T&G), apply the waste factor for the plan complexity, round up to whole sheets, then add one or two spares. Spec the panel by span rating to match framing, and confirm thickness against code for the application."
+        ]
+      }
+    ],
+    "faq": [
+      {
+        "q": "How many square feet does a sheet of plywood or OSB cover?",
+        "a": "A standard 4 ft by 8 ft sheet covers 32 square feet. Tongue-and-groove subfloor nets closer to 31.3 square feet per sheet because the T&G joint consumes part of the width. Divide your total square footage by that coverage, then add a waste factor and round up."
+      },
+      {
+        "q": "What waste factor should I add for plywood or subfloor?",
+        "a": "Use about 10 percent for simple rectangular floors and open areas, and about 15 percent for cut-up plans with many corners, angles, or roof valleys. Long clear runs can go as low as 5 percent. Stair stringers and treads waste heavily, so budget around 20 percent there."
+      },
+      {
+        "q": "Do I subtract window and door openings when estimating wall sheathing?",
+        "a": "Generally no. Crews usually sheath over openings and cut them out afterward, so you calculate the full wall area and let the cut-out scrap fall under your waste allowance. Subtracting openings is a common way to under-order and come up short on sheets."
+      },
+      {
+        "q": "What thickness of subfloor do I need?",
+        "a": "Match the panel span rating to your joist spacing rather than picking a thickness by habit. A common single-layer subfloor is 23/32 in tongue-and-groove rated for 24 in on center joists, with 19/32 to 5/8 in typical for 16 in on center. Read the span rating stamped on the panel."
+      }
+    ],
+    "related": [
+      {
+        "href": "/tools/plywood-calculator",
+        "label": "Plywood Calculator"
+      }
+    ]
+  },
+  {
+    "slug": "how-to-estimate-sod-for-a-lawn",
+    "title": "How to Estimate Sod: Square Feet and Pallets Made Easy",
+    "description": "Learn how to estimate sod for a new lawn: measure square footage, break the yard into shapes, add waste, and convert to pallets and rolls accurately.",
+    "keywords": [
+      "how to estimate sod",
+      "sod estimating",
+      "square feet of sod",
+      "sod pallets per square foot",
+      "sod coverage per pallet",
+      "lawn sod calculation",
+      "sod waste factor",
+      "sod takeoff"
+    ],
+    "dek": "Estimating sod comes down to three things: an accurate square-footage measurement, the right waste allowance, and a clean conversion to pallets and rolls. Get those right and you order once, install clean, and protect your margin.",
+    "date": "2026-06-06",
+    "sections": [
+      {
+        "heading": "Start With Accurate Square Footage",
+        "body": [
+          "Sod is sold and installed by the square foot, so every estimate begins with area. Walk the lawn and break irregular yards into simple shapes you can measure: rectangles, triangles, and circles. Rectangle area is length times width. Triangle area is one-half base times height. Circle area is 3.14 times the radius squared (radius is half the diameter). Add the shapes together for total turf area.",
+          "For curved beds, sweeping borders, or odd lots, the shape method beats eyeballing a single number. Measure to the real edge of where turf will go, not to the fence or the property line. Subtract anything that will not get sod: the house footprint, driveway, walkways, patio, decks, pool, and planting beds. Skipping these subtractions is the most common reason an estimate comes in 10 to 20 percent high.",
+          "On a phone, tape, and wheel this is doable but slow on a complex yard, and transcription errors creep in. A LiDAR scan with an app like ProBuildCalc captures the lawn outline and pulls a square-footage takeoff directly, which is faster than chaining tape measurements and easier to hand off as documentation on a bid."
+        ]
+      },
+      {
+        "heading": "Add a Realistic Waste Factor",
+        "body": [
+          "Sod never installs at exactly the measured area. You lose material to cutting around curves, beds, trees, and walkways, plus trimming the perimeter and fitting the last row. The standard rule of thumb is to add 5 to 10 percent waste on top of measured square footage. Use the low end for clean rectangular yards and the high end for lots with lots of curves, islands, or tight cuts.",
+          "For heavily broken-up lawns, narrow side yards, or steep slopes where rolls are hard to fit, bump waste to 10 to 15 percent. It is cheaper to order one extra roll than to send a crew back for a single piece, and most suppliers will not split a pallet. Always round your final order up to the next full pallet or roll.",
+          "Write the waste factor on the estimate as its own line so it is visible, not buried. Example: 2,000 sq ft measured, plus 10 percent waste, equals 2,200 sq ft to order."
+        ]
+      },
+      {
+        "heading": "Convert Square Feet to Pallets and Rolls",
+        "body": [
+          "Sod comes in slabs, small rolls, and big rolls, and pallet coverage varies by farm and region, so confirm the numbers with your supplier before you order. As a working baseline, a standard pallet of turfgrass covers roughly 400 to 500 square feet. Common small slabs are often cut around 16 by 24 inches, which is about 2.67 square feet each, so a 450 sq ft pallet holds on the order of 165 to 170 pieces. Big rolls used on large commercial jobs can cover far more per unit.",
+          "To estimate pallets, divide your adjusted square footage (measured plus waste) by the supplier's coverage per pallet, then round up. Example: 2,200 sq ft divided by 450 sq ft per pallet equals 4.9, so order 5 pallets. To estimate individual slabs instead, divide adjusted square footage by the square footage of one piece.",
+          "Two unit reminders that catch people: 1 square yard equals 9 square feet, so if a supplier quotes by the yard, multiply yards by 9 to get square feet. And confirm whether the quoted pallet coverage already assumes any trim loss or is a flat slab count, so you are not double-counting waste."
+        ]
+      },
+      {
+        "heading": "Pull It Together and Price the Job",
+        "body": [
+          "A clean sod estimate has a repeatable structure: measured area by shape, minus non-turf subtractions, plus a labeled waste percentage, converted to pallets or rolls rounded up, then priced. Keep the math on the estimate so the customer and your crew can both follow it.",
+          "Material is only part of the cost. Account for delivery (often a flat per-pallet or per-trip charge), site prep such as grading and tilling, removal and disposal of old turf if any, soil amendment or starter fertilizer, and labor for installation. Sod is perishable and should be laid within about 24 hours of delivery, so schedule the crew and the delivery on the same day and stage pallets in shade.",
+          "For ballpark planning only, installed sod commonly runs in the rough range of a low single-digit-dollars-per-square-foot figure for material and labor combined, but this swings widely by region, grass type, site prep, and access. Always price from current local supplier quotes and your own labor rates rather than a national average."
+        ]
+      }
+    ],
+    "faq": [
+      {
+        "q": "How many square feet does a pallet of sod cover?",
+        "a": "It varies by farm and region, but a common baseline is roughly 400 to 500 square feet per pallet. Always confirm the exact coverage and the slab or roll size with your supplier before ordering, because pallet counts are not standardized."
+      },
+      {
+        "q": "How much waste should I add when estimating sod?",
+        "a": "Add 5 to 10 percent on top of measured square footage for typical yards, and 10 to 15 percent for lawns with many curves, islands, slopes, or tight cuts. Round the final order up to the next full pallet or roll, since most suppliers will not split a pallet."
+      },
+      {
+        "q": "How do I convert square feet to pallets?",
+        "a": "Take your measured area, subtract non-turf zones like driveways and beds, add your waste percentage, then divide by the supplier's coverage per pallet and round up. For example, 2,200 square feet divided by 450 square feet per pallet equals 4.9, so you order 5 pallets."
+      },
+      {
+        "q": "Do I measure the whole yard or just part of it?",
+        "a": "Measure only the area that will actually receive sod. Subtract the house footprint, driveway, walkways, patios, decks, pools, and planting beds. Measuring to the property line instead of the real turf edge is the top reason estimates come in too high."
+      }
+    ],
+    "related": [
+      {
+        "href": "/tools/sod-calculator",
+        "label": "Sod Calculator"
+      }
+    ]
+  },
+  {
+    "slug": "how-to-estimate-wallpaper",
+    "title": "How to Estimate Wallpaper: Rolls, Repeat, and Waste",
+    "description": "Learn how to estimate wallpaper rolls for any room, including pattern repeat math, waste percentages, and the strip-counting method estimators trust.",
+    "keywords": [
+      "how to estimate wallpaper",
+      "wallpaper rolls per room",
+      "pattern repeat wallpaper",
+      "wallpaper waste percentage",
+      "wallpaper takeoff",
+      "single vs double roll",
+      "estimate wallpaper coverage"
+    ],
+    "dek": "Wallpaper is one of the easiest finishes to under-order and one of the most expensive to re-order, because a second dye lot rarely matches the first. This guide walks through the two estimating methods pros actually use, how pattern repeat eats into your yield, and the waste percentages that keep you from coming up a strip short on the last wall.",
+    "date": "2026-06-06",
+    "sections": [
+      {
+        "heading": "Know What a Roll Actually Covers",
+        "body": [
+          "Wallpaper is almost always sold by the roll but priced and labeled in confusing ways, so settle the units first. North American rolls are nominally about 27 inches wide and yield roughly 36 square feet per single roll, but they are sold bolted together as double rolls (about 72 nominal square feet) so you get longer continuous runs with fewer seams. European and most designer rolls run narrower, around 20.5 inches (520 mm) wide by about 33 feet (10 m) long, for roughly 56 nominal square feet per roll.",
+          "Here is the trap: nominal coverage is not usable coverage. Once you trim the top and bottom and discard the offcut at the end of a wall, real-world yield drops. A safe planning figure is about 25 to 30 usable square feet per North American single roll and about 25 usable square feet per European roll when there is any pattern to match. Estimate in single-roll equivalents, then convert to the double or metric rolls the supplier actually ships, and always confirm the exact bolt dimensions on the spec sheet before you commit numbers."
+        ]
+      },
+      {
+        "heading": "Method 1: The Square-Footage Method (Quick Quote)",
+        "body": [
+          "For a fast budget number, measure the perimeter of the room and multiply by ceiling height to get gross wall area. Example: a 12 by 14 foot room with 9-foot ceilings has a perimeter of 52 feet, so 52 x 9 = 468 gross square feet. Subtract large openings only \u2014 a standard 3 x 6.7 foot door is about 20 square feet and a typical 3 x 4 foot window about 12 square feet. Do not subtract small openings; that slack becomes part of your matching allowance.",
+          "Divide net area by the usable coverage per roll, not the nominal figure. Using 468 gross minus roughly 32 square feet for one door and one window gives about 436 net square feet. At 25 usable square feet per single-roll equivalent, that is about 17.4, which you round up to 18 single rolls, or 9 double rolls. This method is fine for pricing, but it ignores how repeat forces waste at every strip, so it can run short on bold, large-repeat patterns."
+        ]
+      },
+      {
+        "heading": "Method 2: The Strip-Counting Method (What Pros Order From)",
+        "body": [
+          "Counting strips is the accurate way to estimate and it is how seasoned hangers buy. First, find your cut length: wall height plus a trim allowance of about 4 inches (2 top, 2 bottom), then add the pattern repeat if the paper has one (covered below). Next, find how many strips one roll yields by dividing the roll's usable length by the cut length and rounding DOWN \u2014 partial leftovers usually cannot be reused on a patterned job.",
+          "Then count strips needed: divide the room perimeter by the roll width and round UP. For our 52-foot perimeter at 20.5-inch (1.71 foot) wide paper, 52 / 1.71 = 31 strips. If a 33-foot roll gives a 116-inch cut length (108-inch wall + 4-inch trim + a 4-inch repeat allowance baked in), that is 396 / 116 = 3.4, so 3 full strips per roll. Then 31 strips / 3 per roll = 10.3, rounded up to 11 rolls. Notice this lands higher than the square-foot method \u2014 that gap IS the repeat and trim waste the quick method missed. A LiDAR scan and automated takeoff in ProBuildCalc speeds up the perimeter, height, and opening measurements that feed this calculation, so the strip count starts from verified dimensions instead of a tape measure that skipped a jog in the wall."
+        ]
+      },
+      {
+        "heading": "Pattern Repeat: The Number That Burns Rolls",
+        "body": [
+          "Pattern repeat is the vertical distance before the design starts over, printed on the spec sheet (for example, a 21-inch repeat). It matters because every strip on the wall must begin at the same point in the pattern, so you waste up to one full repeat per strip lining it up. There are three match types. Random match (stripes, grasscloth, many textures) needs no alignment and wastes almost nothing. Straight match repeats straight across at the same height on both edges. Drop match, usually half-drop, shifts the pattern down by half a repeat on the adjacent strip, which is the most waste-prone.",
+          "To account for it, round each cut length UP to the next full multiple of the repeat. If the wall needs 108 inches and the repeat is 21 inches, you need 6 repeats (6 x 21 = 126 inches) per strip, not 5 \u2014 that is 18 inches of forced waste on every single strip. Big repeats over about 18 to 24 inches can quietly add a roll or two to a room, so never estimate a patterned paper without checking the repeat and the match type first."
+        ]
+      },
+      {
+        "heading": "Waste Percentages and Ceiling, Stair, and Accent Cases",
+        "body": [
+          "Build waste into the order on top of your strip count. Reasonable rules of thumb: add about 10 percent for a random match or plain paper, about 15 percent for a straight match, and about 20 percent or more for a large drop-match repeat. Add another 5 percent or so on rooms with many windows, doors, angled walls, or short runs where offcuts cannot be reused. The goal is to finish with most of one extra roll on the shelf, because re-ordering risks a different dye lot that will not match on the wall.",
+          "Special cases: ceilings are estimated the same way but strip them across the SHORTER dimension to minimize seams, and add height-equivalent waste for the repeat. Stairwells need the longest strip measured from the highest point, plus generous waste for the diagonal cuts along the stringer \u2014 and remember the code geometry you are working around: residential stair risers max about 7.75 inches and treads run about 10 inches minimum, which sets how tall that tallest strip really climbs. For a single accent wall, estimate that wall alone by its own width and height rather than the room perimeter so you do not over-buy."
+        ]
+      },
+      {
+        "heading": "Pull It Together and Sanity-Check",
+        "body": [
+          "A clean workflow: confirm roll dimensions and usable yield from the spec sheet, get accurate perimeter and height (subtract only big openings), read the repeat and match type, compute cut length including trim and a full repeat, count strips per roll rounding down, count strips needed rounding up, then divide and round up to whole rolls. Finally add your waste percentage and round up again to the packaged unit, whether that is double rolls or metric bolts.",
+          "Two final checks before ordering. One: verify every roll in the order shares the same dye lot or batch number, and order it all at once. Two: cross-check your two methods \u2014 if the strip count and the square-foot count disagree by a lot on a patterned paper, trust the strip count, because the repeat waste is real. As a rough budget anchor, mid-grade wallpaper commonly lands somewhere in the low-to-mid tens of dollars per single roll with designer lines running well above that, so confirm current pricing with your supplier rather than estimating cost from memory."
+        ]
+      }
+    ],
+    "faq": [
+      {
+        "q": "What is the difference between a single roll and a double roll?",
+        "a": "They contain the same width of paper, but a double roll is one continuous bolt of about twice the length. North American paper is priced per single roll but almost always packaged and sold as double rolls so you get longer runs and fewer seams. Estimate in single-roll equivalents, then convert to the double rolls the supplier ships, always rounding up to whole packaged units."
+      },
+      {
+        "q": "How much extra wallpaper should I order for waste?",
+        "a": "Add roughly 10 percent for plain or random-match paper, about 15 percent for a straight match, and 20 percent or more for a large drop-match repeat, plus another 5 percent for rooms with many openings or angled walls. The aim is to end with most of an extra roll on hand, because re-ordering later risks a mismatched dye lot."
+      },
+      {
+        "q": "Why does pattern repeat make me buy more wallpaper?",
+        "a": "Every strip on the wall has to start at the same point in the pattern so the design lines up across seams. That means you trim and discard up to one full repeat at the top of most strips. With a 21-inch repeat on a 108-inch wall you must cut to 126 inches per strip, wasting 18 inches on each one, which can add a roll or two to a large-repeat room."
+      },
+      {
+        "q": "Should I subtract doors and windows when estimating wallpaper?",
+        "a": "Subtract only large openings such as full doors (about 20 square feet) and big windows (about 12 square feet). Leave small openings in the gross area, because that extra paper becomes part of your matching and trim allowance. On the more accurate strip-counting method you base the count on full wall height regardless, which already builds in that cushion."
+      }
+    ],
+    "related": [
+      {
+        "href": "/tools/wallpaper-calculator",
+        "label": "Wallpaper Calculator"
+      }
+    ]
+  },
+  {
+    "slug": "how-to-estimate-brick-and-block",
+    "title": "How to Estimate Brick and Block (Plus Mortar) for a Wall",
+    "description": "Learn how to estimate brick, concrete block, and mortar for a wall using real coverage rates, waste factors, and contractor rules of thumb.",
+    "keywords": [
+      "how to estimate brick",
+      "brick per square foot",
+      "concrete block estimating",
+      "mortar bags per 1000 brick",
+      "masonry takeoff",
+      "CMU wall estimate",
+      "brick waste factor",
+      "modular brick coverage"
+    ],
+    "dek": "Estimating masonry comes down to wall area, the right coverage rate, and an honest waste factor. Here is the field-tested method for counting brick, concrete block, and the mortar that holds it all together.",
+    "date": "2026-06-06",
+    "sections": [
+      {
+        "heading": "Start With Net Wall Area, Not Gross",
+        "body": [
+          "Every masonry takeoff begins with square footage of wall face. Multiply length by height for each wall, add them up, then subtract openings: doors, windows, and any cast-in-place sections. A common shortcut is to deduct only openings larger than about 10 to 16 square feet, since the brick cut and wasted around small openings roughly offsets the area you would have saved. For a one-off wall, just measure it: a 40 ft long by 8 ft high wall is 320 square feet gross. Knock out a 3 ft by 7 ft door (21 sq ft) and you are estimating against 299 net square feet.",
+          "If you are scanning the space rather than pulling a tape, ProBuildCalc captures wall dimensions and openings with the device LiDAR so the net area lands in your takeoff without manual math. Either way, the number you carry forward is net wall face area in square feet, and every coverage rate below is keyed to that figure."
+        ]
+      },
+      {
+        "heading": "Brick: 6.75 Per Square Foot Is the Anchor Number",
+        "body": [
+          "For standard modular brick (nominal 8 in long by 2-2/3 in high, actual roughly 7-5/8 by 2-1/4) laid in a running bond with a 3/8 in mortar joint, the industry rule of thumb is 6.75 brick per square foot of wall. That figure comes from the Brick Industry Association and is the one most suppliers quote. Other sizes change it: queen and engineer brick run closer to 5.5 to 6 per square foot, and utility or oversize units drop to around 3 to 4.5, so confirm the unit before you multiply.",
+          "Joint width is the biggest swing factor. Tightening from a 3/8 in to a 1/4 in joint adds roughly 9 percent more brick; opening to 1/2 in cuts it about 5 percent. Bond pattern matters too: a stack bond or one-third running bond is close to standard, but herringbone, basket weave, and heavy soldier or header courses cut more brick and push waste up.",
+          "Working the 299 sq ft wall: 299 x 6.75 = 2,018 brick before waste. Brick is often sold by the cube (roughly 500 brick) so you will round up to full cubes when ordering."
+        ]
+      },
+      {
+        "heading": "Concrete Block: Roughly 1.125 Units Per Square Foot",
+        "body": [
+          "Standard CMU is the nominal 8 by 8 by 16 in block, whose actual face is 7-5/8 by 15-5/8 with a 3/8 in joint. One block covers about 0.89 square feet, so the working rule is 1.125 block per square foot of wall. That same 299 sq ft wall needs 299 x 1.125 = 337 block before waste.",
+          "Half-high block (4 in tall) doubles the count to about 2.25 per square foot. Do not forget the vertical math on partial courses and the specialty units: bond beam, lintel, sash, and corner block get counted separately by the linear foot, not lumped into the field count. For reinforced or grouted walls, add a line for vertical rebar by the cell spacing (commonly 16, 24, 32, or 48 in on center) and for grout, which is figured by cubic yard based on how many cells you fill."
+        ]
+      },
+      {
+        "heading": "Mortar: The Number Most Estimates Get Wrong",
+        "body": [
+          "Mortar is sold in roughly 70 to 80 lb bags of mix or as separate cement, lime, and sand. The reliable rules of thumb: about 7 bags of mortar per 1,000 modular brick (call it 143 brick per bag), and about 3 bags per 100 standard 8x8x16 block. Plan on roughly 1 ton of masonry sand per 1,000 brick if you are batching your own.",
+          "Match the mortar type to the job, not habit. Type N (about 750 psi) is the default for above-grade veneer, partitions, and chimneys. Type S (about 1,800 psi) is for at- or below-grade and structural work like foundation walls and retaining walls. Type M is the high-strength option for heavy load and below-grade masonry. Wider joints, deep raked tooling, and rough block all eat more mortar, so the bag count is a floor, not a ceiling.",
+          "For the example wall: 2,018 brick divided by 143 is about 15 bags of mortar; a 337-block wall would run about 10 bags."
+        ]
+      },
+      {
+        "heading": "Add Waste, Then Round to Full Units",
+        "body": [
+          "Coverage rates assume a perfect wall, which does not exist. Add waste on top of the calculated count: about 5 percent for a clean rectangular brick wall with few openings, 10 percent as a sane default, and 10 to 15 percent or more for heavy cutting, lots of openings, returns and corners, or decorative bonds. Block, with fewer cuts, often gets by on 5 percent, but bump it for radius walls and tight cell layouts.",
+          "Apply it and round up to whole cubes, straps, or bags, never down. The 2,018 brick at 10 percent becomes about 2,220, which you would order as five cubes (2,500). The 337 block at 5 percent is roughly 354. Mortar gets the same treatment, plus one or two extra bags so a single rained-out or stiff batch does not stop the wall. Ordering short and making a second supplier run almost always costs more than the few percent of overage you carried."
+        ]
+      },
+      {
+        "heading": "A Quick Worked Example, Start to Finish",
+        "body": [
+          "Wall: 40 ft long, 8 ft high, one 3 ft by 7 ft door. Gross 320 sq ft, minus 21 sq ft opening, equals 299 net sq ft.",
+          "Brick option: 299 x 6.75 = 2,018, plus 10 percent waste is about 2,220, ordered as 5 cubes. Mortar: roughly 15 to 17 bags. Sand if self-batching: about 2 tons.",
+          "Block option: 299 x 1.125 = 337, plus 5 percent is about 354, ordered as full units. Mortar: roughly 10 to 12 bags. Count any bond-beam or lintel block separately, and add rebar and grout if the wall is reinforced. Always confirm unit size and joint width with the actual product before you commit the order, because those two variables move the count more than anything else."
+        ]
+      }
+    ],
+    "faq": [
+      {
+        "q": "How many bricks do I need per square foot?",
+        "a": "For standard modular brick with a 3/8 in mortar joint, use 6.75 brick per square foot of wall face. Larger units like queen or utility brick run lower (roughly 3 to 6 per square foot), so confirm the size first. Multiply net wall area by the rate, then add 5 to 15 percent waste depending on cuts and openings."
+      },
+      {
+        "q": "How much mortar does a brick or block wall take?",
+        "a": "Plan on about 7 bags of mortar per 1,000 modular brick (around 143 brick per bag) and about 3 bags per 100 standard 8x8x16 concrete block, at a 3/8 in joint. Wider joints, raked tooling, and rough units use more, so treat those bag counts as a minimum and add an extra bag or two."
+      },
+      {
+        "q": "What waste factor should I use for masonry?",
+        "a": "About 5 percent for a clean rectangular wall with few openings, 10 percent as a safe default, and 10 to 15 percent or higher for heavy cutting, many openings, corners and returns, or decorative bond patterns. Always round up to full cubes, units, and bags rather than ordering short."
+      },
+      {
+        "q": "How many concrete blocks are in a square foot of wall?",
+        "a": "A standard 8 by 8 by 16 in block covers about 0.89 square feet, so use 1.125 block per square foot of wall. Half-high 4 in block doubles that to about 2.25 per square foot. Count specialty units like bond-beam, lintel, and corner block separately by the linear foot."
+      }
+    ],
+    "related": [
+      {
+        "href": "/tools/brick-calculator",
+        "label": "Brick Calculator"
+      }
+    ]
+  },
+  {
+    "slug": "how-to-estimate-rebar",
+    "title": "How to Estimate Rebar for a Slab or Footing Using a Grid",
+    "description": "Learn how to estimate rebar for slabs and footings using the grid method: bar counts, spacing, lap splices, waste factors, and weight conversions.",
+    "keywords": [
+      "how to estimate rebar",
+      "rebar grid layout",
+      "rebar takeoff",
+      "slab rebar estimate",
+      "footing rebar",
+      "rebar lap splice",
+      "rebar weight per foot",
+      "rebar spacing on center"
+    ],
+    "dek": "Estimating rebar is mostly arithmetic once you treat the slab or footing as a grid. Get the spacing, bar size, and lap splices right, add a sane waste factor, and your takeoff will hold up at both the supply yard and the inspection.",
+    "date": "2026-06-06",
+    "sections": [
+      {
+        "heading": "Start With the Drawings: Bar Size and Spacing",
+        "body": [
+          "Before you count anything, pull two numbers off the structural plan or rebar schedule: the bar size and the on-center (o.c.) spacing. A typical residential slab-on-grade is #4 bars at 12 to 18 inches o.c. each way, while a strip footing might call for two or three #4 or #5 bars running continuously along its length plus transverse bars at a set spacing. Bar sizes are numbered in eighths of an inch, so a #4 is 4/8 inch (1/2 inch) diameter and a #5 is 5/8 inch.",
+          "If the engineer specifies reinforcement by area (for example, a minimum steel ratio) rather than by bar-and-spacing, convert it to a usable grid before estimating. Cross-sectional areas are 0.20 sq in for a #4, 0.31 for a #5, and 0.44 for a #6. Pick a bar size and back into the spacing that meets the required area per foot of width.",
+          "Do not guess at spacing. The difference between 12 inch and 16 inch o.c. on a 40 by 60 slab is hundreds of linear feet of steel. Spacing drives everything downstream, so lock it down first."
+        ]
+      },
+      {
+        "heading": "The Grid Method: Counting Bars Each Way",
+        "body": [
+          "Treat the slab as a rectangle gridded in both directions. The number of bars running in one direction equals the perpendicular dimension divided by the spacing, plus one for the starting bar. The classic mistake is forgetting that extra bar, which always undercounts. For a 40 ft by 60 ft slab at 12 inch (1 ft) o.c. each way: bars running the 60 ft direction are spaced across the 40 ft width, so (40 / 1) + 1 = 41 bars, each about 60 ft long. Bars running the 40 ft direction are spaced across the 60 ft length, so (60 / 1) + 1 = 61 bars, each about 40 ft long.",
+          "Now total the linear footage. That is 41 x 60 = 2,460 lf one way, plus 61 x 40 = 2,440 lf the other way, for 4,900 lf before splices and waste. Subtract concrete cover from the bar lengths if you want to be precise: bars stop about 3 inches short of formed edges against earth, or 2 inches at formed surfaces, so a 60 ft bar is really closer to 59.5 ft. On large pours that trim is real money; on a single-car pad it is noise.",
+          "For a continuous footing, the math is simpler. Longitudinal (continuous) bars equal the number of bars called out times the footing length. Transverse bars or stirrups equal (footing length / spacing) + 1, each cut to the footing width minus cover. Add them together for total linear feet."
+        ]
+      },
+      {
+        "heading": "Lap Splices, Stock Lengths, and Waste",
+        "body": [
+          "Rebar ships in standard mill lengths, most commonly 20 ft, with 30, 40, and 60 ft available by order. Any run longer than your stock length needs a lap splice where two bars overlap and are tied. Lap length for ordinary slab and footing bars runs roughly 30 to 48 bar diameters depending on bar size, concrete strength, and code class; a common field rule of thumb is about 40 bar diameters, or a flat 2 ft for #4 and 2 to 3 ft for #5. Always defer to the splice schedule on the drawings if one is given, because seismic and high-strength mixes can push laps much longer.",
+          "Count splices, do not estimate them loosely. A 60 ft bar built from 20 ft stock needs two splices (three 20 ft sticks), adding roughly 4 to 6 ft of lapped steel per run. Across dozens of long bars that overlap adds up fast, so fold it into the takeoff rather than burying it in waste.",
+          "On top of laps, add a waste and cutoff allowance. For straightforward slabs and footings, 5 to 10 percent is normal; complex layouts with lots of short cuts and bends trend toward 10 percent. After you have the cleaned-up linear footage with laps included, multiply by 1.05 to 1.10 to get the quantity to actually order."
+        ]
+      },
+      {
+        "heading": "Converting Linear Feet to Weight and Ordering",
+        "body": [
+          "Yards quote and sell rebar by weight, so convert your total linear feet using the unit weights: a #3 is about 0.376 lb/ft, #4 is 0.668 lb/ft, #5 is 1.043 lb/ft, and #6 is 1.502 lb/ft. The handy mnemonic is that a #4 weighs roughly two-thirds of a pound per foot. Multiply total linear feet of each bar size by its weight, then sum across sizes for total pounds; divide by 2,000 for tons if the order is large.",
+          "Order in whole sticks of the stock length, not your raw linear footage, since you buy full bars and cut on site. Take the linear feet per direction, divide by stock length, and round up to whole bars before applying weight. Keep bar sizes separated on the order because mixing #4 and #5 on a single line item is how the wrong steel ends up on the truck.",
+          "As a rough budgeting figure, fabricated and delivered rebar commonly lands somewhere in the range of roughly $0.50 to $1.00 per pound depending on bar size, market, and order volume, with small orders and bent or fabricated bar at the higher end. Treat that strictly as a ballpark and confirm with a live quote, since steel pricing moves."
+        ]
+      },
+      {
+        "heading": "Field Checks That Keep the Estimate Honest",
+        "body": [
+          "Verify cover and support. Bars must sit at the specified depth in the slab, held on chairs or dobies, not pulled up by hand mid-pour. Cover is typically 3 inches where concrete is cast against earth, 2 inches for formed surfaces exposed to weather, and less for interior formed surfaces. Cover affects bar length and the number of chairs you need, which is a separate small line item people forget.",
+          "Don't forget the accessories. Tie wire, bar chairs or supports, and dowels at construction joints all belong in the takeoff. Tie wire is minor but real, and chair count roughly follows the grid intersections at whatever support spacing the bars require to stay rigid.",
+          "Measure the real opening, not the nominal one. A slab with thickened edges, a footing that steps, or a curved foundation will not match a clean rectangle. This is exactly where a LiDAR scan and automated takeoff in ProBuildCalc pays off, capturing actual dimensions of an irregular pour so the grid count reflects what is really getting poured instead of a rounded sketch."
+        ]
+      }
+    ],
+    "faq": [
+      {
+        "q": "What is the grid method for estimating rebar?",
+        "a": "You treat the slab or footing as a rectangle reinforced in both directions. Bars in each direction equal the perpendicular dimension divided by the spacing, plus one. Multiply bar count by bar length each way, sum the two directions for total linear feet, then add lap splices and a waste factor before converting to weight to order."
+      },
+      {
+        "q": "How much waste should I add to a rebar estimate?",
+        "a": "For typical slabs and footings, add about 5 to 10 percent for cutoffs and waste, leaning toward 10 percent on complex layouts with many short cuts and bends. Lap splices are counted separately and added to the linear footage, not lumped into the waste factor."
+      },
+      {
+        "q": "How long should a rebar lap splice be?",
+        "a": "For ordinary slab and footing bars, laps run roughly 30 to 48 bar diameters; a common field rule of thumb is about 40 bar diameters, or a flat 2 ft for #4 and 2 to 3 ft for #5. Always use the splice schedule on the drawings when one is provided, since seismic detailing and high-strength concrete can require significantly longer laps."
+      },
+      {
+        "q": "How do I convert linear feet of rebar to weight?",
+        "a": "Multiply total linear feet by the bar's unit weight: roughly 0.376 lb/ft for #3, 0.668 for #4, 1.043 for #5, and 1.502 for #6. Sum across bar sizes for total pounds, and divide by 2,000 for tons. Order in whole stock-length sticks (commonly 20 ft) rather than raw linear footage."
+      }
+    ],
+    "related": [
+      {
+        "href": "/tools/rebar-calculator",
+        "label": "Rebar Calculator"
+      }
+    ]
+  },
+  {
+    "slug": "how-to-build-stairs-rise-and-run",
+    "title": "How to Lay Out Stairs: Rise, Run, Stringers, and Code Limits",
+    "description": "A contractor's guide to stair rise and run: calculate risers and treads, cut stringers, and stay inside IRC code limits without guesswork or rework.",
+    "keywords": [
+      "stair rise and run",
+      "how to lay out stairs",
+      "stair stringer layout",
+      "IRC stair code",
+      "maximum riser height",
+      "minimum tread depth",
+      "cutting stair stringers",
+      "total rise calculation"
+    ],
+    "dek": "Stairs are unforgiving. A riser that varies by half an inch is a trip hazard, a failed inspection, and a callback. Here is the field-tested method for laying out rise and run, cutting stringers, and staying inside code on the first try.",
+    "date": "2026-06-06",
+    "sections": [
+      {
+        "heading": "Start With Total Rise, Then Divide for Riser Count",
+        "body": [
+          "Everything begins with total rise: the exact vertical distance from the lower finished floor to the upper finished floor. Measure it with a level and tape, accounting for finished floor thickness on both ends. A common error is measuring subfloor to subfloor and forgetting the tile, hardwood, or topping that goes down later. Get this number wrong and every riser is wrong.",
+          "Divide total rise by your target riser height to get the number of risers. Most residential work targets a comfortable riser around 7 to 7.5 inches. Example: a total rise of 109 inches divided by 7.5 equals 14.5, so round to 15 risers. Then divide back: 109 divided by 15 equals 7.27 inches per riser. Risers must come out equal, so always divide the total rise by a whole number of risers rather than picking a riser height and hoping it lands evenly.",
+          "Remember the count rule: a flight always has one more riser than it has treads. A run with 15 risers has 14 treads, because the top riser lands you on the finished upper floor, which is not a tread you cut into the stringer."
+        ]
+      },
+      {
+        "heading": "Set the Run and Check It Against the Rise",
+        "body": [
+          "Tread run is the horizontal depth of each step, measured nosing to nosing, not including the nosing overhang. With your 7.27-inch riser, a 10- to 11-inch run is typical and code-compliant. Total run equals tread run multiplied by the number of treads: 14 treads at 10.5 inches gives 147 inches of horizontal travel, which is what you need to confirm there is floor space for the stair to land.",
+          "Use a proportion check so the stair feels right underfoot. The two long-standing rules of thumb are: rise plus run should total roughly 17 to 18 inches, and two times the rise plus the run should total roughly 24 to 25 inches. A 7.27 riser with a 10.5 run gives 17.77 and 25.04, both inside the comfort window. Steep, choppy stairs and long, shallow stairs both come from ignoring these ratios.",
+          "If the total run does not fit the available floor, you have three levers: add a landing to split the flight, adjust the riser height within code, or relocate the bottom of the stair. Do not solve a space problem by shrinking the tread below the code minimum."
+        ]
+      },
+      {
+        "heading": "Know the IRC Code Limits Cold",
+        "body": [
+          "For one- and two-family dwellings, the International Residential Code sets hard limits you cannot exceed. Maximum riser height is 7.75 inches. Minimum tread depth is 10 inches. Minimum headroom is 6 feet 8 inches, measured vertically from the sloped plane along the nosings. Commercial stairs under the IBC are more restrictive, typically a 7-inch max riser and 11-inch min tread, so confirm which code governs your job.",
+          "The uniformity rule causes more failed inspections than the maximums do: within a single flight, the greatest riser height may not exceed the smallest by more than 3/8 inch, and the same 3/8-inch tolerance applies to tread depth. This is why the bottom riser is the one that bites you. When the bottom tread sits on a finished floor that is thicker or thinner than planned, that riser changes height and can blow the 3/8-inch tolerance.",
+          "Nosings get checked too. Where treads are less than 11 inches deep, a nosing of 3/4 inch to 1.25 inches is required, and the nosing profile must be consistent. Open risers, where used, generally cannot allow a 4-inch sphere to pass through. Pull the adopted code edition for your jurisdiction before you cut, since amendments are common."
+        ]
+      },
+      {
+        "heading": "Lay Out and Cut the Stringers",
+        "body": [
+          "Stringers are almost always cut from 2x12 stock because of one number: the throat. After you cut the rise and run notches, the remaining uncut depth of the board, measured perpendicular from the back edge to the inside corner of the notch, must be at least 5 inches under the IRC. A 2x10 rarely leaves enough throat once notched, which is why 2x12 is the standard.",
+          "Mark the notches with a framing square fitted with stair gauges (the little brass buttons). Clamp the gauges at your rise on the tongue and your run on the body, then step the square down the board, scribing each tread and riser in sequence. The most common mistake is the dropped bottom step: you must shorten the first riser by the thickness of one tread so that every finished step ends up equal once treads are installed. Subtract the tread material thickness from the bottom riser cut.",
+          "Cut the notches with a circular saw and finish each inside corner with a handsaw or jigsaw; overcutting with the circular saw weakens the stringer and is visible on inspection. For typical residential widths plan on three stringers (one each side and one center), tightening to 12 inches on center under heavy or commercial loads. Always cut one stringer, test-fit it against the actual opening, and only then use it as a template for the rest."
+        ]
+      },
+      {
+        "heading": "Material Takeoff and Waste",
+        "body": [
+          "For the stringers themselves, figure stringer length with the Pythagorean theorem: the diagonal equals the square root of total rise squared plus total run squared, then add length for the top connection and bottom cut. Buy one length up from the calculated dimension so you have room for the bottom-step adjustment and a clean top cut. For a typical interior flight, three 2x12s at 12 or 16 feet is a common buy.",
+          "Treads and risers are counted directly off your layout: one tread per step (14 in the example) and one riser board per riser if you are closing them in (15). Add roughly 10 percent waste on tread and riser stock for end trimming, defects, and the occasional miscut, and a bit more if you are working in hardwood where grain and color matching cost you boards. Account for nosing return pieces on any open ends.",
+          "Capturing the total rise and the surrounding framing accurately is where layout errors are born, so many crews now verify the opening with a LiDAR scan. Apps like ProBuildCalc let you scan the stairwell, pull exact rise and run dimensions, and generate a stringer and tread takeoff before anyone climbs a ladder with a tape. Whatever method you use, confirm field dimensions against the plan before cutting, because lumber spent on a miscut stringer is gone."
+        ]
+      }
+    ],
+    "faq": [
+      {
+        "q": "What is the maximum stair rise and minimum run allowed by code?",
+        "a": "Under the IRC for homes, the maximum riser height is 7.75 inches and the minimum tread depth is 10 inches. Commercial stairs under the IBC are stricter, usually a 7-inch maximum riser and 11-inch minimum tread. Just as important, within one flight the tallest and shortest risers cannot differ by more than 3/8 inch, and the same tolerance applies to tread depth."
+      },
+      {
+        "q": "How do I calculate the number of risers and treads?",
+        "a": "Divide the total finished-floor-to-finished-floor rise by a target riser height (about 7 to 7.5 inches) and round to a whole number of risers. Then divide the total rise back by that riser count to get the exact equal riser height. The tread count is always one less than the riser count, because the top riser lands on the upper floor rather than on a cut tread."
+      },
+      {
+        "q": "Why are stair stringers cut from 2x12 lumber instead of 2x10?",
+        "a": "Code requires at least 5 inches of solid, uncut throat behind the notches. Once you cut the rise and run into the board, a 2x10 usually does not leave 5 inches of remaining depth, while a 2x12 does. That throat keeps the stringer strong enough to carry the load, which is why 2x12 is the default for cut stringers."
+      },
+      {
+        "q": "What is the dropped bottom step and why does it matter?",
+        "a": "When you frame stringers, the first riser must be cut shorter by the thickness of one tread. If you skip this, the bottom step ends up taller than the rest once treads are installed, and the uneven riser fails the 3/8-inch uniformity rule. Subtracting the tread thickness from the bottom riser keeps every finished step equal."
+      }
+    ],
+    "related": [
+      {
+        "href": "/tools/stair-calculator",
+        "label": "Stair Calculator"
+      }
+    ]
+  },
+  {
+    "slug": "how-to-estimate-a-paver-patio",
+    "title": "How to Estimate Pavers, Base, and Sand for a Patio",
+    "description": "A contractor's guide on how to estimate pavers, base gravel, and bedding sand for patios and walkways, with coverage rates, waste factors, and depths.",
+    "keywords": [
+      "how to estimate pavers",
+      "paver base calculation",
+      "bedding sand for pavers",
+      "paver patio material takeoff",
+      "gravel base depth pavers",
+      "polymeric sand coverage",
+      "paver waste factor",
+      "walkway paver estimate"
+    ],
+    "dek": "Estimating a paver job comes down to three layers stacked on a number you can't fudge: square footage. Get the area right, apply the correct depths and waste, and the pavers, base, and sand fall out cleanly. Here is the method estimators actually use in the field.",
+    "date": "2026-06-06",
+    "sections": [
+      {
+        "heading": "Start With Square Footage, Not Paver Count",
+        "body": [
+          "Every layer keys off net area. For a rectangle, length times width in feet gives square footage. Break irregular shapes into rectangles, triangles, and circles, calculate each, and add them up. A triangle is one-half base times height; a circle is 3.14 times the radius squared.",
+          "Always sketch and measure the actual ground, not the plan dimensions. Curves, step-downs, and out-of-square corners are where takeoffs go wrong. Measure twice, and record both the gross area and any cutouts (planters, posts, existing slab) you'll subtract.",
+          "Do not estimate by counting individual pavers off a pattern. Buy pavers by coverage, which is sold per square foot or per layer/bundle, and let the supplier convert square footage into bundles for the specific unit you spec."
+        ]
+      },
+      {
+        "heading": "Pavers: Coverage Plus a Waste Factor",
+        "body": [
+          "Once you have net square footage, add waste before ordering. Use roughly 5 percent for a simple rectangular field with straight 90-degree borders, 10 percent for standard layouts with some cuts, and 10 to 15 percent for diagonal/herringbone patterns, curves, or circle kits where every perimeter piece gets cut. Breakage and color-blending also eat into yield.",
+          "Order full bundles, and order all of it in one delivery so the dye lot matches. Pavers from different production runs can shade differently, and a mid-job reorder is the classic way to end up with a visible stripe across a patio.",
+          "Keep a few square feet of leftovers on site for the owner. Future repairs almost never match a fresh dye lot, so the extra bundle is cheap insurance, not waste."
+        ]
+      },
+      {
+        "heading": "Base Gravel: Depth Drives Everything",
+        "body": [
+          "Crushed aggregate base (often called road base, crusher run, or 3/4-inch minus) is your structural layer. A common rule of thumb is 4 to 6 inches of compacted base for pedestrian patios and walkways, and 8 to 12 inches for driveways or anything carrying vehicle loads. Increase depth in clay or poorly draining soils and in freeze-thaw climates.",
+          "Convert depth to volume in cubic yards: square feet times depth in feet, divided by 27. For 300 square feet at 6 inches, that is 300 times 0.5 divided by 27, which is about 5.6 cubic yards before compaction. Aggregate compacts roughly 20 to 25 percent, so order about 15 to 20 percent extra loose material to finish at the target depth, and compact in 2-to-3-inch lifts.",
+          "Aggregate is also sold by the ton. As a working figure, crushed stone runs around 1.4 to 1.5 tons per cubic yard, so multiply your yardage by about 1.4 if the quarry quotes by weight. Confirm the supplier's actual conversion for their material."
+        ]
+      },
+      {
+        "heading": "Bedding Sand and Joint Sand Are Two Separate Buys",
+        "body": [
+          "The setting bed is a screeded layer of coarse, sharp concrete sand, typically 1 inch thick (1.5 inches max). Never exceed that or the pavers will rut. One inch over an area: square feet times 1/12, divided by 27 for cubic yards. For 300 square feet that is about 0.93 cubic yard. Sand runs roughly 1.3 to 1.4 tons per cubic yard if bought by weight. Do not use the setting bed to correct grade; that is the base's job.",
+          "Joint sand is a separate line item. Polymeric sand for filling joints is sold by the bag, and coverage depends heavily on joint width and paver thickness. A bag commonly covers somewhere in the range of about 30 to 90 square feet for standard pavers, much less for wide or thick-paver joints, so always read the specific product's coverage chart and round up.",
+          "Hold back a small amount of bedding sand for screeding touch-ups, and budget extra joint sand for a second pass after the first watering settles it."
+        ]
+      },
+      {
+        "heading": "Edge Restraint, Geotextile, and Steps",
+        "body": [
+          "Estimate edge restraint by linear foot of open perimeter, plus spikes (often around one per foot to roughly every 12 inches). A geotextile separation fabric between subgrade and base is cheap insurance over soft or clay soils; estimate it by square footage plus overlap at seams.",
+          "For steps, plan the geometry before ordering. A comfortable, code-typical exterior stair uses risers around 7 inches and treads/run around 11 inches or more, with all risers in a flight kept uniform (variation between the largest and smallest riser held to about 3/8 inch under common code). Confirm your local code before committing dimensions.",
+          "A LiDAR scan with ProBuildCalc turns the as-built patio footprint into a measured area and perimeter, so your paver, base, sand, and edge-restraint quantities come off real dimensions instead of a pacing guess."
+        ]
+      },
+      {
+        "heading": "A Quick Worked Example",
+        "body": [
+          "Say a 12-by-25-foot patio: 300 square feet net. Pavers in a running-bond pattern with cut borders: add 10 percent, so order coverage for about 330 square feet in one dye lot.",
+          "Base at 6 inches compacted: about 5.6 cubic yards in place, order roughly 6.5 to 7 yards loose (or about 9 to 10 tons) to allow for compaction. Bedding sand at 1 inch: about 1 cubic yard. Joint sand: figure square footage against the chosen product's coverage chart and round up to whole bags.",
+          "Add perimeter edge restraint by the linear foot plus spikes, and geotextile fabric if the soil is soft. Label every quantity by layer on the takeoff so the field crew and the supplier read the same numbers."
+        ]
+      }
+    ],
+    "faq": [
+      {
+        "q": "How much waste should I add to a paver order?",
+        "a": "Roughly 5 percent for a simple rectangle with straight borders, about 10 percent for standard layouts with some cutting, and 10 to 15 percent for herringbone, diagonal, or curved layouts where most perimeter pieces get cut. Order all pavers in one dye lot and keep a few square feet for future repairs."
+      },
+      {
+        "q": "How deep should the gravel base be under pavers?",
+        "a": "A common rule of thumb is 4 to 6 inches of compacted crushed base for pedestrian patios and walkways, and 8 to 12 inches for driveways or vehicle loads. Go deeper in clay, poor-draining soil, or freeze-thaw climates, and compact in 2-to-3-inch lifts."
+      },
+      {
+        "q": "How thick should the bedding sand layer be?",
+        "a": "Screed coarse concrete sand to about 1 inch, with 1.5 inches as a practical maximum. A thicker bed lets pavers settle and rut. The setting bed is for bedding only, not for fixing grade, which is the base layer's job."
+      },
+      {
+        "q": "How do I convert depth into cubic yards of material?",
+        "a": "Multiply square footage by the depth in feet, then divide by 27. For example, 300 square feet at 6 inches is 300 times 0.5 divided by 27, about 5.6 cubic yards. Then add 15 to 20 percent extra for base gravel to account for compaction."
+      }
+    ],
+    "related": [
+      {
+        "href": "/tools/paver-calculator",
+        "label": "Paver Calculator"
+      }
+    ]
+  },
+  {
+    "slug": "asphalt-driveway-paving-guide",
+    "title": "Asphalt Driveway Calculator: Tonnage and Paving Costs",
+    "description": "Learn how to estimate asphalt tonnage for a driveway, with spread rates, waste factors, compaction rules, and realistic paving cost ranges for contractors.",
+    "keywords": [
+      "asphalt driveway calculator",
+      "asphalt tonnage estimate",
+      "hot mix asphalt coverage",
+      "driveway paving cost",
+      "asphalt spread rate",
+      "asphalt density per cubic foot",
+      "asphalt waste factor",
+      "tons per square yard asphalt"
+    ],
+    "dek": "Ordering asphalt by the truckload leaves no room for guessing. This guide walks through the exact tonnage math, the spread rates and waste factors estimators actually use, and honest cost ranges so your driveway bid covers the job without leaving tons on the truck or money on the table.",
+    "date": "2026-06-06",
+    "sections": [
+      {
+        "heading": "The core formula: area, thickness, density",
+        "body": [
+          "Asphalt is sold by the ton, but you measure a driveway in area and thickness, so every estimate is a unit conversion. The chain is: area in square feet, times compacted thickness in feet, equals cubic feet of volume. Multiply volume by the density of hot-mix asphalt, then divide by 2,000 to get tons. Hot-mix dense-graded asphalt runs about 145 pounds per compacted cubic foot, with a normal range of roughly 140 to 150 depending on the mix and aggregate. Use 145 unless your supplier gives you a mix-specific number.",
+          "Worked example: a driveway 20 feet wide by 50 feet long is 1,000 square feet. At 3 inches compacted, that is 1,000 times 0.25 feet, or 250 cubic feet. At 145 pounds per cubic foot that is 36,250 pounds, divided by 2,000 equals about 18.1 tons before waste. Always convert your thickness from inches to feet (inches divided by 12) before multiplying, because that single step is where most blown estimates come from.",
+          "Measure the area honestly. For an irregular driveway, break it into rectangles and triangles, figure each piece, and add them up rather than averaging a guess. A LiDAR scan-to-takeoff tool like ProBuildCalc removes the tape-measure error on odd shapes and aprons, but the math downstream is the same."
+        ]
+      },
+      {
+        "heading": "Rules of thumb and coverage rates",
+        "body": [
+          "For fast field checks, memorize the per-square-yard rule: at 145 pounds per cubic foot, one inch of compacted asphalt over one square yard weighs about 110 pounds, or roughly 0.054 tons per square yard per inch. Multiply your square yards by inches of thickness by 0.054 and you have your tons. To get square yards, divide square feet by 9.",
+          "The coverage version is even quicker for ordering. One ton of asphalt covers about 80 square feet at 2 inches, about 55 square feet at 3 inches, and about 40 square feet at 4 inches compacted. Those three numbers cover most residential and light-commercial work. Notice the inverse relationship: double the thickness and you halve the coverage, so a 4-inch pull eats tonnage fast.",
+          "Typical compacted thicknesses: residential driveways are commonly 2 to 3 inches of asphalt over 4 to 8 inches of compacted aggregate base. Driveways that see heavy vehicles, RVs, or delivery trucks step up to 3 to 4 inches, often placed as a 2-inch binder course plus a wearing course. Thin overlays on sound existing pavement can run 1.5 inches."
+        ]
+      },
+      {
+        "heading": "Compaction and waste: order more than you measure",
+        "body": [
+          "Asphalt is placed loose and compacted with a roller, and it loses roughly 20 to 25 percent of its loose height in the process. This is why you order tonnage by compacted thickness, not loose: to finish at 3 inches compacted the crew lays it close to 3.75 inches loose. If you back-calculate tons from a loose screed setting you will over-order. Spec the compacted number and let the density figure account for it.",
+          "Add a waste and yield factor on top of the theoretical tonnage. For straightforward rectangular driveways, 5 to 10 percent is normal; use the higher end for small jobs, irregular edges, hand-work around aprons, and material that cools and stiffens before it is spread. On the 18.1-ton example above, a 6 percent factor brings the order to about 19.2 tons.",
+          "Order in realistic increments. Plants and trucks deal in tons, and a tri-axle hauls roughly 18 to 22 tons, so a single load may cover a typical driveway. Confirm minimum-load fees and whether a short load triggers a surcharge. Hot-mix has to be placed while hot, so coordinate delivery timing with crew readiness rather than letting a truck sit and the mat cool."
+        ]
+      },
+      {
+        "heading": "What asphalt paving actually costs",
+        "body": [
+          "Treat all dollar figures as approximate ranges that swing with region, oil prices, haul distance, and job size. As a rough order of magnitude, installed residential asphalt commonly lands somewhere in the range of 7 to 15 dollars per square foot for a standard driveway with proper base prep, with small or hard-access jobs running higher per foot because mobilization and minimum charges get spread over less area. Material-only hot-mix is frequently quoted per ton and is only one slice of that installed price.",
+          "The line items that move a bid most are base preparation and access, not the asphalt itself. Excavation, grading, and the aggregate base often rival or exceed the cost of the wearing course. Tear-out and disposal of an old slab, poor drainage that needs correcting, and tight sites that force hand-work all add real money. A tack coat between binder and surface courses, plus edge work and a clean joint to the garage or street, are small lines that still belong in the estimate.",
+          "Bid the system, not just the mat. Quantify the aggregate base by the ton on the same volume method shown above, price subgrade prep separately, and carry mobilization, minimum-load fees, and sealcoating if the client expects it. Hold a contingency for soft subgrade you cannot see until you dig, since that is the most common reason an asphalt job goes over."
+        ]
+      }
+    ],
+    "faq": [
+      {
+        "q": "How many tons of asphalt do I need for a 2-car driveway?",
+        "a": "A typical 2-car driveway around 20 by 24 feet (480 square feet) at 3 inches compacted needs about 8.7 tons of hot-mix before waste, or roughly 9.2 tons with a 6 percent waste factor. Scale it by the coverage rule that one ton covers about 55 square feet at 3 inches, then add 5 to 10 percent for waste."
+      },
+      {
+        "q": "What is the density of asphalt per cubic foot?",
+        "a": "Dense-graded hot-mix asphalt weighs about 145 pounds per compacted cubic foot, with a normal range of roughly 140 to 150 depending on the mix design and aggregate. Use 145 for estimates unless your supplier provides a mix-specific density."
+      },
+      {
+        "q": "How thick should an asphalt driveway be?",
+        "a": "Most residential driveways use 2 to 3 inches of compacted asphalt over 4 to 8 inches of compacted aggregate base. Step up to 3 to 4 inches of asphalt, often as a binder course plus a wearing course, where heavy vehicles, RVs, or trucks will park or drive."
+      },
+      {
+        "q": "Why do I have to order more asphalt than my measured volume?",
+        "a": "Two reasons. Asphalt loses about 20 to 25 percent of its loose height during compaction, so it is ordered by compacted thickness, and you should add a 5 to 10 percent waste and yield factor for edges, hand-work, and material that stiffens before spreading."
+      }
+    ],
+    "related": [
+      {
+        "href": "/tools/asphalt-calculator",
+        "label": "Asphalt Calculator"
+      }
+    ]
+  },
+  {
+    "slug": "retaining-wall-block-estimate",
+    "title": "Retaining Wall Block Calculator: Blocks and Base Math",
+    "description": "A contractor's guide to estimating SRW blocks, leveling pad base, drainage stone, and geogrid for a retaining wall, with real coverage rates and waste factors.",
+    "keywords": [
+      "retaining wall block calculator",
+      "SRW block estimating",
+      "leveling pad base",
+      "retaining wall material takeoff",
+      "block wall waste factor",
+      "drainage stone retaining wall",
+      "geogrid retaining wall",
+      "wall face area"
+    ],
+    "dek": "Pricing a segmental retaining wall comes down to four takeoffs: face block, cap block, the leveling pad base, and the drainage stone behind the wall. Get the face area right and the rest follows. Here is the method I use, with the coverage rates and waste factors that keep a bid honest.",
+    "date": "2026-06-06",
+    "sections": [
+      {
+        "heading": "Start With Face Area, Not Length",
+        "body": [
+          "Every block takeoff starts from the wall face area in square feet: total wall length times average exposed height. Length is easy. Height is where estimates go wrong, because a wall that is 3 feet tall at one end and buried to grade at the other does not average 3 feet. Walk the run, take height readings every 8 to 10 feet, and average them. On a stepped or sloping site, break the wall into segments and figure each separately, then sum.",
+          "Include the buried course in your height. Standard practice is to bury the bottom course roughly one-tenth of the exposed wall height, with a 1-course minimum. A 4-foot exposed wall needs about 5 inches of embedment, so you are really building closer to 4.4 vertical feet of block. Estimators who price only the visible face come up short on both block and base.",
+          "This is also the step where a measurement error compounds across every later line item, so it is worth scanning the site rather than eyeballing it. A LiDAR scan from an app like ProBuildCalc captures wall length and grade change in one pass and spits out face area, which beats taping a sloped bank solo."
+        ]
+      },
+      {
+        "heading": "Convert Face Area to Block Count",
+        "body": [
+          "Block count is face area divided by the face area of one unit. The trap is that nominal and actual sizes differ. A common SRW unit is sold as 12 inches wide by 8 inches high, but it covers about 6 inches high to the exposed face on some beveled units, so always estimate off the manufacturer's stated face coverage, not the nominal name.",
+          "Two reliable ways to figure it: per square foot, a standard 12x8 face unit yields about 1.5 blocks per square foot of wall (a 6x12 exposed face works out closer to 2 per square foot). Per unit, divide your face area by the single-block face area in square feet (a 12-inch-wide by 8-inch-high face is 0.67 sq ft). Run it both ways as a cross-check; if the two numbers disagree, you used the wrong face dimension somewhere.",
+          "Caps are figured by length, not area. Cap units are typically sold to cover a set length each, so divide total wall length by the cap coverage per unit. Add caps for any wall return or corner. Many caps need to be split or trimmed at corners, so caps carry a higher waste allowance than field block."
+        ]
+      },
+      {
+        "heading": "Add a Realistic Waste Factor",
+        "body": [
+          "Field block on a straight run wastes little: 3 to 5 percent covers normal breakage and the occasional bad unit. Bump it to 5 to 10 percent for curved walls, stepped grades, and walls with lots of corners, because every curve and corner forces cuts and the offcuts rarely get reused.",
+          "Caps and any split-face accent units deserve 10 percent because of trimming at terminations. Buy block by the full cube where you can, since partial cubes often cost more per unit and color lots can shift between deliveries. Note the lot number so a mid-job reorder matches.",
+          "Always round up to whole units, then up again to the nearest cube if the supplier sells that way. A bid that lands a contractor two short on delivery day costs far more in a return trip than the few extra units would have."
+        ]
+      },
+      {
+        "heading": "Size the Leveling Pad Base",
+        "body": [
+          "The leveling pad is compacted, road-base type aggregate (often a 3/4-inch minus crushed stone or a 21A type mix) under the bottom course. Standard build is 6 inches of compacted base, in a trench about 6 inches wider than the block on the buried side so the wall is not sitting on the edge of the pad.",
+          "Figure the base by volume in cubic yards: trench length times trench width times depth, all in feet, divided by 27. Example: a 40-foot wall on a 2-foot-wide, 0.5-foot-deep pad is 40 x 2 x 0.5 = 40 cubic feet, divided by 27 is about 1.5 cubic yards. Add 10 to 15 percent for compaction, since loose-delivered stone compacts down roughly that much, and a little for over-dig.",
+          "If you price aggregate by the ton instead of the yard, crushed stone runs roughly 1.4 to 1.5 tons per cubic yard, so multiply your loose yardage by about 1.5 to get tons. Confirm the conversion with your local quarry, because it varies by material and moisture."
+        ]
+      },
+      {
+        "heading": "Drainage Stone and Geogrid Behind the Wall",
+        "body": [
+          "Behind the block goes free-draining angular stock (typically clean 3/4-inch crushed, not rounded pea gravel) with a perforated drain pipe at the base daylighted to an outlet. A common spec is a 12-inch-wide column of drainage stone for the full wall height. Figure it by volume: wall length times 1 foot wide times wall height (including the buried course), divided by 27 for cubic yards. Separate the drainage stone from the structural backfill with a non-woven filter fabric so fines do not migrate in and clog it.",
+          "Geogrid is required on most walls taller than about 3 to 4 feet exposed, but the exact trigger height, grid strength, and embedment length are set by an engineer and the manufacturer's design tables, which depend on soil and surcharge. Do not eyeball it. Estimate grid by the layers and embedment length the engineered drawing calls out: layers times wall length times embedment depth gives square feet, then add 5 to 10 percent for overlap and trimming.",
+          "Treat anything over roughly 4 feet exposed, or any wall holding back a slope, driveway, or other surcharge, as engineered. That is a code and liability line, not an estimating preference, so price the engineering and any required permit into the job rather than assuming a gravity wall."
+        ]
+      }
+    ],
+    "faq": [
+      {
+        "q": "How many retaining wall blocks do I need per square foot?",
+        "a": "For a standard SRW unit with a 12-inch-wide by 8-inch-high face, plan on about 1.5 blocks per square foot of wall face. A unit with a 6-inch exposed face height runs closer to 2 per square foot. Always confirm against the manufacturer's stated face coverage, since nominal and actual sizes differ, and figure caps separately by wall length rather than by area."
+      },
+      {
+        "q": "How much base do I need under a retaining wall?",
+        "a": "Standard is a 6-inch-deep compacted aggregate leveling pad in a trench about 6 inches wider than the block. Figure it as trench length times width times depth in feet, divided by 27 for cubic yards, then add 10 to 15 percent for compaction. A 40-foot wall on a 2-foot by 6-inch pad needs roughly 1.5 cubic yards before the compaction allowance."
+      },
+      {
+        "q": "What waste factor should I use for retaining wall block?",
+        "a": "Use 3 to 5 percent for field block on straight runs, and 5 to 10 percent for curved or heavily cornered walls because of cuts. Caps and accent units warrant about 10 percent for trimming at corners and terminations. Round up to whole units, and to the nearest full cube if your supplier sells that way, to avoid a short delivery."
+      },
+      {
+        "q": "When does a retaining wall need geogrid or an engineer?",
+        "a": "As a rule of thumb, walls taller than about 3 to 4 feet of exposed height, or any wall retaining a slope, driveway, or other surcharge load, need engineered geogrid reinforcement and usually a permit. The exact trigger height, grid strength, and embedment length come from the engineer and the block manufacturer's design tables based on your soil, so do not size grid by eye."
+      }
+    ],
+    "related": [
+      {
+        "href": "/tools/retaining-wall-calculator",
+        "label": "Retaining Wall Calculator"
+      }
+    ]
+  },
+  {
+    "slug": "how-to-read-a-tape-measure",
+    "title": "How to Read a Tape Measure: Fractions, Marks, and Tricks",
+    "description": "Learn how to read a tape measure fast: what every mark means, fractions down to 1/16, the burned-inch trick, and field shortcuts pros use daily.",
+    "keywords": [
+      "how to read a tape measure",
+      "tape measure fractions",
+      "reading a tape measure marks",
+      "1/16 inch markings",
+      "burn an inch",
+      "tape measure tricks",
+      "imperial measuring tape"
+    ],
+    "dek": "A tape measure is the most-used tool on any jobsite, yet misreading the marks is one of the most common sources of waste and rework. Here is exactly what every line means and the field tricks that keep your cuts accurate.",
+    "date": "2026-06-06",
+    "sections": [
+      {
+        "heading": "The marks, longest to shortest",
+        "body": [
+          "A standard US tape is divided so the mark length tells you the fraction. The longest numbered lines are whole inches. The next-longest unnumbered line, dead center between two inches, is the 1/2 inch. The slightly shorter marks that split each half are the 1/4 inches (1/4 and 3/4). Shorter still are the 1/8 marks, and the shortest marks of all are the 1/16 inches. Most tapes stop at 1/16; a few precision tapes go to 1/32 on the first foot or so.",
+          "Read from the nearest whole inch and add the fraction. If a measurement lands on the second-shortest line past the 3-inch mark, that is 3 inches plus 5/16, because you count the 1/16 lines: 1/16, 1/8 (2/16), 3/16, 1/4 (4/16), 5/16. The trick that speeds this up is to never count sixteenths one at a time. Find the nearest 1/4 or 1/8 you recognize by mark length, then step one 1/16 in either direction.",
+          "Always reduce fractions the way a cut list expects them: 4/16 is 1/4, 8/16 is 1/2, 12/16 is 3/4. Calling out 'eight sixteenths' to a cut man invites a mistake. Say the simplest form."
+        ]
+      },
+      {
+        "heading": "Reading the foot marks and the printed numbers",
+        "body": [
+          "On tapes 12 feet and longer, the inches usually keep counting (13, 14, 15...) while a separate marker, often a small red box or bold number, flags each full foot. So 38 inches may be printed near a '3F 2in' or a boxed 38. Decide before the job whether your crew calls dimensions in inches (38 in) or feet-inches (3 ft 2 in) and stick to one. Mixing them is how a stud gets cut a foot short.",
+          "The black diamonds or triangles spaced every 19.2 inches are stud/truss marks for five-joist layout across an 8-foot sheet; the bold red numbers every 16 inches are standard on-center framing marks. You do not have to pull a tape for every stud, just chase the red.",
+          "When you transfer a number to lumber, mark with a crisp V or crow's foot pointing at the exact line, not a fat pencil dash. The point of the V is your cut line. A 1/16 error repeated across a wall of studs stacks up fast."
+        ]
+      },
+      {
+        "heading": "The hook, the burned inch, and other accuracy tricks",
+        "body": [
+          "The metal hook on the end is loose by design, and it slides about 1/16 inch, exactly the thickness of the hook. That float makes the tape read true whether you hook a board (pulling out) or butt it against a surface (pushing in). Do not crimp it tight thinking it is broken; you will throw off every measurement.",
+          "When the hook end is damaged or you need maximum precision, burn an inch: start your measurement from the 1-inch line instead of the hook, then subtract 1 inch from whatever you read. Just remember to deduct the inch, or every cut runs long by an inch.",
+          "For inside measurements like a window opening or cabinet box, read the number off the tape body where it exits the case and add the case length printed on the housing, commonly 3 inches or 3-3/8 inches. Bend the tape into the corner, take the reading, add the case. Two other habits: keep the tape flat and square to avoid arc error on long pulls, and on layouts longer than the blade, mark, slide, and overlap your start on a known number rather than the hook."
+        ]
+      },
+      {
+        "heading": "Where reading marks meets real takeoffs",
+        "body": [
+          "Once you can read to 1/16 reliably, the next jump in accuracy is reducing how many hand measurements you have to chain together. Every time you reposition a tape on a long run, you risk a 1/16 to 1/8 stack-up error. For full-room takeoffs, LiDAR scanning tools like ProBuildCalc capture dimensions and square footage in one pass, which you then sanity-check against a few hand pulls at door openings and out-of-square corners.",
+          "Use the tape as the verification tool even when you scan. Pull a known wall by hand, compare it to the scan, and you have caught drift in both methods before it reaches your cut list or your material order.",
+          "Build a small allowance into ordering, not into cutting. Cut to the line; add waste at the order stage."
+        ]
+      },
+      {
+        "heading": "Turning measurements into material with sane waste factors",
+        "body": [
+          "Reading the tape is only useful if the number feeds a clean takeoff. Standard field waste factors: roughly 10 percent for flooring, tile, and drywall on simple rectangular rooms, climbing to about 15 percent for diagonal or herringbone tile and busy patterns; about 10 to 15 percent for framing lumber; and 5 to 10 percent for paint, depending on cut-in and texture. Order in whole units, not the bare math.",
+          "Keep a few coverage rules in your head. Interior paint covers roughly 350 to 400 square feet per gallon per coat on smooth drywall, less on rough or porous surfaces, and most jobs need two coats. An 80-pound bag of concrete yields about 0.6 cubic foot, so a cubic yard (27 cubic feet) takes roughly 45 bags. Drywall and OSB sheets are 32 square feet each (4x8). These let you convert a tape reading to an order on the spot.",
+          "Convert units cleanly: 12 inches to a foot, 16.5 feet to a rod is rarely needed, but linear-to-square and square-to-yard come up daily. Square footage is length times width in feet; divide by 9 for square yards (carpet) and by the sheet coverage for board count."
+        ]
+      },
+      {
+        "heading": "Code limits worth measuring against",
+        "body": [
+          "A tape is also a compliance tool. For stairs under the common residential code, maximum riser height is 7-3/4 inches and minimum tread depth is 10 inches, with no more than 3/8 inch variation between the largest and smallest riser or tread in a flight. Measure every riser, not just the first.",
+          "Other figures you will check with a tape: standard handrail height 34 to 38 inches above the stair nosing; guardrails generally 36 inches residential and 42 inches commercial, with baluster gaps that reject a 4-inch sphere; and typical interior door rough openings sized about 2 inches over the door width for jamb and shim space. Local codes vary, so confirm the adopted code and any amendments before you cut.",
+          "When a dimension controls life safety, read to 1/16 and write it down. The cost of a re-pour or a failed inspection dwarfs the few seconds it takes to measure twice."
+        ]
+      }
+    ],
+    "faq": [
+      {
+        "q": "What is the smallest fraction on a standard tape measure?",
+        "a": "Most US tapes read down to 1/16 inch, shown by the shortest marks. Some precision tapes add 1/32-inch marks on the first foot. The rule is simple: the shorter the line, the smaller the fraction, with whole inches longest, then 1/2, 1/4, 1/8, and 1/16."
+      },
+      {
+        "q": "Why does the hook on the end of my tape wiggle?",
+        "a": "That movement is intentional. The hook floats by about 1/16 inch, the thickness of the hook itself, so the tape reads true whether you pull it out and hook a board or push it in against a surface. Do not tighten it; crimping the hook will make every measurement wrong."
+      },
+      {
+        "q": "What does it mean to burn an inch?",
+        "a": "Burning an inch means starting your measurement from the 1-inch line instead of the hook, then subtracting 1 inch from the reading. Pros do it when the hook is damaged or for maximum precision. The only catch is remembering to deduct that inch, or your cut runs an inch long."
+      },
+      {
+        "q": "How do I take an accurate inside measurement?",
+        "a": "Bend the tape into the corner, read the number where the blade exits the case, then add the case length printed on the housing, usually 3 or 3-3/8 inches. This avoids the inaccuracy of trying to read a tape that is curled inside a tight opening like a window or cabinet box."
+      }
+    ],
+    "related": [
+      {
+        "href": "/tools/square-footage-calculator",
+        "label": "Square Footage Calculator"
+      }
+    ]
+  },
+  {
+    "slug": "how-to-bid-a-construction-job",
+    "title": "How to Bid a Construction Job: Takeoff to Final Price",
+    "description": "Learn how to bid a construction job step by step: takeoff, waste factors, labor hours, overhead, and markup. Practical rules of thumb estimators actually use.",
+    "keywords": [
+      "how to bid a construction job",
+      "construction takeoff",
+      "construction estimating",
+      "material takeoff",
+      "contractor bid",
+      "overhead and profit markup",
+      "labor cost estimating",
+      "waste factor"
+    ],
+    "dek": "A bid is just arithmetic done in the right order: measure the work, price the materials and labor, add the cost of running your business, then mark it up to make money. Here is the exact sequence a working estimator follows, with the rules of thumb and waste factors you need to get it right.",
+    "date": "2026-06-06",
+    "sections": [
+      {
+        "heading": "Start With a Clean Takeoff",
+        "body": [
+          "The takeoff is the quantity survey: how many square feet, linear feet, cubic yards, or each-of-item the job requires. Everything downstream is wrong if this is wrong, so measure twice and write down your assumptions. Break the job into systems (demo, framing, drywall, paint, flooring, trim) and quantify each separately rather than guessing at a lump sum.",
+          "Use the units the material is sold in. Drywall and flooring are priced per square foot but bought per sheet or per carton, paint per gallon, lumber per piece or per board foot, concrete per cubic yard. Do your measuring in real dimensions, then convert to purchase units at the end. A common miss is forgetting that a 'square' of roofing equals 100 square feet, so a 2,000 sq ft roof is 20 squares before waste.",
+          "This is where digital scanning earns its keep. Pacing a room and sketching on a legal pad invites transposed numbers; a LiDAR scan with an app like ProBuildCalc captures room dimensions and surface areas directly, so your takeoff starts from measured geometry instead of a tape-and-memory guess. However you capture it, the rule is the same: quantities first, pricing second."
+        ]
+      },
+      {
+        "heading": "Add Realistic Waste Factors",
+        "body": [
+          "Never order exactly what you measured. Cuts, breakage, defects, and offcuts mean you buy more than the net area. Standard add-ons: drywall and most sheet goods 10 to 15 percent; paint figure 350 to 400 sq ft of coverage per gallon per coat and plan two coats; interior trim and baseboard 10 to 15 percent for miter cuts; tile 10 percent for straight lay and 15 to 20 percent for diagonal or herringbone patterns; hardwood and laminate flooring around 10 percent, more for complex rooms.",
+          "Roofing shingles run roughly 10 percent waste on a simple gable and 15 percent or more on a cut-up hip roof with valleys. Concrete is usually ordered with about 5 to 10 percent over the calculated volume because you cannot return what is left in the truck and a short pour is far more expensive than a little extra.",
+          "Round up to whole purchase units after applying waste. If the math says 27.3 sheets of drywall, you are buying 28. Keep the waste percentage as a separate, visible line in your worksheet so you can adjust it by job complexity rather than burying it."
+        ]
+      },
+      {
+        "heading": "Price Materials, Then Estimate Labor",
+        "body": [
+          "Material pricing is the easy half: take your waste-adjusted quantities, apply current supplier pricing, and total it. Call your supplier for live numbers on anything volatile like lumber or copper rather than trusting last quarter's figures. Add delivery, dumpster or haul-off, and any rental equipment as their own lines.",
+          "Labor is where bids are won and lost. The professional method is labor hours, not gut feel: estimate the man-hours each task takes, then multiply by your fully burdened labor rate. Burdened rate means the worker's wage plus payroll taxes, workers' comp, and benefits, which typically adds roughly 25 to 40 percent on top of base wage. A nominally 25-dollar-an-hour carpenter can cost you 32 to 35 dollars an hour all-in.",
+          "Build production rates from your own completed jobs whenever possible, because your crew's real pace beats any published table. As reference points, a finisher might hang and finish drywall at a few hundred square feet a day, and a painter might cut and roll several hundred square feet of wall an hour. Track actuals on every job and your future estimates get sharper."
+        ]
+      },
+      {
+        "heading": "Layer In Overhead and Profit",
+        "body": [
+          "Your direct costs (material plus labor plus subs plus equipment) are not your price. You still have to cover overhead: truck payments, insurance, your phone, software, the office, and the hours you spend estimating jobs you do not win. Overhead is commonly expressed as a percentage of your annual direct costs; many small contractors land somewhere around 10 to 20 percent, but you should calculate yours from your own books rather than borrowing a number.",
+          "Profit is separate from overhead and separate from your own wages if you work in the field. It is the return that lets the business grow and absorb a bad job. A frequent target is roughly 8 to 15 percent profit on residential remodel work, with the exact figure driven by risk, competition, and how badly you want the job.",
+          "Watch the markup-versus-margin trap. To net a 20 percent margin you must mark up costs by 25 percent, not 20, because margin is figured on the selling price and markup is figured on cost. Marking up 1,000 dollars of cost by 20 percent yields 1,200 dollars but only a 16.7 percent margin. Decide which number you are managing to and apply the right multiplier."
+        ]
+      },
+      {
+        "heading": "Catch the Details That Sink Bids",
+        "body": [
+          "Scope creep and code requirements live in the gaps. If you are touching stairs, the work has to meet code, and bidding it wrong is costly: the widely used limits are a maximum riser height around 7 to 7-3/4 inches and a minimum tread depth around 10 to 11 inches, with all risers and treads in a flight kept uniform within about 3/8 inch. Verify against your local adopted code, since jurisdictions amend these.",
+          "Read the plans and specs for what is implied but not drawn: permits and fees, demolition and disposal, surface prep, blocking, fasteners, caulk and adhesives, and final cleanup. These small lines add up and are the first thing a sloppy bid forgets. Note allowances clearly for any finish the client has not selected so you are not on the hook for their granite taste on a laminate budget.",
+          "Finally, decide how you present the number and protect it. Fixed-price bids put the risk of bad estimating on you, so pad your contingency on uncertain scope; time-and-materials shifts that risk to the client but needs clear rates. Either way, write down your assumptions, exclusions, and allowances in the proposal, and set an expiration date on the bid so a lumber spike three months later is not your problem."
+        ]
+      }
+    ],
+    "faq": [
+      {
+        "q": "What is the difference between a takeoff and an estimate?",
+        "a": "A takeoff is the measured quantity survey: how much material and how many units the job requires (square feet, linear feet, cubic yards, each). An estimate takes those quantities and attaches money to them, adding waste, labor hours, overhead, and profit. You cannot produce a reliable estimate without an accurate takeoff first."
+      },
+      {
+        "q": "How much should I mark up a construction job?",
+        "a": "There is no single right number; it depends on your overhead and target profit. Many small remodelers cover overhead with roughly 10 to 20 percent and add profit of about 8 to 15 percent, but you should calculate both from your own books. Remember to use markup, not margin: a 25 percent markup on cost yields a 20 percent margin on the sale price."
+      },
+      {
+        "q": "What waste percentage should I add to materials?",
+        "a": "It varies by material and complexity. Common starting points are 10 to 15 percent for drywall and sheet goods, about 10 percent for straight-lay flooring and 15 to 20 percent for diagonal tile patterns, 10 to 15 percent for trim, and 5 to 10 percent over calculated volume for concrete. Increase the factor for cut-up rooms and complex roof lines."
+      },
+      {
+        "q": "Should I estimate labor by the hour or as a lump sum?",
+        "a": "Estimate by labor hours and multiply by a fully burdened rate (wage plus taxes, insurance, and benefits, often 25 to 40 percent above base wage). Lump-sum guessing hides where you make and lose money. Build production rates from your own completed jobs and track actuals so your estimates improve over time."
+      }
+    ],
+    "related": [
+      {
+        "href": "/tools",
+        "label": "Free calculators"
+      }
+    ]
+  },
+  {
+    "slug": "markup-vs-margin-for-contractors",
+    "title": "Markup vs Margin: How Contractors Set the Right Number",
+    "description": "Markup vs margin confuses contractors and quietly kills profit. Learn the formulas, the conversion table, and how to set a markup that actually hits your target margin.",
+    "keywords": [
+      "markup vs margin",
+      "contractor markup",
+      "construction profit margin",
+      "how to calculate markup",
+      "gross margin contractor",
+      "markup percentage",
+      "construction estimating",
+      "overhead and profit"
+    ],
+    "dek": "Markup and margin are not the same number, and confusing them is one of the most expensive bookkeeping mistakes a contractor can make. This guide explains both, gives you the conversion math, and shows how to set a markup that actually lands on the profit you need.",
+    "date": "2026-06-06",
+    "sections": [
+      {
+        "heading": "The two definitions, side by side",
+        "body": [
+          "Markup is calculated on your cost. Margin is calculated on your selling price. Same dollars of profit, different denominator, very different percentage. If a job costs you 10,000 dollars in materials, labor, and subs, and you sell it for 13,000, your markup is 3,000 divided by 10,000, which is 30 percent. Your gross margin is 3,000 divided by 13,000, which is about 23 percent. The profit is identical. The percentage is not.",
+          "The trap is charging a markup percentage while thinking it is your margin. A contractor who 'adds 20 percent' believes he is keeping 20 cents on the dollar. He is actually keeping about 16.7 cents. On a year of 600,000 in volume, that gap is roughly 20,000 dollars of profit he assumed he had and never collected. The error always cuts against you, because margin is always a smaller number than the markup that produced it.",
+          "One more term to keep straight: gross margin is what is left after the direct job costs (material, labor, subcontractors, equipment, that job's permits). Net profit is what is left after you also pay overhead, the fixed business costs that exist whether or not you have a job running, such as your truck, insurance, office, software, and your own salary."
+        ]
+      },
+      {
+        "heading": "The formulas you actually need",
+        "body": [
+          "Markup percent equals profit divided by cost. Margin percent equals profit divided by price. To get from one to the other: margin equals markup divided by (1 plus markup). And the more useful direction, because you should set your margin target first: markup equals margin divided by (1 minus margin).",
+          "That second formula is the one that fixes the leak. Decide the margin you need to keep, then back into the markup that gets you there. Example: you want a 30 percent gross margin. Markup equals 0.30 divided by (1 minus 0.30), which is 0.30 divided by 0.70, which is 42.9 percent. So you mark costs up by about 1.43 to hit a 30 percent margin. To price a job, the fastest path is to divide cost by (1 minus your target margin): a 10,000 dollar cost at a 30 percent margin is 10,000 divided by 0.70, or about 14,286.",
+          "Build this into your estimate once and stop doing it in your head on a tailgate. The same scanning and takeoff work that produces your quantities can carry the markup rule straight through to price; ProBuildCalc, for instance, lets you scan a room, generate the material and labor takeoff, and apply a saved markup so the quoted number already reflects the margin you set."
+        ]
+      },
+      {
+        "heading": "Markup-to-margin conversion table",
+        "body": [
+          "Memorize a few of these so you can sanity-check a bid on the spot. At 10 percent markup you keep a 9.1 percent margin. At 15 percent markup, 13.0 percent margin. At 20 percent markup, 16.7 percent margin. At 25 percent markup, 20.0 percent margin. At 30 percent markup, 23.1 percent margin. At 40 percent markup, 28.6 percent margin. At 50 percent markup, 33.3 percent margin. At 67 percent markup, 40.0 percent margin. At 100 percent markup, 50.0 percent margin.",
+          "Read it the other way when you are setting prices. To keep a 20 percent margin you need a 25 percent markup. For 25 percent margin, a 33 percent markup. For 30 percent margin, a 43 percent markup. For 40 percent margin, a 67 percent markup. For 50 percent margin you have to double your cost, a 100 percent markup. Notice how fast markup climbs as the target margin rises; that nonlinear jump is exactly why eyeballing it fails.",
+          "A rough industry rule of thumb: many residential remodelers aim for roughly a 50 percent markup (about 33 percent gross margin) to cover overhead and leave real profit, while high-volume new-construction and spec work often runs leaner, sometimes 15 to 25 percent markup, because overhead is spread across more volume. Treat these as starting points, not gospel."
+        ]
+      },
+      {
+        "heading": "Setting a number that covers overhead, not just costs",
+        "body": [
+          "A margin target is meaningless until it actually covers your overhead plus the profit you want left over. Work it out from your own books. Total your annual overhead, the fixed costs that run regardless of jobs. Divide that by your expected annual revenue to get your overhead rate. If overhead is 120,000 and you expect 600,000 in revenue, overhead eats 20 percent of every dollar before any profit. If you also want, say, 10 percent net profit, your gross margin needs to be at least 30 percent, which from the table means about a 43 percent markup on costs.",
+          "Two common ways to recover overhead in a bid. The percentage method spreads overhead across all jobs proportionally through your margin, which is simple but quietly overcharges small jobs and undercharges large ones. The per-job allocation method assigns overhead based on a job's share of your production capacity, usually measured in labor hours or weeks on site, which is fairer on big-ticket projects but takes more bookkeeping. Pick one and apply it consistently.",
+          "Watch the difference between marking up your own labor versus subcontractor work. You carry risk, warranty, and supervision on subs, so they get a markup too, often a smaller one than your self-performed work, but never zero. And always mark up materials on the delivered, taxed cost, not the shelf price, or the markup evaporates into freight and sales tax."
+        ]
+      },
+      {
+        "heading": "Where the number quietly leaks",
+        "body": [
+          "Waste and coverage errors. If you estimate materials with no waste factor, your real cost lands higher than your bid and your margin shrinks on every job. Standard allowances: roughly 10 percent waste on flooring and drywall, 10 to 15 percent on tile (more for diagonal or herringbone layouts and small rooms with lots of cuts), about 10 percent on framing lumber, and 5 to 10 percent on paint. Coverage rates matter too: one gallon of wall paint covers about 350 to 400 square feet per coat, and most interior work is two coats, so a 12 by 15 room with 8-foot walls (roughly 430 square feet of wall) needs about 2 to 3 gallons per coat. Build waste into the quantity, then apply markup on top.",
+          "Change orders. This is where margin is won or lost. Out-of-scope work has zero competitive pressure on it, yet contractors routinely add it at cost or at a reflex 10 percent. Apply your full markup to change orders, in writing, before the work starts. A job bid at a thin margin can be made whole on change orders that carry full markup, and a fat original bid can still lose money if changes go in for free.",
+          "Unit conversions that bite. Concrete is sold by the cubic yard (27 cubic feet); a 10 by 12 slab at 4 inches is 10 times 12 times 0.333 feet, about 40 cubic feet, or 1.5 cubic yards before the 5 to 10 percent over-order. Don't forget code-driven quantities that change your takeoff: a typical stair flight under the residential code caps riser height around 7 and three-quarter inches and requires at least a 10-inch tread run, so a given floor-to-floor height dictates a minimum step count you cannot value-engineer away. Get the quantity right first; markup on a wrong quantity is still wrong."
+        ]
+      }
+    ],
+    "faq": [
+      {
+        "q": "Is markup or margin the bigger number?",
+        "a": "Markup is always the bigger percentage for the same dollars of profit, because it is calculated on your cost while margin is calculated on the higher selling price. A 50 percent markup equals only a 33.3 percent margin. Confusing the two always overstates the profit you think you are keeping."
+      },
+      {
+        "q": "What markup do I need to hit a 30 percent margin?",
+        "a": "About 42.9 percent. Use the formula markup equals margin divided by (1 minus margin): 0.30 divided by 0.70 equals 0.429. The fastest way to price the job is to divide your total cost by 0.70, which builds the 30 percent margin in directly."
+      },
+      {
+        "q": "What is a typical markup for a contractor?",
+        "a": "As a rough rule of thumb, many residential remodelers target around a 50 percent markup, roughly a 33 percent gross margin, to cover overhead and profit. Higher-volume new construction often runs leaner at 15 to 25 percent because fixed overhead is spread across more revenue. Set your own number from your actual overhead rate rather than copying an industry average."
+      },
+      {
+        "q": "Does margin include my overhead?",
+        "a": "Gross margin is what remains after direct job costs only: material, labor, subs, and equipment. It does not include overhead, your fixed business costs like insurance, trucks, and office. To find your true profit, subtract overhead from gross margin. Your margin target must be high enough to cover both overhead and the net profit you want."
+      }
+    ],
+    "related": [
+      {
+        "href": "/tools",
+        "label": "Free calculators"
+      }
+    ]
+  },
+  {
+    "slug": "how-to-measure-for-countertops",
+    "title": "How to Measure Countertops in Square Feet",
+    "description": "A contractor's guide to measuring countertops: square-foot math, the 25-inch depth rule, backsplash, seams, edge profiles, and waste factors.",
+    "keywords": [
+      "how to measure countertops",
+      "countertop square footage",
+      "measuring countertops in square feet",
+      "countertop estimating",
+      "countertop slab takeoff",
+      "kitchen countertop measurement"
+    ],
+    "dek": "Countertop pricing lives and dies on square footage, but the number a fabricator bills is almost never the number you get from raw counter dimensions. Here is how to measure countertops the way shops actually estimate them, including the depth conventions, seam rules, and waste factors that change the final figure.",
+    "date": "2026-06-06",
+    "sections": [
+      {
+        "heading": "The Core Method: Length x Width in Inches, Then Divide by 144",
+        "body": [
+          "Break the counter into rectangles. Measure each run's length and depth in inches, multiply to get square inches, then divide by 144 to convert to square feet. Add the rectangles together. The divide-by-144 step is where field guys lose money: a foot is 12 inches, so a square foot is 12 x 12 = 144 square inches, not 100 and not 12.",
+          "Worked example for a basic L-shape: a main run 120 in long x 25 in deep = 3,000 sq in. A return leg 60 in x 25 in = 1,500 sq in. Total 4,500 sq in / 144 = 31.25 sq ft. Always measure the actual cabinet runs on site rather than scaling off a plan, because base cabinets shift during install and stock plans lie.",
+          "For L and U shapes, do not double-count the corner. Where two runs overlap, measure one run full length and the second run only up to the edge of the first, or you will pay for that corner square twice."
+        ]
+      },
+      {
+        "heading": "Use 25 to 26 Inches Deep and 1.5 Inches per Linear Foot for Backsplash",
+        "body": [
+          "Standard base cabinets are 24 in deep, but a finished countertop overhangs the face and sits over a backsplash gap, so fabricators almost universally estimate at 25 in or 26 in of depth. Stick with the shop's convention; 25.5 in is a common default. An island or a counter with a waterfall or a seating overhang can run 36 in to 42 in deep, so measure those separately.",
+          "A standard 4 in tall backsplash adds roughly 0.33 sq ft per linear foot of wall it covers (4 in / 12 = 0.33 ft, times the run length). A quick shop shortcut is about 1.5 sq ft of slab per linear foot of countertop once you fold in a standard 4 in splash, but verify against your real takeoff for anything other than a plain galley. Full-height splashes, typically 18 in to 20 in from counter to upper cabinet, are billed as their own square footage and eat slab fast.",
+          "Note the difference between square feet and linear feet. Many laminate and lower-end quartz jobs are quoted per linear foot of finished counter at a fixed depth; natural stone, premium quartz, and any custom edge are almost always quoted per square foot of slab. Know which unit your supplier uses before you price the job."
+        ]
+      },
+      {
+        "heading": "Add Waste, Seams, and Edge Profiles Before You Quote",
+        "body": [
+          "Slab material does not yield 100 percent. For a rectangular layout in a forgiving material, plan on roughly 10 percent waste. For stone with directional veining you must book-match, or a kitchen with many small cuts and angles, 15 to 25 percent is realistic because off-cuts cannot always be reused. Apply waste to slab quantity, not to the finished counter square footage you bill the client.",
+          "Slabs have a maximum size, commonly around 10 ft by 5 ft for quartz and variable for natural stone, so any run longer than the slab forces a seam. Standard sinks are about 30 to 33 in wide and standard cooktops about 30 in, so deduct cutouts where your supplier credits them, but many shops do not credit cutouts because the cut piece is scrap. Confirm the policy before assuming a deduction.",
+          "Edge profile drives both labor and linear-foot pricing. A standard eased or beveled edge is the baseline; ogee, bullnose, mitered, or built-up edges are priced per linear foot on top of the field square footage, so measure and note the total finished edge length, not just the surface area."
+        ]
+      },
+      {
+        "heading": "Field Measure Twice, Then Template",
+        "body": [
+          "Final fabrication should never run off tape-measure numbers alone. Once cabinets are set and level, the shop produces a physical or laser template that captures wall waviness, out-of-square corners, and exact sink and faucet locations. Your square-foot takeoff is for the estimate and the slab order; the template is for the cut.",
+          "Sketch the layout and label every dimension, the depth convention you used, splash type, edge profile, and every cutout. Scanning the room with a LiDAR takeoff tool such as ProBuildCalc captures the runs and overhangs in one pass and exports the square footage and linear edge footage, which cuts the arithmetic errors that creep in when you are converting square inches in your head on a jobsite.",
+          "Confirm units and conventions with your fabricator in writing: depth assumption, whether splash is included, cutout credits, and waste responsibility. A clean estimate that states 'approximately 32 sq ft of field plus 14 linear ft of ogee edge, 4 in splash included, one seam' protects your margin and prevents the change-order fight after the slab is cut."
+        ]
+      }
+    ],
+    "faq": [
+      {
+        "q": "How many square feet is an average kitchen countertop?",
+        "a": "A typical mid-size kitchen lands around 30 to 45 square feet of countertop, depending on the layout and whether there is an island. Estimate it by measuring each run's length times depth (usually 25 to 26 inches) in inches and dividing by 144, then add an island or peninsula separately. Always measure the actual job rather than relying on an average."
+      },
+      {
+        "q": "Do I measure countertops in square feet or linear feet?",
+        "a": "Both, depending on the material and supplier. Laminate and many entry-level quartz lines are quoted per linear foot of finished counter at a set depth. Natural stone and premium quartz are quoted per square foot of slab, with edge profiles added per linear foot of finished edge. Confirm which unit your supplier uses before pricing."
+      },
+      {
+        "q": "How much waste should I add when estimating a countertop slab?",
+        "a": "Plan on roughly 10 percent for a simple rectangular layout in a forgiving material, and 15 to 25 percent for stone with veining you must match or kitchens with many small or angled cuts. Apply the waste factor to the slab quantity you order, not to the finished square footage you bill the customer."
+      },
+      {
+        "q": "Should I subtract the sink and cooktop cutouts from my measurement?",
+        "a": "Often no. Many fabricators do not credit cutouts because the removed piece becomes scrap, while others do. A standard sink is about 30 to 33 inches wide and a cooktop about 30 inches, so the area is meaningful. Confirm your supplier's cutout policy before assuming a deduction in your estimate."
+      }
+    ],
+    "related": [
       {
         "href": "/tools/square-footage-calculator",
         "label": "Square Footage Calculator"

@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { POSTS } from "./blog/posts";
+import { ROLES } from "./for/roles";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://probuildcalc.com";
 
@@ -31,6 +32,14 @@ const ROUTES: Array<{
   { path: "/tools/stud-calculator", priority: 0.8, changeFrequency: "monthly" },
   { path: "/tools/plywood-calculator", priority: 0.8, changeFrequency: "monthly" },
   { path: "/tools/sod-calculator", priority: 0.8, changeFrequency: "monthly" },
+  { path: "/tools/wallpaper-calculator", priority: 0.8, changeFrequency: "monthly" },
+  { path: "/tools/brick-calculator", priority: 0.8, changeFrequency: "monthly" },
+  { path: "/tools/rebar-calculator", priority: 0.8, changeFrequency: "monthly" },
+  { path: "/tools/stair-calculator", priority: 0.8, changeFrequency: "monthly" },
+  { path: "/tools/paver-calculator", priority: 0.8, changeFrequency: "monthly" },
+  { path: "/tools/asphalt-calculator", priority: 0.8, changeFrequency: "monthly" },
+  { path: "/tools/retaining-wall-calculator", priority: 0.8, changeFrequency: "monthly" },
+  { path: "/for", priority: 0.7, changeFrequency: "monthly" },
   { path: "/blog", priority: 0.6, changeFrequency: "weekly" },
   { path: "/support", priority: 0.5, changeFrequency: "monthly" },
   { path: "/privacy", priority: 0.3, changeFrequency: "yearly" },
@@ -51,6 +60,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date(p.date),
       changeFrequency: "monthly" as const,
       priority: 0.6,
+    })),
+    ...ROLES.map((r) => ({
+      url: `${SITE_URL}/for/${r.slug}`,
+      lastModified: now,
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
     })),
   ];
 }
