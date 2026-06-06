@@ -32,6 +32,11 @@ name: Deploy to Vultr
 on:
   push:
     branches: [main]
+    # Don't rebuild/redeploy prod for changes that can't affect the running app.
+    paths-ignore:
+      - "**.md"
+      - "docs/**"
+      - ".github/workflows/ios-build.yml"
   workflow_dispatch: # Allow manual trigger
 
 # Never let two deploys rebuild the same container concurrently.
@@ -81,6 +86,10 @@ jobs:
           username: ${{ secrets.VULTR_USER }}
           key: ${{ secrets.VULTR_SSH_KEY }}
           script_stop: true
+          # A cold (cache-miss) `docker compose build` on the 2-vCPU server runs
+          # several minutes and exceeds appleboy/ssh-action's 10m default, which
+          # would false-fail the deploy. Give it plenty of headroom.
+          command_timeout: "30m"
           script: |
             set -euo pipefail
             APP_DIR=/root/server/contractorcalc
