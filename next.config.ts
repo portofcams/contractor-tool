@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { withSentryConfig } from "@sentry/nextjs";
 
 /**
  * Next.js Configuration — ProBuildCalc
@@ -20,4 +21,20 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+// Note: Next 16 removed `next lint` and the build-time ESLint pass, so the
+// pre-existing react-hooks / no-explicit-any errors do NOT break `next build`.
+// Lint is surfaced as an advisory (non-blocking) step in CI; type safety is
+// enforced via `tsc --noEmit`. See .github/workflows/deploy.yml.
+
+// Sentry / GlitchTip error monitoring. Dormant unless NEXT_PUBLIC_SENTRY_DSN is
+// set in the environment (see sentry.*.config.ts -> `enabled`). Source-map
+// upload only runs when SENTRY_AUTH_TOKEN is present.
+export default withSentryConfig(nextConfig, {
+  org: process.env.SENTRY_ORG || "ikena-group",
+  project: process.env.SENTRY_PROJECT || "probuildcalc",
+  sentryUrl: process.env.SENTRY_URL || "https://errors.portofcams.com",
+  authToken: process.env.SENTRY_AUTH_TOKEN,
+  silent: !process.env.CI,
+  disableLogger: true,
+  sourcemaps: process.env.SENTRY_AUTH_TOKEN ? undefined : { disable: true },
+});

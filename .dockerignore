@@ -1,0 +1,34 @@
+# Build context hygiene for the production Docker image (context = ./src,
+# dockerfile = Dockerfile). Without this, `COPY . .` in the builder stage
+# slurps host node_modules / .next / .env / macOS ._* junk into the image,
+# clobbering the clean `npm ci` deps and baking secrets into a layer.
+
+# Dependencies & build output (reinstalled/rebuilt inside the image)
+node_modules
+.next
+out
+build
+
+# VCS & CI
+.git
+.github
+
+# Secrets & local env (provided at runtime via docker-compose env_file)
+.env
+.env.*
+!.env.example
+!.env.production.template
+
+# Local databases / volumes accidentally present in the context
+db-data
+*.db
+
+# Tests, native shells, and editor/OS cruft (not needed to build the web app)
+e2e
+test-results
+playwright-report
+ios
+._*
+.DS_Store
+*.log
+tsconfig.tsbuildinfo
