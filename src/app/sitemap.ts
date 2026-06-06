@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { POSTS } from "./blog/posts";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://probuildcalc.com";
 
@@ -30,6 +31,7 @@ const ROUTES: Array<{
   { path: "/tools/stud-calculator", priority: 0.8, changeFrequency: "monthly" },
   { path: "/tools/plywood-calculator", priority: 0.8, changeFrequency: "monthly" },
   { path: "/tools/sod-calculator", priority: 0.8, changeFrequency: "monthly" },
+  { path: "/blog", priority: 0.6, changeFrequency: "weekly" },
   { path: "/support", priority: 0.5, changeFrequency: "monthly" },
   { path: "/privacy", priority: 0.3, changeFrequency: "yearly" },
   { path: "/terms", priority: 0.3, changeFrequency: "yearly" },
@@ -37,10 +39,18 @@ const ROUTES: Array<{
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
-  return ROUTES.map((r) => ({
-    url: `${SITE_URL}${r.path}`,
-    lastModified: now,
-    changeFrequency: r.changeFrequency,
-    priority: r.priority,
-  }));
+  return [
+    ...ROUTES.map((r) => ({
+      url: `${SITE_URL}${r.path}`,
+      lastModified: now,
+      changeFrequency: r.changeFrequency,
+      priority: r.priority,
+    })),
+    ...POSTS.map((p) => ({
+      url: `${SITE_URL}/blog/${p.slug}`,
+      lastModified: new Date(p.date),
+      changeFrequency: "monthly" as const,
+      priority: 0.6,
+    })),
+  ];
 }
