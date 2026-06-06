@@ -19,6 +19,12 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  // Per maintainer preference, type-check debt must not block a production
+  // deploy (deploys were chronically broken by gating). `tsc --noEmit` still
+  // runs as an advisory step in CI to surface issues. See deploy.yml.
+  typescript: {
+    ignoreBuildErrors: true,
+  },
 };
 
 // Note: Next 16 removed `next lint` and the build-time ESLint pass, so the

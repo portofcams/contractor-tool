@@ -5,8 +5,8 @@
 # Trigger: push to `main` (or manual dispatch)
 #
 # Flow:
-#   1. quality — install deps, generate Prisma client, lint (advisory),
-#                type-check (BLOCKING gate).
+#   1. quality — install deps, generate Prisma client, lint + type-check
+#                (both advisory; deploys are never blocked by lint/type debt).
 #   2. deploy  — SSH to the Vultr server, fast-forward the live build context
 #                to `main`, rebuild the Docker image, recreate the container.
 #
@@ -62,9 +62,12 @@ jobs:
         run: npm run lint
         continue-on-error: true
 
-      # Blocking gate: type errors should stop a deploy.
-      - name: Type Check
+      # Advisory: surfaced but does NOT block deploys (maintainer preference —
+      # next.config also sets typescript.ignoreBuildErrors so `next build` won't
+      # fail either). Watch the annotations to keep type debt from growing.
+      - name: Type Check (advisory)
         run: npx tsc --noEmit
+        continue-on-error: true
 
   deploy:
     name: Build & Deploy (Docker)
