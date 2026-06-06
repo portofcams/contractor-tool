@@ -12,6 +12,7 @@ const ROUTES: Array<{
   changeFrequency: "weekly" | "monthly" | "yearly";
 }> = [
   { path: "/landing", priority: 1.0, changeFrequency: "weekly" },
+  { path: "/tools/flooring-calculator", priority: 0.8, changeFrequency: "monthly" },
   { path: "/support", priority: 0.5, changeFrequency: "monthly" },
   { path: "/privacy", priority: 0.3, changeFrequency: "yearly" },
   { path: "/terms", priority: 0.3, changeFrequency: "yearly" },
