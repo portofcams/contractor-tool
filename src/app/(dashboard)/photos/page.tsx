@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -54,11 +54,7 @@ export default function PhotosPage() {
   // Lightbox
   const [lightboxUrl, setLightboxUrl] = useState<string | null>(null);
 
-  useEffect(() => {
-    loadData();
-  }, [filterJob]);
-
-  async function loadData() {
+  const loadData = useCallback(async () => {
     setLoading(true);
     const params = new URLSearchParams();
     if (filterJob) params.set("jobId", filterJob);
@@ -74,7 +70,13 @@ export default function PhotosPage() {
     if (Array.isArray(photosData)) setPhotos(photosData);
     if (Array.isArray(jobsData)) setJobs(jobsData);
     setLoading(false);
-  }
+  }, [filterJob]);
+
+  useEffect(() => {
+    // loadData sets a loading flag synchronously before its first await (load-on-filter pattern)
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    loadData();
+  }, [loadData]);
 
   async function handleUpload(e: React.ChangeEvent<HTMLInputElement>) {
     const files = e.target.files;

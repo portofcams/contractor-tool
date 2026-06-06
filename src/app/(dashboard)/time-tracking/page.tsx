@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -47,21 +47,7 @@ export default function TimeTrackingPage() {
   const [formDesc, setFormDesc] = useState("");
   const [formHours, setFormHours] = useState("");
 
-  useEffect(() => {
-    loadData();
-  }, []);
-
-  // Tick the active timer
-  useEffect(() => {
-    if (!activeTimer) return;
-    const interval = setInterval(() => {
-      const diff = Date.now() - new Date(activeTimer.clockIn).getTime();
-      setElapsed(Math.floor(diff / 1000));
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [activeTimer]);
-
-  async function loadData() {
+  const loadData = useCallback(async () => {
     setLoading(true);
     const [entriesRes, jobsRes, crewRes] = await Promise.all([
       fetch("/api/time-entries"),
@@ -80,7 +66,23 @@ export default function TimeTrackingPage() {
     if (Array.isArray(jobsData)) setJobs(jobsData);
     if (Array.isArray(crewData)) setCrew(crewData);
     setLoading(false);
-  }
+  }, []);
+
+  useEffect(() => {
+    // loadData sets a loading flag synchronously before its first await (load-on-mount pattern)
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    loadData();
+  }, [loadData]);
+
+  // Tick the active timer
+  useEffect(() => {
+    if (!activeTimer) return;
+    const interval = setInterval(() => {
+      const diff = Date.now() - new Date(activeTimer.clockIn).getTime();
+      setElapsed(Math.floor(diff / 1000));
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [activeTimer]);
 
   async function clockIn() {
     const res = await fetch("/api/time-entries", {

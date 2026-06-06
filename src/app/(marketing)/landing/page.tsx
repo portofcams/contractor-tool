@@ -19,7 +19,6 @@ function useCounter(target: number, duration = 1500, suffix = "") {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          let start = 0;
           const startTime = performance.now();
           function tick(now: number) {
             const elapsed = now - startTime;
@@ -449,7 +448,9 @@ export default function LandingPage() {
       {/* ══════ STATS ══════ */}
       <section className="py-12 px-6 md:px-12 border-y border-white/[0.06]">
         <div className="max-w-[1200px] mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+          {/* eslint-disable-next-line react-hooks/refs -- useCounter exposes `ref` for an IntersectionObserver; the binding is not a render-time ref read */}
           <div ref={stat1.ref}>
+            {/* eslint-disable-next-line react-hooks/refs -- `value` is React state from useCounter, not a ref; reading it in render is correct */}
             <p className="text-3xl md:text-4xl font-bold text-[#0a84ff] font-mono">{stat1.value}</p>
             <p className="text-xs text-[#f5f0e8]/40 mt-1.5 font-mono tracking-wider uppercase">Avg quote time</p>
           </div>
@@ -457,11 +458,15 @@ export default function LandingPage() {
             <p className="text-3xl md:text-4xl font-bold text-[#0a84ff] font-mono">±0.5&quot;</p>
             <p className="text-xs text-[#f5f0e8]/40 mt-1.5 font-mono tracking-wider uppercase">LiDAR accuracy</p>
           </div>
+          {/* eslint-disable-next-line react-hooks/refs -- useCounter exposes `ref` for an IntersectionObserver; the binding is not a render-time ref read */}
           <div ref={stat2.ref}>
+            {/* eslint-disable-next-line react-hooks/refs -- `value` is React state from useCounter, not a ref; reading it in render is correct */}
             <p className="text-3xl md:text-4xl font-bold text-[#0a84ff] font-mono">{stat2.value}</p>
             <p className="text-xs text-[#f5f0e8]/40 mt-1.5 font-mono tracking-wider uppercase">Scan view modes</p>
           </div>
+          {/* eslint-disable-next-line react-hooks/refs -- useCounter exposes `ref` for an IntersectionObserver; the binding is not a render-time ref read */}
           <div ref={stat3.ref}>
+            {/* eslint-disable-next-line react-hooks/refs -- `value` is React state from useCounter, not a ref; reading it in render is correct */}
             <p className="text-3xl md:text-4xl font-bold text-[#0a84ff] font-mono">{stat3.value}</p>
             <p className="text-xs text-[#f5f0e8]/40 mt-1.5 font-mono tracking-wider uppercase">Offline capable</p>
           </div>

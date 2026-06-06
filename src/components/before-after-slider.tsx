@@ -18,8 +18,22 @@ export function BeforeAfterSlider({
   height = 300,
 }: BeforeAfterSliderProps) {
   const [position, setPosition] = useState(50);
+  const [containerWidth, setContainerWidth] = useState<number | undefined>(undefined);
   const containerRef = useRef<HTMLDivElement>(null);
   const dragging = useRef(false);
+
+  // Measure container width outside of render so the clipped "before" image
+  // can be sized to the full container (preventing it from squishing as the
+  // clip width changes). Kept in sync via ResizeObserver.
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const measure = () => setContainerWidth(el.offsetWidth);
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   const updatePosition = useCallback((clientX: number) => {
     const el = containerRef.current;
@@ -71,7 +85,7 @@ export function BeforeAfterSlider({
           src={beforeSrc}
           alt={beforeLabel}
           className="absolute inset-0 w-full h-full object-cover"
-          style={{ width: containerRef.current?.offsetWidth || "100%", maxWidth: "none" }}
+          style={{ width: containerWidth ?? "100%", maxWidth: "none" }}
           draggable={false}
         />
       </div>

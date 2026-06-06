@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -30,12 +30,21 @@ interface Job {
   quote: { projectName: string | null };
 }
 
+interface ScanResult {
+  store?: string | null;
+  date?: string | null;
+  items?: ReceiptItem[] | null;
+  subtotal?: number | null;
+  tax: number;
+  total?: number | null;
+}
+
 export default function ReceiptsPage() {
   const [receipts, setReceipts] = useState<ReceiptRecord[]>([]);
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(true);
   const [scanning, setScanning] = useState(false);
-  const [scanResult, setScanResult] = useState<any>(null);
+  const [scanResult, setScanResult] = useState<ScanResult | null>(null);
   const [saving, setSaving] = useState(false);
   const [showCamera, setShowCamera] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -44,11 +53,7 @@ export default function ReceiptsPage() {
   const [saveJobId, setSaveJobId] = useState("");
   const [saveNotes, setSaveNotes] = useState("");
 
-  useEffect(() => {
-    loadData();
-  }, []);
-
-  async function loadData() {
+  const loadData = useCallback(async () => {
     setLoading(true);
     const [receiptsRes, jobsRes] = await Promise.all([
       fetch("/api/receipts"),
@@ -59,7 +64,13 @@ export default function ReceiptsPage() {
     if (Array.isArray(receiptsData)) setReceipts(receiptsData);
     if (Array.isArray(jobsData)) setJobs(jobsData);
     setLoading(false);
-  }
+  }, []);
+
+  useEffect(() => {
+    // loadData sets a loading flag synchronously before its first await (load-on-mount pattern)
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    loadData();
+  }, [loadData]);
 
   async function handleCapture(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];

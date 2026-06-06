@@ -81,6 +81,8 @@ export default function PriceBookPage() {
   }, []);
 
   useEffect(() => {
+    // async data loader (fetches from API on mount) — no lazy-init alternative for network data
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchItems();
   }, [fetchItems]);
 

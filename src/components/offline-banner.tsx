@@ -22,7 +22,28 @@ export function OfflineBanner() {
     }
   }, []);
 
+  const triggerSync = useCallback(async () => {
+    if (syncing) return;
+    setSyncing(true);
+    setSyncResult("");
+
+    try {
+      const result = await fullSync(API_BASE);
+      if (result.synced > 0) {
+        setSyncResult(`Synced ${result.synced} item${result.synced !== 1 ? "s" : ""}`);
+        setTimeout(() => setSyncResult(""), 3000);
+      }
+      await checkPending();
+    } catch {
+      setSyncResult("Sync failed");
+      setTimeout(() => setSyncResult(""), 3000);
+    }
+    setSyncing(false);
+  }, [syncing, checkPending]);
+
   useEffect(() => {
+    // browser-only value (navigator.onLine), must read after mount (SSR hydration)
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsOffline(!navigator.onLine);
     checkPending();
 
@@ -46,26 +67,7 @@ export function OfflineBanner() {
       window.removeEventListener("offline", handleOffline);
       clearInterval(interval);
     };
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  async function triggerSync() {
-    if (syncing) return;
-    setSyncing(true);
-    setSyncResult("");
-
-    try {
-      const result = await fullSync(API_BASE);
-      if (result.synced > 0) {
-        setSyncResult(`Synced ${result.synced} item${result.synced !== 1 ? "s" : ""}`);
-        setTimeout(() => setSyncResult(""), 3000);
-      }
-      await checkPending();
-    } catch {
-      setSyncResult("Sync failed");
-      setTimeout(() => setSyncResult(""), 3000);
-    }
-    setSyncing(false);
-  }
+  }, [checkPending, triggerSync]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Show nothing if online with no pending items and no sync result
   if (!isOffline && pendingCount === 0 && !syncResult) return null;

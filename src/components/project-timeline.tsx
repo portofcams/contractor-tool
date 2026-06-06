@@ -20,7 +20,7 @@ interface Phase {
   tasks: { id: string; title: string; status: string; dueDate: string | null; completedAt: string | null }[];
 }
 
-interface TimelineData {
+export interface TimelineData {
   phases: Phase[];
   criticalPath: string[];
   projectStart: string | null;

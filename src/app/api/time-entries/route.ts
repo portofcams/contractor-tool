@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/db";
+import type { Prisma } from "@prisma/client";
 import { z } from "zod";
 
 const timeEntrySchema = z.object({
@@ -28,7 +29,7 @@ export async function GET(req: Request) {
   const from = url.searchParams.get("from");
   const to = url.searchParams.get("to");
 
-  const where: any = { contractorId: session.user.id };
+  const where: Prisma.TimeEntryWhereInput = { contractorId: session.user.id };
   if (jobId) where.jobId = jobId;
   if (crewMemberId) where.crewMemberId = crewMemberId;
   if (from || to) {
@@ -132,11 +133,12 @@ export async function PATCH(req: Request) {
     }
 
     // Recalculate hours if clocking out
-    const data: any = {};
+    const data: Prisma.TimeEntryUncheckedUpdateInput = {};
     if (updates.clockOut) {
-      data.clockOut = new Date(updates.clockOut);
+      const clockOut = new Date(updates.clockOut);
+      data.clockOut = clockOut;
       const clockIn = existing.clockIn;
-      const diff = data.clockOut.getTime() - clockIn.getTime();
+      const diff = clockOut.getTime() - clockIn.getTime();
       data.hours = Math.round((diff / (1000 * 60 * 60)) * 100) / 100;
     }
     if (updates.hours !== undefined) data.hours = updates.hours;

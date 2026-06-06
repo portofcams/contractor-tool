@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/db";
+import type { Prisma } from "@prisma/client";
 import { z } from "zod";
 import { canSeePrices, stripReceiptPrices } from "@/lib/permissions";
 
@@ -31,7 +32,7 @@ export async function GET(req: Request) {
   const url = new URL(req.url);
   const jobId = url.searchParams.get("jobId");
 
-  const where: any = { contractorId: session.user.id };
+  const where: Prisma.ReceiptWhereInput = { contractorId: session.user.id };
   if (jobId) where.jobId = jobId;
 
   const receipts = await prisma.receipt.findMany({

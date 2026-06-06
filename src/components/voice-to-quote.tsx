@@ -54,6 +54,8 @@ export function VoiceToQuote({ trade, onApply }: VoiceToQuoteProps) {
     const SpeechRecognition =
       window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRecognition) {
+      // browser-only capability check (window.SpeechRecognition), must read after mount (SSR hydration)
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setSupported(false);
       setInputMode("type");
     }

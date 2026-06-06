@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -55,11 +55,7 @@ export function SubManager({ projectId, phases }: { projectId?: string; phases?:
   const [form, setForm] = useState({ companyName: "", contactName: "", email: "", phone: "", trade: "plumbing", licenseNumber: "", insuranceExpiry: "", hourlyRate: "", rating: "", notes: "" });
   const [bidForm, setBidForm] = useState({ phaseId: "", amount: "", description: "", estimatedDays: "", notes: "" });
 
-  useEffect(() => {
-    loadData();
-  }, [filterTrade]);
-
-  async function loadData() {
+  const loadData = useCallback(async () => {
     setLoading(true);
     const url = filterTrade ? `/api/subcontractors?trade=${filterTrade}` : "/api/subcontractors";
     const res = await fetch(url);
@@ -69,7 +65,13 @@ export function SubManager({ projectId, phases }: { projectId?: string; phases?:
       setBids(await bidRes.json());
     }
     setLoading(false);
-  }
+  }, [filterTrade, projectId]);
+
+  useEffect(() => {
+    // loadData sets a loading flag synchronously before its first await (load-on-filter pattern)
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    loadData();
+  }, [loadData]);
 
   async function saveSub(e: React.FormEvent) {
     e.preventDefault();

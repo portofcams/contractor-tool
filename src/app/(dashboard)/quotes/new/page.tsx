@@ -170,6 +170,8 @@ export default function NewQuotePage() {
     // Check LiDAR availability
     roomScanner.isAvailable().then(setLidarAvailable).catch(() => {});
     // Offline detection
+    // browser-only value, must read after mount (SSR hydration)
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsOffline(!navigator.onLine);
     const goOffline = () => setIsOffline(true);
     const goOnline = () => setIsOffline(false);
@@ -186,6 +188,8 @@ export default function NewQuotePage() {
     if (!duplicateFrom) return;
     try {
       const data = JSON.parse(decodeURIComponent(duplicateFrom));
+      // initializing form state from a URL param on mount (one-time duplicateFrom parse)
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       if (data.trade) setTrade(data.trade as typeof trade);
       if (data.materials) {
         setMaterials(data.materials);

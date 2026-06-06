@@ -97,10 +97,11 @@ export const authOptions: NextAuthOptions = {
             token.role = contractor.role || "manager";
           }
         } else {
-          token.id = user.id;
-          token.role = (user as any).role || "manager";
-          if ((user as any).teamMemberId) {
-            token.teamMemberId = (user as any).teamMemberId;
+          const authUser = user as { id: string; role?: string; teamMemberId?: string };
+          token.id = authUser.id;
+          token.role = authUser.role || "manager";
+          if (authUser.teamMemberId) {
+            token.teamMemberId = authUser.teamMemberId;
           }
         }
       }

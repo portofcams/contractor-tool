@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -51,11 +51,7 @@ export default function ProjectsPage() {
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState("createdAt");
 
-  useEffect(() => {
-    loadProjects();
-  }, [statusFilter, search, sort]);
-
-  async function loadProjects() {
+  const loadProjects = useCallback(async () => {
     setLoading(true);
     const params = new URLSearchParams();
     if (statusFilter !== "all") params.set("status", statusFilter);
@@ -64,7 +60,13 @@ export default function ProjectsPage() {
     const res = await fetch(`/api/projects?${params}`);
     setProjects(await res.json());
     setLoading(false);
-  }
+  }, [statusFilter, search, sort]);
+
+  useEffect(() => {
+    // loadProjects sets a loading flag synchronously before its first await (load-on-filter pattern)
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    loadProjects();
+  }, [loadProjects]);
 
   return (
     <div className="space-y-6">

@@ -23,6 +23,8 @@ export function AROverlayMode({ scan }: Props) {
 
   useEffect(() => {
     // AR overlay requires native iOS with the USDZ model
+    // browser/native-only value (Capacitor platform), must read after mount (SSR hydration)
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setArAvailable(
       Capacitor.isNativePlatform() &&
       Capacitor.getPlatform() === "ios" &&

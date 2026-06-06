@@ -45,7 +45,7 @@ export function canEditSettings(role: string): boolean {
 /**
  * Strip price fields from a quote/materials for lead visibility
  */
-export function stripPrices(quote: any): any {
+export function stripPrices(quote: Record<string, unknown>): Record<string, unknown> {
   const stripped = { ...quote };
   delete stripped.subtotal;
   delete stripped.total;
@@ -54,7 +54,7 @@ export function stripPrices(quote: any): any {
   delete stripped.laborCost;
 
   if (stripped.materials && Array.isArray(stripped.materials)) {
-    stripped.materials = stripped.materials.map((m: any) => ({
+    stripped.materials = stripped.materials.map((m: Record<string, unknown>) => ({
       item: m.item,
       qty: m.qty,
       unit: m.unit,
@@ -68,13 +68,13 @@ export function stripPrices(quote: any): any {
 /**
  * Strip price from a receipt for lead visibility
  */
-export function stripReceiptPrices(receipt: any): any {
+export function stripReceiptPrices(receipt: Record<string, unknown>): Record<string, unknown> {
   const stripped = { ...receipt };
   delete stripped.total;
   delete stripped.subtotal;
   delete stripped.tax;
   if (stripped.items && Array.isArray(stripped.items)) {
-    stripped.items = stripped.items.map((item: any) => ({
+    stripped.items = stripped.items.map((item: Record<string, unknown>) => ({
       description: item.description,
       category: item.category,
       // no amount

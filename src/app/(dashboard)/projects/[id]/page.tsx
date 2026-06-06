@@ -1,13 +1,14 @@
 "use client";
 
-import { useState, useEffect, use } from "react";
+import { useState, useEffect, useCallback, use } from "react";
+import type { Prisma } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ProjectStats } from "@/components/project-stats";
-import { ProjectTimeline } from "@/components/project-timeline";
-import { TaskBoard } from "@/components/task-board";
+import { ProjectTimeline, type TimelineData } from "@/components/project-timeline";
+import { TaskBoard, type Task as BoardTask } from "@/components/task-board";
 import { DailyLogForm } from "@/components/daily-log-form";
 import { ChangeOrderForm } from "@/components/change-order-form";
 import { PhaseForm } from "@/components/phase-form";
@@ -43,17 +44,110 @@ const WEATHER_ICONS: Record<string, string> = {
 
 const DOC_CATEGORIES = ["permit", "contract", "insurance", "plan", "photo", "invoice", "general"];
 
+// Recursively maps Date -> string, matching the shape after JSON serialization
+// (the project API responses are consumed client-side via `await res.json()`).
+type Serialized<T> = T extends Date
+  ? string
+  : T extends (infer U)[]
+  ? Serialized<U>[]
+  : T extends object
+  ? { [K in keyof T]: Serialized<T[K]> }
+  : T;
+
+// Mirrors the `include` shape returned by GET /api/projects/[id]/route.ts
+type ProjectDetailRaw = Prisma.ProjectGetPayload<{
+  include: {
+    customer: true;
+    phases: {
+      include: {
+        tasks: true;
+        subcontractorBids: { include: { subcontractor: { select: { companyName: true; trade: true } } } };
+        dependsOn: { select: { id: true; name: true } };
+      };
+    };
+    tasks: {
+      include: {
+        phase: { select: { id: true; name: true; color: true } };
+        crewMember: { select: { id: true; name: true } };
+        subcontractor: { select: { id: true; companyName: true } };
+      };
+    };
+    dailyLogs: true;
+    changeOrders: true;
+    documents: true;
+    quotes: { include: { customer: { select: { name: true } } } };
+    jobs: { include: { quote: { select: { quoteNumber: true; trade: true } } } };
+  };
+}>;
+type ProjectDetail = Serialized<ProjectDetailRaw>;
+
+type ProjectPhaseDetail = ProjectDetail["phases"][number];
+type DailyLogDetail = ProjectDetail["dailyLogs"][number];
+type ChangeOrderDetail = ProjectDetail["changeOrders"][number];
+type ProjectDocumentDetail = ProjectDetail["documents"][number];
+
+// Shape returned by GET /api/projects/[id]/stats/route.ts
+interface ProjectStatsData {
+  completion: number;
+  totalTasks: number;
+  doneTasks: number;
+  blockedTasks: number;
+  totalPhases: number;
+  donePhases: number;
+  daysRemaining: number | null;
+  totalDays: number | null;
+  elapsedDays: number | null;
+  timeProgress: number | null;
+  budgetEstimated: number;
+  budgetAdjusted: number;
+  budgetSpent: number;
+  budgetHealth: string;
+  scheduleHealth: string;
+  changeOrderCount: number;
+  changeOrderCost: number;
+  changeOrderDays: number;
+  totalDelayHours: number;
+  status: string;
+}
+
+// Shape returned by GET /api/projects/[id]/budget/route.ts
+interface ProjectBudgetData {
+  originalBudget: number;
+  changeOrdersApproved: number;
+  changeOrdersPending: number;
+  adjustedBudget: number;
+  totalSpent: number;
+  remaining: number;
+  percentUsed: number;
+  health: string;
+  phases: { id: string; name: string; estimated: number; actual: number; variance: number; status: string }[];
+  changeOrders: { id: string; orderNumber: number; title: string; costImpact: number; daysImpact: number; status: string }[];
+}
+
+interface EditFormState {
+  name: string;
+  description: string;
+  status: string;
+  priority: string;
+  address: string;
+  startDate: string;
+  estimatedEnd: string;
+  budgetEstimated: string;
+}
+
 export default function ProjectDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const router = useRouter();
-  const [project, setProject] = useState<any>(null);
-  const [stats, setStats] = useState<any>(null);
-  const [timeline, setTimeline] = useState<any>(null);
-  const [budget, setBudget] = useState<any>(null);
+  const [project, setProject] = useState<ProjectDetail | null>(null);
+  const [stats, setStats] = useState<ProjectStatsData | null>(null);
+  const [timeline, setTimeline] = useState<TimelineData | null>(null);
+  const [budget, setBudget] = useState<ProjectBudgetData | null>(null);
   const [tab, setTab] = useState("overview");
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(false);
-  const [editForm, setEditForm] = useState<any>({});
+  const [editForm, setEditForm] = useState<EditFormState>({
+    name: "", description: "", status: "", priority: "", address: "", startDate: "", estimatedEnd: "", budgetEstimated: "",
+  });
 
   // Form states
   const [showPhaseForm, setShowPhaseForm] = useState(false);
@@ -63,30 +157,30 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
   const [showDocForm, setShowDocForm] = useState(false);
   const [taskForm, setTaskForm] = useState({ title: "", description: "", phaseId: "", priority: "medium", assigneeType: "", crewMemberId: "", subcontractorId: "", dueDate: "", estimatedHours: "", estimatedCost: "" });
   const [docForm, setDocForm] = useState({ name: "", fileUrl: "", fileType: "general", category: "general", notes: "" });
-  const [editingTask, setEditingTask] = useState<any>(null);
+  const [editingTask, setEditingTask] = useState<BoardTask | null>(null);
 
   // Filter states
   const [taskFilterPhase, setTaskFilterPhase] = useState("");
   const [taskFilterPriority, setTaskFilterPriority] = useState("");
 
-  useEffect(() => { loadAll(); }, [id]);
-
-  async function loadAll() {
+  const loadAll = useCallback(async () => {
     setLoading(true);
     const [projRes, statsRes] = await Promise.all([
       fetch(`/api/projects/${id}`),
       fetch(`/api/projects/${id}/stats`),
     ]);
-    const proj = await projRes.json();
+    const proj: ProjectDetail = await projRes.json();
     setProject(proj);
     setStats(await statsRes.json());
     setEditForm({
       name: proj.name, description: proj.description || "", status: proj.status, priority: proj.priority,
-      address: proj.address || "", startDate: proj.startDate?.split("T")[0] || "", estimatedEnd: proj.estimatedEnd?.split("T")[0] || "",
+      address: proj.address || "", startDate: proj.startDate?.toString().split("T")[0] || "", estimatedEnd: proj.estimatedEnd?.toString().split("T")[0] || "",
       budgetEstimated: proj.budgetEstimated?.toString() || "",
     });
     setLoading(false);
-  }
+  }, [id]);
+
+  useEffect(() => { void (async () => { await loadAll(); })(); }, [loadAll]);
 
   async function loadTimeline() {
     const res = await fetch(`/api/projects/${id}/timeline`);
@@ -99,8 +193,10 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
   }
 
   useEffect(() => {
-    if (tab === "timeline" && !timeline) loadTimeline();
-    if (tab === "budget" && !budget) loadBudget();
+    void (async () => {
+      if (tab === "timeline" && !timeline) await loadTimeline();
+      if (tab === "budget" && !budget) await loadBudget();
+    })();
   }, [tab]);
 
   async function saveEdit() {
@@ -273,9 +369,9 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
                 <p className="text-muted-foreground text-center py-4">No activity yet</p>
               ) : (
                 <div className="space-y-3">
-                  {project.dailyLogs.slice(0, 5).map((log: any) => (
+                  {project.dailyLogs.slice(0, 5).map((log: DailyLogDetail) => (
                     <div key={log.id} className="flex items-start gap-3 p-3 rounded-lg bg-secondary/30">
-                      <span className="text-lg">{WEATHER_ICONS[log.weather] || "📋"}</span>
+                      <span className="text-lg">{WEATHER_ICONS[log.weather ?? ""] || "📋"}</span>
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium">{new Date(log.date).toLocaleDateString()}</p>
                         {log.workCompleted && <p className="text-xs text-muted-foreground line-clamp-2">{log.workCompleted}</p>}
@@ -283,7 +379,7 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
                       </div>
                     </div>
                   ))}
-                  {project.changeOrders.filter((co: any) => co.status === "proposed").map((co: any) => (
+                  {project.changeOrders.filter((co: ChangeOrderDetail) => co.status === "proposed").map((co: ChangeOrderDetail) => (
                     <div key={co.id} className="flex items-center justify-between p-3 rounded-lg bg-purple-500/5 border border-purple-500/20">
                       <div>
                         <p className="text-sm font-medium">CO #{co.orderNumber}: {co.title}</p>
@@ -303,8 +399,8 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
               <CardHeader><CardTitle>Phases</CardTitle></CardHeader>
               <CardContent>
                 <div className="space-y-2">
-                  {project.phases.map((phase: any) => {
-                    const done = phase.tasks.filter((t: any) => t.status === "done").length;
+                  {project.phases.map((phase: ProjectPhaseDetail) => {
+                    const done = phase.tasks.filter((t) => t.status === "done").length;
                     const total = phase.tasks.length;
                     const pct = total > 0 ? Math.round((done / total) * 100) : 0;
                     return (
@@ -336,7 +432,7 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
           </div>
           {showPhaseForm && (
             <Card><CardContent className="pt-6">
-              <PhaseForm projectId={id} existingPhases={project.phases.map((p: any) => ({ id: p.id, name: p.name }))} onSaved={() => { setShowPhaseForm(false); loadAll(); loadTimeline(); }} onCancel={() => setShowPhaseForm(false)} />
+              <PhaseForm projectId={id} existingPhases={project.phases.map((p: ProjectPhaseDetail) => ({ id: p.id, name: p.name }))} onSaved={() => { setShowPhaseForm(false); loadAll(); loadTimeline(); }} onCancel={() => setShowPhaseForm(false)} />
             </CardContent></Card>
           )}
           {timeline ? (
@@ -349,7 +445,7 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
           {/* Phase list with actions */}
           {project.phases.length > 0 && (
             <div className="space-y-2">
-              {project.phases.map((phase: any) => (
+              {project.phases.map((phase: ProjectPhaseDetail) => (
                 <Card key={phase.id}>
                   <CardContent className="pt-4">
                     <div className="flex items-center justify-between">
@@ -392,7 +488,7 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
             <div className="flex gap-2">
               <select value={taskFilterPhase} onChange={(e) => setTaskFilterPhase(e.target.value)} className="px-3 py-2 rounded-md border border-border bg-background text-sm">
                 <option value="">All phases</option>
-                {project.phases.map((p: any) => <option key={p.id} value={p.id}>{p.name}</option>)}
+                {project.phases.map((p: ProjectPhaseDetail) => <option key={p.id} value={p.id}>{p.name}</option>)}
               </select>
               <select value={taskFilterPriority} onChange={(e) => setTaskFilterPriority(e.target.value)} className="px-3 py-2 rounded-md border border-border bg-background text-sm">
                 <option value="">All priorities</option>
@@ -418,7 +514,7 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
                     <label className="text-sm font-medium">Phase</label>
                     <select value={taskForm.phaseId} onChange={(e) => setTaskForm({ ...taskForm, phaseId: e.target.value })} className="w-full mt-1 px-3 py-2 rounded-md border border-border bg-background text-sm">
                       <option value="">No phase</option>
-                      {project.phases.map((p: any) => <option key={p.id} value={p.id}>{p.name}</option>)}
+                      {project.phases.map((p: ProjectPhaseDetail) => <option key={p.id} value={p.id}>{p.name}</option>)}
                     </select>
                   </div>
                   <div>
@@ -483,14 +579,14 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
             <p className="text-muted-foreground text-center py-8">No daily logs yet</p>
           ) : (
             <div className="space-y-3">
-              {project.dailyLogs.map((log: any) => {
+              {project.dailyLogs.map((log: DailyLogDetail) => {
                 const crew = log.crewOnSite as { name: string; role: string; hoursWorked: number }[] | null;
                 return (
                   <Card key={log.id}>
                     <CardContent className="pt-4">
                       <div className="flex items-start justify-between">
                         <div className="flex items-center gap-3">
-                          <span className="text-2xl">{WEATHER_ICONS[log.weather] || "📋"}</span>
+                          <span className="text-2xl">{WEATHER_ICONS[log.weather ?? ""] || "📋"}</span>
                           <div>
                             <p className="font-medium">{new Date(log.date).toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric" })}</p>
                             <div className="flex gap-3 text-xs text-muted-foreground">
@@ -532,8 +628,8 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
               <h2 className="text-lg font-semibold">Change Orders</h2>
               {project.changeOrders.length > 0 && (
                 <p className="text-sm text-muted-foreground">
-                  Approved total: <span className={project.changeOrders.filter((co: any) => co.status === "approved").reduce((s: number, co: any) => s + co.costImpact, 0) >= 0 ? "text-red-500" : "text-green-500"}>
-                    ${project.changeOrders.filter((co: any) => co.status === "approved").reduce((s: number, co: any) => s + co.costImpact, 0).toLocaleString()}
+                  Approved total: <span className={project.changeOrders.filter((co: ChangeOrderDetail) => co.status === "approved").reduce((s: number, co: ChangeOrderDetail) => s + co.costImpact, 0) >= 0 ? "text-red-500" : "text-green-500"}>
+                    ${project.changeOrders.filter((co: ChangeOrderDetail) => co.status === "approved").reduce((s: number, co: ChangeOrderDetail) => s + co.costImpact, 0).toLocaleString()}
                   </span>
                 </p>
               )}
@@ -549,7 +645,7 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
             <p className="text-muted-foreground text-center py-8">No change orders</p>
           ) : (
             <div className="space-y-2">
-              {project.changeOrders.map((co: any) => (
+              {project.changeOrders.map((co: ChangeOrderDetail) => (
                 <Card key={co.id}>
                   <CardContent className="pt-4">
                     <div className="flex items-center justify-between">
@@ -586,7 +682,7 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
       {tab === "subs" && (
         <SubManager
           projectId={id}
-          phases={project.phases.map((p: any) => ({ id: p.id, name: p.name }))}
+          phases={project.phases.map((p: ProjectPhaseDetail) => ({ id: p.id, name: p.name }))}
         />
       )}
 
@@ -631,13 +727,13 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
           ) : (
             <div className="space-y-2">
               {DOC_CATEGORIES.map((cat) => {
-                const docs = project.documents.filter((d: any) => d.category === cat);
+                const docs = project.documents.filter((d: ProjectDocumentDetail) => d.category === cat);
                 if (docs.length === 0) return null;
                 return (
                   <Card key={cat}>
                     <CardHeader className="pb-2"><CardTitle className="text-sm">{cat.charAt(0).toUpperCase() + cat.slice(1)}s</CardTitle></CardHeader>
                     <CardContent>
-                      {docs.map((doc: any) => (
+                      {docs.map((doc: ProjectDocumentDetail) => (
                         <div key={doc.id} className="flex items-center justify-between py-2 border-b border-border last:border-0">
                           <div>
                             <a href={doc.fileUrl} target="_blank" rel="noopener noreferrer" className="text-sm font-medium text-primary hover:underline">{doc.name}</a>
@@ -713,7 +809,7 @@ export default function ProjectDetailPage({ params }: { params: Promise<{ id: st
                         </tr>
                       </thead>
                       <tbody>
-                        {budget.phases.map((p: any) => (
+                        {budget.phases.map((p: ProjectBudgetData["phases"][number]) => (
                           <tr key={p.id} className="border-b border-border/50">
                             <td className="py-2">{p.name}</td>
                             <td className="text-right py-2">${p.estimated.toLocaleString()}</td>

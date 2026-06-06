@@ -38,6 +38,8 @@ export function GlobalSearch() {
     if (debounceRef.current) clearTimeout(debounceRef.current);
 
     if (query.length < 2) {
+      // clearing debounced-search results when query too short (part of the fetch/timer sync effect)
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setResults(null);
       setOpen(false);
       return;

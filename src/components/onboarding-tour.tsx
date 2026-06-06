@@ -105,6 +105,8 @@ export function OnboardingTour({ onComplete }: { onComplete: () => void }) {
 
   useEffect(() => {
     const done = localStorage.getItem("onboarding_complete");
+    // browser-only value (localStorage), must read after mount (SSR hydration)
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (done) setDismissed(true);
   }, []);
 

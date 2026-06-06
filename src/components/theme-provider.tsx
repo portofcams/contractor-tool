@@ -25,6 +25,8 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const stored = localStorage.getItem("theme") as Theme | null;
     if (stored) {
+      // browser-only value (localStorage), must read after mount (SSR hydration)
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setThemeState(stored);
     }
     setMounted(true);

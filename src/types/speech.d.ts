@@ -36,6 +36,7 @@ interface SpeechRecognitionErrorEvent extends Event {
   message: string;
 }
 
+// eslint-disable-next-line no-var -- global augmentation: `var` is required to declare a value on globalThis
 declare var SpeechRecognition: {
   new (): SpeechRecognition;
   prototype: SpeechRecognition;

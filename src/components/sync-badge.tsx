@@ -8,6 +8,8 @@ export function SyncBadge() {
   const [pendingCount, setPendingCount] = useState(0);
 
   useEffect(() => {
+    // browser-only value (navigator.onLine), must read after mount (SSR hydration)
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsOffline(!navigator.onLine);
 
     async function checkPending() {
