@@ -35,6 +35,12 @@ const TOOLS = [
   { href: "/tools/baseboard-calculator", name: "Baseboard & Trim Calculator", desc: "Linear feet and pieces of baseboard, crown, or trim." },
   { href: "/tools/fence-calculator", name: "Fence Calculator", desc: "Posts, rails, and pickets for a fence run." },
   { href: "/tools/mulch-calculator", name: "Mulch & Soil Calculator", desc: "Cubic yards and bags of mulch, topsoil, or gravel." },
+  { href: "/tools/carpet-calculator", name: "Carpet Calculator", desc: "Square feet and square yards of carpet for a room." },
+  { href: "/tools/insulation-calculator", name: "Insulation Calculator", desc: "Bags or batts of insulation for walls and attics." },
+  { href: "/tools/gravel-calculator", name: "Gravel Calculator", desc: "Cubic yards and tons of gravel or crushed stone." },
+  { href: "/tools/stud-calculator", name: "Stud & Framing Calculator", desc: "Studs and plate material for a stud wall." },
+  { href: "/tools/plywood-calculator", name: "Plywood & Sheathing Calculator", desc: "Sheets of plywood, OSB, or subfloor." },
+  { href: "/tools/sod-calculator", name: "Sod Calculator", desc: "Square feet, yards, and pallets of sod." },
 ];
 
 export default function ToolsIndexPage() {
