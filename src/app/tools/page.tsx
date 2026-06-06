@@ -29,6 +29,12 @@ const TOOLS = [
   { href: "/tools/paint-calculator", name: "Paint Calculator", desc: "Gallons of paint for a room — doors and windows deducted." },
   { href: "/tools/drywall-calculator", name: "Drywall Calculator", desc: "Sheets of drywall plus screw, compound, and tape estimates." },
   { href: "/tools/concrete-calculator", name: "Concrete Calculator", desc: "Cubic yards of ready-mix or bags for a slab." },
+  { href: "/tools/tile-calculator", name: "Tile Calculator", desc: "Tiles and boxes for a floor or wall, with waste." },
+  { href: "/tools/roofing-calculator", name: "Roofing Calculator", desc: "Roof area, squares, and shingle bundles by pitch." },
+  { href: "/tools/deck-calculator", name: "Deck Board Calculator", desc: "Deck boards and total linear feet for your deck." },
+  { href: "/tools/baseboard-calculator", name: "Baseboard & Trim Calculator", desc: "Linear feet and pieces of baseboard, crown, or trim." },
+  { href: "/tools/fence-calculator", name: "Fence Calculator", desc: "Posts, rails, and pickets for a fence run." },
+  { href: "/tools/mulch-calculator", name: "Mulch & Soil Calculator", desc: "Cubic yards and bags of mulch, topsoil, or gravel." },
 ];
 
 export default function ToolsIndexPage() {
