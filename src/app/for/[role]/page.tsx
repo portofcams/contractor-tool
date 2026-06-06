@@ -22,7 +22,7 @@ export async function generateMetadata({
     title: `${r.title} | ProBuildCalc`,
     description: r.description,
     alternates: { canonical: path },
-    openGraph: { type: "website", siteName: "ProBuildCalc", title: `${r.title} | ProBuildCalc`, description: r.description, url: `${SITE_URL}${path}` },
+    openGraph: { type: "website", siteName: "ProBuildCalc", title: `${r.title} | ProBuildCalc`, description: r.description, url: `${SITE_URL}${path}`, images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "ProBuildCalc" }] },
     twitter: { card: "summary_large_image", title: `${r.title} | ProBuildCalc`, description: r.description },
   };
 }

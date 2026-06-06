@@ -11,7 +11,7 @@ const DESCRIPTION = "Free rebar calculator. Enter slab size and grid spacing to 
 export const metadata: Metadata = {
   title: `${TITLE} | ProBuildCalc`, description: DESCRIPTION, alternates: { canonical: PATH },
   keywords: ["rebar calculator", "rebar grid calculator", "how much rebar do I need", "slab rebar calculator"],
-  openGraph: { type: "website", siteName: "ProBuildCalc", title: `${TITLE} | ProBuildCalc`, description: DESCRIPTION, url: `${SITE_URL}${PATH}` },
+  openGraph: { type: "website", siteName: "ProBuildCalc", title: `${TITLE} | ProBuildCalc`, description: DESCRIPTION, url: `${SITE_URL}${PATH}`, images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "ProBuildCalc" }] },
   twitter: { card: "summary", title: `${TITLE} | ProBuildCalc`, description: DESCRIPTION },
 };
 

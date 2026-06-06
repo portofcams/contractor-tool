@@ -38,6 +38,7 @@ export const metadata: Metadata = {
     description:
       "Calculate materials needed from floor plans in 30 seconds. Professional quotes for flooring, painting, and drywall contractors.",
     url: SITE_URL,
+    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "ProBuildCalc" }],
   },
   twitter: {
     card: "summary_large_image",

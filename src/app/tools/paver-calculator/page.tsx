@@ -11,7 +11,7 @@ const DESCRIPTION = "Free paver calculator. Enter your patio size and paver dime
 export const metadata: Metadata = {
   title: `${TITLE} | ProBuildCalc`, description: DESCRIPTION, alternates: { canonical: PATH },
   keywords: ["paver calculator", "how many pavers do I need", "patio paver calculator", "paver base calculator"],
-  openGraph: { type: "website", siteName: "ProBuildCalc", title: `${TITLE} | ProBuildCalc`, description: DESCRIPTION, url: `${SITE_URL}${PATH}` },
+  openGraph: { type: "website", siteName: "ProBuildCalc", title: `${TITLE} | ProBuildCalc`, description: DESCRIPTION, url: `${SITE_URL}${PATH}`, images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "ProBuildCalc" }] },
   twitter: { card: "summary", title: `${TITLE} | ProBuildCalc`, description: DESCRIPTION },
 };
 

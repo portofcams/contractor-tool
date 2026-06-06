@@ -11,7 +11,7 @@ const DESCRIPTION = "Free retaining wall calculator. Enter wall length, height, 
 export const metadata: Metadata = {
   title: `${TITLE} | ProBuildCalc`, description: DESCRIPTION, alternates: { canonical: PATH },
   keywords: ["retaining wall calculator", "retaining wall block calculator", "how many blocks for a retaining wall", "block wall calculator"],
-  openGraph: { type: "website", siteName: "ProBuildCalc", title: `${TITLE} | ProBuildCalc`, description: DESCRIPTION, url: `${SITE_URL}${PATH}` },
+  openGraph: { type: "website", siteName: "ProBuildCalc", title: `${TITLE} | ProBuildCalc`, description: DESCRIPTION, url: `${SITE_URL}${PATH}`, images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "ProBuildCalc" }] },
   twitter: { card: "summary", title: `${TITLE} | ProBuildCalc`, description: DESCRIPTION },
 };
 

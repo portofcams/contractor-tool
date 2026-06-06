@@ -11,7 +11,7 @@ const DESCRIPTION = "Free wallpaper calculator. Enter room size, doors, and wind
 export const metadata: Metadata = {
   title: `${TITLE} | ProBuildCalc`, description: DESCRIPTION, alternates: { canonical: PATH },
   keywords: ["wallpaper calculator", "how many rolls of wallpaper", "wallpaper rolls calculator", "wallpaper coverage"],
-  openGraph: { type: "website", siteName: "ProBuildCalc", title: `${TITLE} | ProBuildCalc`, description: DESCRIPTION, url: `${SITE_URL}${PATH}` },
+  openGraph: { type: "website", siteName: "ProBuildCalc", title: `${TITLE} | ProBuildCalc`, description: DESCRIPTION, url: `${SITE_URL}${PATH}`, images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "ProBuildCalc" }] },
   twitter: { card: "summary", title: `${TITLE} | ProBuildCalc`, description: DESCRIPTION },
 };
 

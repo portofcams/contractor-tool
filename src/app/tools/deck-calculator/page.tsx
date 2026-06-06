@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   keywords: ["deck calculator", "deck board calculator", "how many deck boards", "decking calculator"],
   openGraph: {
     type: "website", siteName: "ProBuildCalc", title: `${TITLE} | ProBuildCalc`, description: DESCRIPTION,
-    url: `${SITE_URL}${PATH}`, images: [{ url: "/icon-512.png", width: 512, height: 512, alt: "ProBuildCalc" }],
+    url: `${SITE_URL}${PATH}`, images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "ProBuildCalc" }],
   },
   twitter: { card: "summary", title: `${TITLE} | ProBuildCalc`, description: DESCRIPTION },
 };

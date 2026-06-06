@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   title: "ProBuildCalc by Trade — Flooring, Paint, Concrete & More",
   description: "See how ProBuildCalc's LiDAR scanning and material takeoffs work for your trade — flooring, painting, remodeling, decks, and concrete.",
   alternates: { canonical: "/for" },
-  openGraph: { type: "website", siteName: "ProBuildCalc", title: "ProBuildCalc by Trade", description: "LiDAR scanning and material takeoffs for your trade.", url: `${SITE_URL}/for` },
+  openGraph: { type: "website", siteName: "ProBuildCalc", title: "ProBuildCalc by Trade", description: "LiDAR scanning and material takeoffs for your trade.", url: `${SITE_URL}/for`, images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "ProBuildCalc" }] },
 };
 
 export default function ForIndex() {

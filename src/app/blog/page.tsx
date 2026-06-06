@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     title: "Estimating & Takeoff Guides for Contractors | ProBuildCalc",
     description: "How-to guides and cost breakdowns for contractors and DIYers.",
     url: `${SITE_URL}/blog`,
-    images: [{ url: "/icon-512.png", width: 512, height: 512, alt: "ProBuildCalc" }],
+    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "ProBuildCalc" }],
   },
 };
 
