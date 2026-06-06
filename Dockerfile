@@ -12,6 +12,13 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
+# Sentry/GlitchTip DSN must be present at build time: Next inlines NEXT_PUBLIC_*
+# into the bundle during `next build` (runtime env is too late). Public,
+# non-secret; defaults empty so non-prod builds stay dormant. The real value is
+# passed via docker-compose `build.args` on the server.
+ARG NEXT_PUBLIC_SENTRY_DSN=""
+ENV NEXT_PUBLIC_SENTRY_DSN=$NEXT_PUBLIC_SENTRY_DSN
+
 # Generate Prisma client
 RUN npx prisma generate
 
