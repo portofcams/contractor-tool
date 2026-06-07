@@ -220,6 +220,77 @@ export const ROLES: Role[] = [
       { href: "/blog/how-to-bid-a-construction-job", label: "How to Bid a Construction Job" },
     ],
   },
+  {
+    slug: "framing-contractors",
+    trade: "Framing Contractors",
+    title: "ProBuildCalc for Framing Contractors — Studs, Joists & Cost Estimates",
+    description: "Measure a floor plan, take off stud counts, joist lengths, and rough opening dimensions, and quote framing jobs fast — the estimating app built for framing contractors.",
+    dek: "Scan the floor plan or measure on-site, and walk away with stud counts, joist schedule, rough opening dimensions, and a framing cost estimate — before the next crew shows up.",
+    benefits: [
+      "Calculate wall stud counts at any spacing from measured linear footage — in seconds.",
+      "Take off floor joist quantities with the right span and spacing for the load.",
+      "Size rough openings for windows and doors and confirm header requirements.",
+      "Quote framing by square foot with a materials list you can hand to the lumber yard.",
+    ],
+    tools: [
+      { href: "/tools/stud-calculator", label: "Stud Calculator" },
+      { href: "/tools/joist-calculator", label: "Joist Calculator" },
+      { href: "/tools/rough-opening-calculator", label: "Rough Opening Calculator" },
+      { href: "/tools/framing-cost-calculator", label: "Framing Cost Calculator" },
+    ],
+    guides: [
+      { href: "/blog/wall-framing-stud-spacing-guide", label: "Wall Framing & Stud Spacing Guide" },
+      { href: "/blog/framing-cost-per-square-foot", label: "Framing Cost Per Square Foot" },
+      { href: "/blog/window-rough-opening-size-chart", label: "Window Rough Opening Size Chart" },
+    ],
+  },
+  {
+    slug: "drywall-contractors",
+    trade: "Drywall Contractors",
+    title: "ProBuildCalc for Drywall Contractors — Sheets, Compound & Quotes",
+    description: "Measure wall and ceiling area, take off drywall sheet counts with the right waste factor, and quote drywall jobs on-site — the estimating app built for drywall contractors.",
+    dek: "Measure wall and ceiling square footage in one scan, get your sheet count and compound estimate, and send a quote before the competition finishes measuring.",
+    benefits: [
+      "Capture wall and ceiling area from a LiDAR scan — no counting studs by hand.",
+      "Calculate sheet count with the right waste factor for your layout and room shape.",
+      "Estimate joint compound, tape, and corner bead from the same measurements.",
+      "Quote drywall jobs on-site with a materials list matched to what you will order.",
+    ],
+    tools: [
+      { href: "/tools/drywall-calculator", label: "Drywall Calculator" },
+      { href: "/tools/square-footage-calculator", label: "Square Footage Calculator" },
+      { href: "/tools/stud-calculator", label: "Stud Calculator" },
+      { href: "/tools/paint-calculator", label: "Paint Calculator" },
+    ],
+    guides: [
+      { href: "/blog/how-to-estimate-drywall", label: "How to Estimate Drywall" },
+      { href: "/blog/drywall-installation-cost-guide", label: "Drywall Installation Cost Guide" },
+      { href: "/blog/how-to-bid-a-construction-job", label: "How to Bid a Construction Job" },
+    ],
+  },
+  {
+    slug: "plumbers",
+    trade: "Plumbers",
+    title: "ProBuildCalc for Plumbers — PEX Pipe, Pool Volume & Material Estimates",
+    description: "Calculate PEX pipe footage for radiant heat and plumbing rough-ins, estimate pool volume for fill and chemical costs, and quote plumbing jobs faster.",
+    dek: "Get PEX pipe footage by zone and spacing, pool fill volume in gallons, and a rough-in materials list — all from measurements you already have on the job site.",
+    benefits: [
+      "Calculate PEX tubing footage for radiant floor heat at any spacing and zone layout.",
+      "Estimate pool fill volume in gallons for accurate chemical dosing and fill cost quotes.",
+      "Measure room area and convert to pipe footage for rough-in plumbing estimates.",
+      "Quote plumbing rough-ins with a materials list you can send to the supply house.",
+    ],
+    tools: [
+      { href: "/tools/pex-pipe-calculator", label: "PEX Pipe Calculator" },
+      { href: "/tools/pool-volume-calculator", label: "Pool Volume Calculator" },
+      { href: "/tools/square-footage-calculator", label: "Square Footage Calculator" },
+      { href: "/tools/concrete-calculator", label: "Concrete Calculator" },
+    ],
+    guides: [
+      { href: "/blog/pex-pipe-sizing-guide", label: "PEX Pipe Sizing Guide" },
+      { href: "/blog/how-to-bid-a-construction-job", label: "How to Bid a Construction Job" },
+    ],
+  },
 ];
 
 export const getRole = (slug: string): Role | undefined => ROLES.find((r) => r.slug === slug);
