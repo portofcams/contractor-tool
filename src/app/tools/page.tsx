@@ -62,6 +62,14 @@ const TOOLS = [
   { href: "/tools/joist-calculator", name: "Floor Joist Calculator", desc: "Joist count and spacing for a deck or floor framing." },
   { href: "/tools/rough-opening-calculator", name: "Rough Opening Calculator", desc: "Rough opening size for doors and windows." },
   { href: "/tools/pool-volume-calculator", name: "Pool Volume Calculator", desc: "Gallons and liters for rectangular, oval, or round pools." },
+  { href: "/tools/window-calculator", name: "Window Calculator", desc: "Window count, glass area, and rough opening size for a wall." },
+  { href: "/tools/mortar-calculator", name: "Mortar Calculator", desc: "Bags of mortar for brick or CMU block walls." },
+  { href: "/tools/pex-pipe-calculator", name: "PEX Pipe Calculator", desc: "Total PEX footage for radiant floor heating or plumbing." },
+  { href: "/tools/framing-cost-calculator", name: "Framing Cost Calculator", desc: "Stud count, linear feet, and lumber cost estimate for a wall." },
+  { href: "/tools/driveway-cost-calculator", name: "Driveway Cost Calculator", desc: "Concrete vs asphalt driveway cost estimate by square footage." },
+  { href: "/tools/bathroom-tile-calculator", name: "Bathroom Tile Calculator", desc: "Floor and wall tile boxes plus grout for a bathroom remodel." },
+  { href: "/tools/wood-fence-cost-calculator", name: "Wood Fence Cost Calculator", desc: "Posts, rails, pickets, and cost estimate for a wood fence." },
+  { href: "/tools/shed-calculator", name: "Shed Calculator", desc: "Studs, plywood, roofing squares, and siding for a shed build." },
 ];
 
 export default function ToolsIndexPage() {

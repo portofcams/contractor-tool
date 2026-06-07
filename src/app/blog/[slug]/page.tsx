@@ -92,13 +92,25 @@ export default async function BlogPostPage({
         <p className="mt-3 text-lg text-neutral-600 dark:text-neutral-300">{post.dek}</p>
 
         <div className="mt-8 space-y-8">
-          {post.sections.map((s) => (
-            <section key={s.heading}>
-              <h2 className="text-2xl font-semibold">{s.heading}</h2>
-              {s.body.map((para, i) => (
-                <p key={i} className="mt-3 text-neutral-700 dark:text-neutral-300">{para}</p>
-              ))}
-            </section>
+          {post.sections.map((s, idx) => (
+            <>
+              <section key={s.heading}>
+                <h2 className="text-2xl font-semibold">{s.heading}</h2>
+                {s.body.map((para, i) => (
+                  <p key={i} className="mt-3 text-neutral-700 dark:text-neutral-300">{para}</p>
+                ))}
+              </section>
+              {idx === 1 && post.related.length > 0 && (
+                <div className="rounded-xl border border-blue-200 bg-blue-50 px-5 py-4 dark:border-blue-900 dark:bg-blue-950/40">
+                  <p className="text-sm font-medium text-blue-800 dark:text-blue-300">
+                    Free tool:{" "}
+                    <Link href={post.related[0].href} className="underline hover:no-underline">
+                      {post.related[0].label} →
+                    </Link>
+                  </p>
+                </div>
+              )}
+            </>
           ))}
         </div>
 

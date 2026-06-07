@@ -15,6 +15,14 @@ const POPULAR: [string, string][] = [
   ["Joist Spacing", "/tools/joist-calculator"],
   ["Rough Opening", "/tools/rough-opening-calculator"],
   ["Pool Volume", "/tools/pool-volume-calculator"],
+  ["Window", "/tools/window-calculator"],
+  ["Mortar", "/tools/mortar-calculator"],
+  ["PEX Pipe", "/tools/pex-pipe-calculator"],
+  ["Framing Cost", "/tools/framing-cost-calculator"],
+  ["Driveway Cost", "/tools/driveway-cost-calculator"],
+  ["Bathroom Tile", "/tools/bathroom-tile-calculator"],
+  ["Wood Fence Cost", "/tools/wood-fence-cost-calculator"],
+  ["Shed", "/tools/shed-calculator"],
 ];
 
 export default function RelatedStrip() {

@@ -96,6 +96,14 @@ export const POSTS: BlogPost[] = [
       {
         "href": "/tools/square-footage-calculator",
         "label": "Square Footage Calculator"
+      },
+      {
+        "href": "/tools/carpet-calculator",
+        "label": "Carpet Calculator"
+      },
+      {
+        "href": "/tools/baseboard-calculator",
+        "label": "Baseboard & Trim Calculator"
       }
     ]
   },
@@ -183,6 +191,18 @@ export const POSTS: BlogPost[] = [
       {
         "href": "/tools/flooring-calculator",
         "label": "Flooring Calculator"
+      },
+      {
+        "href": "/tools/carpet-calculator",
+        "label": "Carpet Calculator"
+      },
+      {
+        "href": "/tools/tile-calculator",
+        "label": "Tile Calculator"
+      },
+      {
+        "href": "/tools/square-footage-calculator",
+        "label": "Square Footage Calculator"
       }
     ]
   },
@@ -269,6 +289,14 @@ export const POSTS: BlogPost[] = [
       {
         "href": "/tools",
         "label": "All calculators"
+      },
+      {
+        "href": "/tools/flooring-calculator",
+        "label": "Flooring Calculator"
+      },
+      {
+        "href": "/tools/concrete-calculator",
+        "label": "Concrete Calculator"
       }
     ]
   },
@@ -352,6 +380,14 @@ export const POSTS: BlogPost[] = [
       {
         "href": "/tools/square-footage-calculator",
         "label": "Square Footage Calculator"
+      },
+      {
+        "href": "/tools/flooring-calculator",
+        "label": "Flooring Calculator"
+      },
+      {
+        "href": "/tools/carpet-calculator",
+        "label": "Carpet Calculator"
       }
     ]
   },
@@ -433,6 +469,14 @@ export const POSTS: BlogPost[] = [
       {
         "href": "/tools/paint-calculator",
         "label": "Paint Calculator"
+      },
+      {
+        "href": "/tools/drywall-calculator",
+        "label": "Drywall Calculator"
+      },
+      {
+        "href": "/tools/baseboard-calculator",
+        "label": "Baseboard & Trim Calculator"
       }
     ]
   },
@@ -516,6 +560,14 @@ export const POSTS: BlogPost[] = [
       {
         "href": "/tools/paint-calculator",
         "label": "Paint Calculator"
+      },
+      {
+        "href": "/tools/drywall-calculator",
+        "label": "Drywall Calculator"
+      },
+      {
+        "href": "/tools/wallpaper-calculator",
+        "label": "Wallpaper Calculator"
       }
     ]
   },
@@ -599,6 +651,18 @@ export const POSTS: BlogPost[] = [
       {
         "href": "/tools/drywall-calculator",
         "label": "Drywall Calculator"
+      },
+      {
+        "href": "/tools/stud-calculator",
+        "label": "Stud & Framing Calculator"
+      },
+      {
+        "href": "/tools/plywood-calculator",
+        "label": "Plywood Calculator"
+      },
+      {
+        "href": "/tools/paint-calculator",
+        "label": "Paint Calculator"
       }
     ]
   },
@@ -674,6 +738,14 @@ export const POSTS: BlogPost[] = [
       {
         "href": "/tools/drywall-calculator",
         "label": "Drywall Calculator"
+      },
+      {
+        "href": "/tools/stud-calculator",
+        "label": "Stud & Framing Calculator"
+      },
+      {
+        "href": "/tools/paint-calculator",
+        "label": "Paint Calculator"
       }
     ]
   },
@@ -757,6 +829,14 @@ export const POSTS: BlogPost[] = [
       {
         "href": "/tools/concrete-calculator",
         "label": "Concrete Calculator"
+      },
+      {
+        "href": "/tools/rebar-calculator",
+        "label": "Rebar Calculator"
+      },
+      {
+        "href": "/tools/cubic-yards-calculator",
+        "label": "Cubic Yards Calculator"
       }
     ]
   },
@@ -847,6 +927,14 @@ export const POSTS: BlogPost[] = [
       {
         "href": "/tools/roofing-calculator",
         "label": "Roofing Calculator"
+      },
+      {
+        "href": "/tools/siding-calculator",
+        "label": "Siding Calculator"
+      },
+      {
+        "href": "/tools/gutter-calculator",
+        "label": "Gutter Calculator"
       }
     ]
   },
@@ -922,6 +1010,14 @@ export const POSTS: BlogPost[] = [
       {
         "href": "/tools/deck-calculator",
         "label": "Deck Calculator"
+      },
+      {
+        "href": "/tools/joist-calculator",
+        "label": "Floor Joist Calculator"
+      },
+      {
+        "href": "/tools/stud-calculator",
+        "label": "Stud & Framing Calculator"
       }
     ]
   },
@@ -1005,6 +1101,14 @@ export const POSTS: BlogPost[] = [
       {
         "href": "/tools/tile-calculator",
         "label": "Tile Calculator"
+      },
+      {
+        "href": "/tools/grout-calculator",
+        "label": "Grout Calculator"
+      },
+      {
+        "href": "/tools/square-footage-calculator",
+        "label": "Square Footage Calculator"
       }
     ]
   },
@@ -1088,6 +1192,18 @@ export const POSTS: BlogPost[] = [
       {
         "href": "/tools/mulch-calculator",
         "label": "Mulch & Soil Calculator"
+      },
+      {
+        "href": "/tools/gravel-calculator",
+        "label": "Gravel Calculator"
+      },
+      {
+        "href": "/tools/sod-calculator",
+        "label": "Sod Calculator"
+      },
+      {
+        "href": "/tools/cubic-yards-calculator",
+        "label": "Cubic Yards Calculator"
       }
     ]
   },
@@ -1169,6 +1285,14 @@ export const POSTS: BlogPost[] = [
       {
         "href": "/tools/fence-calculator",
         "label": "Fence Calculator"
+      },
+      {
+        "href": "/tools/stud-calculator",
+        "label": "Stud & Framing Calculator"
+      },
+      {
+        "href": "/tools/deck-calculator",
+        "label": "Deck Board Calculator"
       }
     ]
   },
@@ -1249,6 +1373,18 @@ export const POSTS: BlogPost[] = [
       {
         "href": "/tools/gravel-calculator",
         "label": "Gravel Calculator"
+      },
+      {
+        "href": "/tools/cubic-yards-calculator",
+        "label": "Cubic Yards Calculator"
+      },
+      {
+        "href": "/tools/asphalt-calculator",
+        "label": "Asphalt Calculator"
+      },
+      {
+        "href": "/tools/sand-calculator",
+        "label": "Sand Calculator"
       }
     ]
   },
@@ -1344,6 +1480,22 @@ export const POSTS: BlogPost[] = [
       {
         "href": "/tools/square-footage-calculator",
         "label": "Square Footage Calculator"
+      },
+      {
+        "href": "/tools/flooring-calculator",
+        "label": "Flooring Calculator"
+      },
+      {
+        "href": "/tools/concrete-calculator",
+        "label": "Concrete Calculator"
+      },
+      {
+        "href": "/tools/drywall-calculator",
+        "label": "Drywall Calculator"
+      },
+      {
+        "href": "/tools/roofing-calculator",
+        "label": "Roofing Calculator"
       }
     ]
   },
@@ -1435,6 +1587,14 @@ export const POSTS: BlogPost[] = [
       {
         "href": "/tools/carpet-calculator",
         "label": "Carpet Calculator"
+      },
+      {
+        "href": "/tools/carpet-stairs-calculator",
+        "label": "Carpet Stairs Calculator"
+      },
+      {
+        "href": "/tools/square-footage-calculator",
+        "label": "Square Footage Calculator"
       }
     ]
   },
@@ -1515,6 +1675,14 @@ export const POSTS: BlogPost[] = [
       {
         "href": "/tools/insulation-calculator",
         "label": "Insulation Calculator"
+      },
+      {
+        "href": "/tools/spray-foam-calculator",
+        "label": "Spray Foam Calculator"
+      },
+      {
+        "href": "/tools/stud-calculator",
+        "label": "Stud & Framing Calculator"
       }
     ]
   },
@@ -1598,6 +1766,18 @@ export const POSTS: BlogPost[] = [
       {
         "href": "/tools/stud-calculator",
         "label": "Stud & Framing Calculator"
+      },
+      {
+        "href": "/tools/joist-calculator",
+        "label": "Floor Joist Calculator"
+      },
+      {
+        "href": "/tools/rough-opening-calculator",
+        "label": "Rough Opening Calculator"
+      },
+      {
+        "href": "/tools/plywood-calculator",
+        "label": "Plywood Calculator"
       }
     ]
   },
@@ -1687,6 +1867,14 @@ export const POSTS: BlogPost[] = [
       {
         "href": "/tools/plywood-calculator",
         "label": "Plywood Calculator"
+      },
+      {
+        "href": "/tools/stud-calculator",
+        "label": "Stud & Framing Calculator"
+      },
+      {
+        "href": "/tools/drywall-calculator",
+        "label": "Drywall Calculator"
       }
     ]
   },
@@ -1762,6 +1950,18 @@ export const POSTS: BlogPost[] = [
       {
         "href": "/tools/sod-calculator",
         "label": "Sod Calculator"
+      },
+      {
+        "href": "/tools/grass-seed-calculator",
+        "label": "Grass Seed Calculator"
+      },
+      {
+        "href": "/tools/sand-calculator",
+        "label": "Sand Calculator"
+      },
+      {
+        "href": "/tools/cubic-yards-calculator",
+        "label": "Cubic Yards Calculator"
       }
     ]
   },
@@ -1846,6 +2046,14 @@ export const POSTS: BlogPost[] = [
       {
         "href": "/tools/wallpaper-calculator",
         "label": "Wallpaper Calculator"
+      },
+      {
+        "href": "/tools/paint-calculator",
+        "label": "Paint Calculator"
+      },
+      {
+        "href": "/tools/square-footage-calculator",
+        "label": "Square Footage Calculator"
       }
     ]
   },
@@ -1934,6 +2142,14 @@ export const POSTS: BlogPost[] = [
       {
         "href": "/tools/brick-calculator",
         "label": "Brick Calculator"
+      },
+      {
+        "href": "/tools/concrete-calculator",
+        "label": "Concrete Calculator"
+      },
+      {
+        "href": "/tools/sand-calculator",
+        "label": "Sand Calculator"
       }
     ]
   },
@@ -2017,6 +2233,14 @@ export const POSTS: BlogPost[] = [
       {
         "href": "/tools/rebar-calculator",
         "label": "Rebar Calculator"
+      },
+      {
+        "href": "/tools/concrete-calculator",
+        "label": "Concrete Calculator"
+      },
+      {
+        "href": "/tools/cubic-yards-calculator",
+        "label": "Cubic Yards Calculator"
       }
     ]
   },
@@ -2100,6 +2324,14 @@ export const POSTS: BlogPost[] = [
       {
         "href": "/tools/stair-calculator",
         "label": "Stair Calculator"
+      },
+      {
+        "href": "/tools/carpet-stairs-calculator",
+        "label": "Carpet Stairs Calculator"
+      },
+      {
+        "href": "/tools/carpet-calculator",
+        "label": "Carpet Calculator"
       }
     ]
   },
@@ -2191,6 +2423,18 @@ export const POSTS: BlogPost[] = [
       {
         "href": "/tools/paver-calculator",
         "label": "Paver Calculator"
+      },
+      {
+        "href": "/tools/sand-calculator",
+        "label": "Sand Calculator"
+      },
+      {
+        "href": "/tools/cubic-yards-calculator",
+        "label": "Cubic Yards Calculator"
+      },
+      {
+        "href": "/tools/gravel-calculator",
+        "label": "Gravel Calculator"
       }
     ]
   },
@@ -2266,6 +2510,14 @@ export const POSTS: BlogPost[] = [
       {
         "href": "/tools/asphalt-calculator",
         "label": "Asphalt Calculator"
+      },
+      {
+        "href": "/tools/cubic-yards-calculator",
+        "label": "Cubic Yards Calculator"
+      },
+      {
+        "href": "/tools/gravel-calculator",
+        "label": "Gravel Calculator"
       }
     ]
   },
@@ -2349,6 +2601,18 @@ export const POSTS: BlogPost[] = [
       {
         "href": "/tools/retaining-wall-calculator",
         "label": "Retaining Wall Calculator"
+      },
+      {
+        "href": "/tools/cubic-yards-calculator",
+        "label": "Cubic Yards Calculator"
+      },
+      {
+        "href": "/tools/gravel-calculator",
+        "label": "Gravel Calculator"
+      },
+      {
+        "href": "/tools/sand-calculator",
+        "label": "Sand Calculator"
       }
     ]
   },
@@ -2439,6 +2703,14 @@ export const POSTS: BlogPost[] = [
       {
         "href": "/tools/square-footage-calculator",
         "label": "Square Footage Calculator"
+      },
+      {
+        "href": "/tools/flooring-calculator",
+        "label": "Flooring Calculator"
+      },
+      {
+        "href": "/tools/concrete-calculator",
+        "label": "Concrete Calculator"
       }
     ]
   },
@@ -2522,6 +2794,22 @@ export const POSTS: BlogPost[] = [
       {
         "href": "/tools",
         "label": "Free calculators"
+      },
+      {
+        "href": "/tools/flooring-calculator",
+        "label": "Flooring Calculator"
+      },
+      {
+        "href": "/tools/concrete-calculator",
+        "label": "Concrete Calculator"
+      },
+      {
+        "href": "/tools/roofing-calculator",
+        "label": "Roofing Calculator"
+      },
+      {
+        "href": "/tools/drywall-calculator",
+        "label": "Drywall Calculator"
       }
     ]
   },
@@ -2605,6 +2893,18 @@ export const POSTS: BlogPost[] = [
       {
         "href": "/tools",
         "label": "Free calculators"
+      },
+      {
+        "href": "/tools/flooring-calculator",
+        "label": "Flooring Calculator"
+      },
+      {
+        "href": "/tools/concrete-calculator",
+        "label": "Concrete Calculator"
+      },
+      {
+        "href": "/tools/roofing-calculator",
+        "label": "Roofing Calculator"
       }
     ]
   },
@@ -2678,6 +2978,14 @@ export const POSTS: BlogPost[] = [
       {
         "href": "/tools/square-footage-calculator",
         "label": "Square Footage Calculator"
+      },
+      {
+        "href": "/tools/tile-calculator",
+        "label": "Tile Calculator"
+      },
+      {
+        "href": "/tools/grout-calculator",
+        "label": "Grout Calculator"
       }
     ]
   }
