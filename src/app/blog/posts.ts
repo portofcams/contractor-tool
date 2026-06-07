@@ -1109,6 +1109,10 @@ export const POSTS: BlogPost[] = [
       {
         "href": "/tools/square-footage-calculator",
         "label": "Square Footage Calculator"
+      },
+      {
+        "href": "/tools/bathroom-tile-calculator",
+        "label": "Bathroom Tile Calculator"
       }
     ]
   },
@@ -1293,6 +1297,10 @@ export const POSTS: BlogPost[] = [
       {
         "href": "/tools/deck-calculator",
         "label": "Deck Board Calculator"
+      },
+      {
+        "href": "/tools/wood-fence-cost-calculator",
+        "label": "Wood Fence Cost Calculator"
       }
     ]
   },
@@ -1385,6 +1393,10 @@ export const POSTS: BlogPost[] = [
       {
         "href": "/tools/sand-calculator",
         "label": "Sand Calculator"
+      },
+      {
+        "href": "/tools/driveway-cost-calculator",
+        "label": "Driveway Cost Calculator"
       }
     ]
   },
@@ -1683,6 +1695,10 @@ export const POSTS: BlogPost[] = [
       {
         "href": "/tools/stud-calculator",
         "label": "Stud & Framing Calculator"
+      },
+      {
+        "href": "/tools/pex-pipe-calculator",
+        "label": "PEX Pipe Calculator"
       }
     ]
   },
@@ -1778,6 +1794,14 @@ export const POSTS: BlogPost[] = [
       {
         "href": "/tools/plywood-calculator",
         "label": "Plywood Calculator"
+      },
+      {
+        "href": "/tools/framing-cost-calculator",
+        "label": "Framing Cost Calculator"
+      },
+      {
+        "href": "/tools/window-calculator",
+        "label": "Window Calculator"
       }
     ]
   },
@@ -1875,6 +1899,10 @@ export const POSTS: BlogPost[] = [
       {
         "href": "/tools/drywall-calculator",
         "label": "Drywall Calculator"
+      },
+      {
+        "href": "/tools/shed-calculator",
+        "label": "Shed Calculator"
       }
     ]
   },
@@ -2150,6 +2178,10 @@ export const POSTS: BlogPost[] = [
       {
         "href": "/tools/sand-calculator",
         "label": "Sand Calculator"
+      },
+      {
+        "href": "/tools/mortar-calculator",
+        "label": "Mortar Calculator"
       }
     ]
   },
@@ -2518,6 +2550,10 @@ export const POSTS: BlogPost[] = [
       {
         "href": "/tools/gravel-calculator",
         "label": "Gravel Calculator"
+      },
+      {
+        "href": "/tools/driveway-cost-calculator",
+        "label": "Driveway Cost Calculator"
       }
     ]
   },
@@ -2810,6 +2846,14 @@ export const POSTS: BlogPost[] = [
       {
         "href": "/tools/drywall-calculator",
         "label": "Drywall Calculator"
+      },
+      {
+        "href": "/tools/framing-cost-calculator",
+        "label": "Framing Cost Calculator"
+      },
+      {
+        "href": "/tools/driveway-cost-calculator",
+        "label": "Driveway Cost Calculator"
       }
     ]
   },
@@ -2986,6 +3030,10 @@ export const POSTS: BlogPost[] = [
       {
         "href": "/tools/grout-calculator",
         "label": "Grout Calculator"
+      },
+      {
+        "href": "/tools/bathroom-tile-calculator",
+        "label": "Bathroom Tile Calculator"
       }
     ]
   }
