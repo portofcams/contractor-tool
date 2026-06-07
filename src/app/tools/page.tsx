@@ -54,6 +54,14 @@ const TOOLS = [
   { href: "/tools/grass-seed-calculator", name: "Grass Seed Calculator", desc: "Pounds of seed for a new or overseeded lawn." },
   { href: "/tools/drop-ceiling-calculator", name: "Drop Ceiling Calculator", desc: "Tiles and grid for a suspended ceiling." },
   { href: "/tools/cubic-yards-calculator", name: "Cubic Yards Calculator", desc: "Volume in cubic yards for any bulk material." },
+  { href: "/tools/grout-calculator", name: "Grout Calculator", desc: "Pounds of grout for tile — floor, wall, or backsplash." },
+  { href: "/tools/sand-calculator", name: "Sand Calculator", desc: "Tons and cubic yards of sand for a patio, pool, or base." },
+  { href: "/tools/spray-foam-calculator", name: "Spray Foam Calculator", desc: "Board-feet of spray foam insulation for walls or attics." },
+  { href: "/tools/caulk-calculator", name: "Caulk Calculator", desc: "Tubes of caulk for a joint length, with waste factor." },
+  { href: "/tools/carpet-stairs-calculator", name: "Carpet Stairs Calculator", desc: "Carpet yardage for a staircase — treads, risers, and nosing." },
+  { href: "/tools/joist-calculator", name: "Floor Joist Calculator", desc: "Joist count and spacing for a deck or floor framing." },
+  { href: "/tools/rough-opening-calculator", name: "Rough Opening Calculator", desc: "Rough opening size for doors and windows." },
+  { href: "/tools/pool-volume-calculator", name: "Pool Volume Calculator", desc: "Gallons and liters for rectangular, oval, or round pools." },
 ];
 
 export default function ToolsIndexPage() {

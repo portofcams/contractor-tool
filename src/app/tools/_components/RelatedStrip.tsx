@@ -4,11 +4,17 @@ const POPULAR: [string, string][] = [
   ["Square Footage", "/tools/square-footage-calculator"],
   ["Flooring", "/tools/flooring-calculator"],
   ["Paint", "/tools/paint-calculator"],
-  ["Drywall", "/tools/drywall-calculator"],
   ["Concrete", "/tools/concrete-calculator"],
   ["Tile", "/tools/tile-calculator"],
   ["Roofing", "/tools/roofing-calculator"],
-  ["Deck", "/tools/deck-calculator"],
+  ["Grout", "/tools/grout-calculator"],
+  ["Sand", "/tools/sand-calculator"],
+  ["Spray Foam", "/tools/spray-foam-calculator"],
+  ["Caulk", "/tools/caulk-calculator"],
+  ["Carpet Stairs", "/tools/carpet-stairs-calculator"],
+  ["Joist Spacing", "/tools/joist-calculator"],
+  ["Rough Opening", "/tools/rough-opening-calculator"],
+  ["Pool Volume", "/tools/pool-volume-calculator"],
 ];
 
 export default function RelatedStrip() {
