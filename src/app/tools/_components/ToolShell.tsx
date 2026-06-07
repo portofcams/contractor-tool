@@ -1,12 +1,15 @@
 import Link from "next/link";
+import RelatedStrip from "./RelatedStrip";
 
 // Shared chrome for every /tools/* page. Underscore folder = not a route.
 export default function ToolShell({
   breadcrumb,
   children,
+  hideRelated = false,
 }: {
   breadcrumb?: string;
   children: React.ReactNode;
+  hideRelated?: boolean;
 }) {
   return (
     <main className="min-h-screen bg-white text-neutral-900 dark:bg-neutral-950 dark:text-neutral-100">
@@ -37,6 +40,7 @@ export default function ToolShell({
           )}
         </nav>
         {children}
+        {!hideRelated && <RelatedStrip />}
       </div>
 
       <footer className="border-t border-neutral-200 py-8 text-center text-sm text-neutral-500 dark:border-neutral-800 dark:text-neutral-400">

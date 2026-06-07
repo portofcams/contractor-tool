@@ -48,11 +48,17 @@ const TOOLS = [
   { href: "/tools/paver-calculator", name: "Paver Calculator", desc: "Pavers, base, and sand for a patio." },
   { href: "/tools/asphalt-calculator", name: "Asphalt Calculator", desc: "Tons of asphalt for a driveway or lot." },
   { href: "/tools/retaining-wall-calculator", name: "Retaining Wall Calculator", desc: "Blocks, caps, and base for a retaining wall." },
+  { href: "/tools/siding-calculator", name: "Siding Calculator", desc: "Squares of siding for a house, openings deducted." },
+  { href: "/tools/gutter-calculator", name: "Gutter Calculator", desc: "Linear feet of gutter, downspouts, and hangers." },
+  { href: "/tools/board-foot-calculator", name: "Board Foot Calculator", desc: "Board feet and cost for lumber." },
+  { href: "/tools/grass-seed-calculator", name: "Grass Seed Calculator", desc: "Pounds of seed for a new or overseeded lawn." },
+  { href: "/tools/drop-ceiling-calculator", name: "Drop Ceiling Calculator", desc: "Tiles and grid for a suspended ceiling." },
+  { href: "/tools/cubic-yards-calculator", name: "Cubic Yards Calculator", desc: "Volume in cubic yards for any bulk material." },
 ];
 
 export default function ToolsIndexPage() {
   return (
-    <ToolShell>
+    <ToolShell hideRelated>
       <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">Free Contractor Calculators</h1>
       <p className="mt-3 text-lg text-neutral-600 dark:text-neutral-300">
         Quick, no-sign-up estimating tools for the job site — square footage,

@@ -116,6 +116,8 @@ export default function LandingPage() {
             ProBuild<span className="text-[#0a84ff]">Calc</span>
           </Link>
           <div className="flex items-center gap-2">
+            <Link href="/tools" className="hidden sm:block text-sm text-[#f5f0e8]/50 hover:text-[#f5f0e8] px-2.5">Calculators</Link>
+            <Link href="/blog" className="hidden sm:block text-sm text-[#f5f0e8]/50 hover:text-[#f5f0e8] px-2.5">Guides</Link>
             <Link href="/login">
               <Button variant="ghost" size="sm" className="text-[#f5f0e8]/50 hover:text-[#f5f0e8] text-sm">Sign In</Button>
             </Link>
@@ -671,11 +673,43 @@ export default function LandingPage() {
         </FadeUp>
       </section>
 
+      {/* ══════ FREE TOOLS ══════ */}
+      <section className="py-16 px-6 md:px-12 border-t border-white/[0.06]">
+        <div className="max-w-[1200px] mx-auto">
+          <h2 className="text-2xl md:text-3xl font-bold tracking-tight mb-2">Free contractor calculators</h2>
+          <p className="text-sm text-[#f5f0e8]/40 mb-8">No sign-up — estimate materials in seconds, then let the app scan and take off the whole room for you.</p>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+            {[
+              ["Square Footage", "/tools/square-footage-calculator"],
+              ["Flooring", "/tools/flooring-calculator"],
+              ["Paint", "/tools/paint-calculator"],
+              ["Drywall", "/tools/drywall-calculator"],
+              ["Concrete", "/tools/concrete-calculator"],
+              ["Tile", "/tools/tile-calculator"],
+              ["Roofing", "/tools/roofing-calculator"],
+              ["Deck", "/tools/deck-calculator"],
+            ].map(([name, href]) => (
+              <Link key={href} href={href} className="rounded-sm border border-white/[0.08] px-4 py-3 text-sm text-[#f5f0e8]/70 hover:text-[#f5f0e8] hover:border-[#0a84ff]/50 transition-colors">
+                {name}
+              </Link>
+            ))}
+          </div>
+          <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm">
+            <Link href="/tools" className="text-[#0a84ff] hover:underline">All 30 calculators →</Link>
+            <Link href="/blog" className="text-[#0a84ff] hover:underline">Estimating guides →</Link>
+            <Link href="/for" className="text-[#0a84ff] hover:underline">By trade →</Link>
+          </div>
+        </div>
+      </section>
+
       {/* ══════ FOOTER ══════ */}
       <footer className="py-8 px-6 md:px-12 border-t border-white/[0.06]">
         <div className="max-w-[1200px] mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
           <span className="text-xs text-[#f5f0e8]/25 font-mono">&copy; {new Date().getFullYear()} ProBuildCalc</span>
-          <div className="flex gap-6 text-xs text-[#f5f0e8]/25">
+          <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-[#f5f0e8]/25">
+            <Link href="/tools" className="hover:text-[#f5f0e8]/60 transition-colors">Calculators</Link>
+            <Link href="/blog" className="hover:text-[#f5f0e8]/60 transition-colors">Guides</Link>
+            <Link href="/for" className="hover:text-[#f5f0e8]/60 transition-colors">Trades</Link>
             <Link href="/privacy" className="hover:text-[#f5f0e8]/60 transition-colors">Privacy</Link>
             <Link href="/terms" className="hover:text-[#f5f0e8]/60 transition-colors">Terms</Link>
             <Link href="/login" className="hover:text-[#f5f0e8]/60 transition-colors">Sign In</Link>
