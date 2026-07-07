@@ -3,6 +3,7 @@ import { getContractor } from "@/lib/session";
 import { prisma } from "@/lib/db";
 import { readFile } from "@/lib/storage";
 import Anthropic from "@anthropic-ai/sdk";
+import { checkBudget, logUsage, BudgetExceededError } from "@/lib/anthropic-budget";
 
 const anthropic = new Anthropic();
 
@@ -54,8 +55,10 @@ export async function POST(
     };
     const mediaType = mediaTypeMap[ext || ""] || "image/jpeg";
 
+    await checkBudget("contractorcalc/floorplan-extract");
+    const model = "claude-sonnet-4-20250514";
     const response = await anthropic.messages.create({
-      model: "claude-sonnet-4-20250514",
+      model,
       max_tokens: 1024,
       messages: [
         {
@@ -92,6 +95,8 @@ If you cannot identify any rooms, return: { "rooms": [], "totalSqft": 0, "notes"
         },
       ],
     });
+
+    await logUsage(model, response.usage.input_tokens, response.usage.output_tokens, "contractorcalc/floorplan-extract").catch(() => {});
 
     // Parse AI response
     const textBlock = response.content.find((b) => b.type === "text");
@@ -138,6 +143,9 @@ If you cannot identify any rooms, return: { "rooms": [], "totalSqft": 0, "notes"
       notes: parsed.notes || "",
     });
   } catch (err) {
+    if (err instanceof BudgetExceededError) {
+      return NextResponse.json({ error: err.message }, { status: 429 });
+    }
     console.error("Floor plan extraction error:", err);
     return NextResponse.json(
       { error: "Failed to analyze floor plan. Please try again." },

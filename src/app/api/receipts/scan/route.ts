@@ -7,6 +7,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import Anthropic from "@anthropic-ai/sdk";
+import { checkBudget, logUsage, BudgetExceededError } from "@/lib/anthropic-budget";
 
 const anthropic = process.env.ANTHROPIC_API_KEY
   ? new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
@@ -44,8 +45,10 @@ export async function POST(req: Request) {
   }
 
   try {
+    await checkBudget("contractorcalc/receipts-scan");
+    const model = "claude-sonnet-4-20250514";
     const response = await anthropic.messages.create({
-      model: "claude-sonnet-4-20250514",
+      model,
       max_tokens: 1500,
       system: `You are an expert at reading receipts. Extract all line items from this receipt photo.
 
@@ -76,6 +79,8 @@ Rules:
         },
       ],
     });
+
+    await logUsage(model, response.usage.input_tokens, response.usage.output_tokens, "contractorcalc/receipts-scan").catch(() => {});
 
     const textBlock = response.content.find((b) => b.type === "text");
     if (!textBlock || textBlock.type !== "text") {
@@ -126,6 +131,9 @@ Rules:
 
     return NextResponse.json(receipt);
   } catch (err) {
+    if (err instanceof BudgetExceededError) {
+      return NextResponse.json({ error: err.message }, { status: 429 });
+    }
     console.error("Receipt scan error:", err);
     return NextResponse.json(
       { error: "Receipt scanning failed. Please try again." },

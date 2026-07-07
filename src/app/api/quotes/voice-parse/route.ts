@@ -9,6 +9,7 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import Anthropic from "@anthropic-ai/sdk";
+import { checkBudget, logUsage, BudgetExceededError } from "@/lib/anthropic-budget";
 
 const anthropic = process.env.ANTHROPIC_API_KEY
   ? new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
@@ -84,8 +85,10 @@ Rules:
 - confidence: "high" if clear dimensions given, "medium" if some assumptions, "low" if vague`;
 
   try {
+    await checkBudget("contractorcalc/voice-parse");
+    const model = "claude-sonnet-4-20250514";
     const response = await anthropic.messages.create({
-      model: "claude-sonnet-4-20250514",
+      model,
       max_tokens: 2000,
       system: systemPrompt,
       messages: [
@@ -95,6 +98,8 @@ Rules:
         },
       ],
     });
+
+    await logUsage(model, response.usage.input_tokens, response.usage.output_tokens, "contractorcalc/voice-parse").catch(() => {});
 
     const textBlock = response.content.find((b) => b.type === "text");
     if (!textBlock || textBlock.type !== "text") {
@@ -112,6 +117,9 @@ Rules:
     const result = JSON.parse(jsonMatch[0]);
     return NextResponse.json(result);
   } catch (err) {
+    if (err instanceof BudgetExceededError) {
+      return NextResponse.json({ error: err.message }, { status: 429 });
+    }
     console.error("Voice parse error:", err);
     return NextResponse.json(
       { error: "Voice parsing failed. Please try again." },

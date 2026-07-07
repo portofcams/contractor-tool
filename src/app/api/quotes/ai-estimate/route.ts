@@ -10,6 +10,7 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import Anthropic from "@anthropic-ai/sdk";
+import { checkBudget, logUsage, BudgetExceededError } from "@/lib/anthropic-budget";
 
 const anthropic = process.env.ANTHROPIC_API_KEY
   ? new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
@@ -136,6 +137,8 @@ Rules:
     : userPrompt;
 
   try {
+    await checkBudget("contractorcalc/ai-estimate");
+
     // Build content blocks with all images
     const contentBlocks: Anthropic.Messages.ContentBlockParam[] = imageList.map((img) => {
       const { mediaType: mt, base64Data: bd } = parseImage(img);
@@ -146,12 +149,15 @@ Rules:
     });
     contentBlocks.push({ type: "text", text: fullPrompt });
 
+    const model = "claude-sonnet-4-20250514";
     const response = await anthropic.messages.create({
-      model: "claude-sonnet-4-20250514",
+      model,
       max_tokens: 3000,
       messages: [{ role: "user", content: contentBlocks }],
       system: systemPrompt,
     });
+
+    await logUsage(model, response.usage.input_tokens, response.usage.output_tokens, "contractorcalc/ai-estimate").catch(() => {});
 
     // Extract the text response
     const textBlock = response.content.find((b) => b.type === "text");
@@ -172,6 +178,9 @@ Rules:
 
     return NextResponse.json(estimate);
   } catch (err) {
+    if (err instanceof BudgetExceededError) {
+      return NextResponse.json({ error: err.message }, { status: 429 });
+    }
     console.error("AI estimate error:", err);
     return NextResponse.json(
       { error: "AI estimation failed. Please try again." },
