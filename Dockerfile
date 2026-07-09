@@ -4,7 +4,11 @@ FROM node:20-alpine AS base
 FROM base AS deps
 WORKDIR /app
 COPY package.json package-lock.json ./
-RUN npm ci
+# Cache mount + fetch retries: plain `npm ci` flakes with ECONNRESET on
+# emulated (Rosetta) amd64 builds under sustained network load.
+RUN --mount=type=cache,target=/root/.npm \
+    npm ci --cache /root/.npm --maxsockets 4 \
+    --fetch-retries=8 --fetch-retry-mintimeout=20000 --fetch-retry-maxtimeout=120000
 
 # ── Build ──
 FROM base AS builder
@@ -22,8 +26,18 @@ ENV NEXT_PUBLIC_SENTRY_DSN=$NEXT_PUBLIC_SENTRY_DSN
 # Generate Prisma client
 RUN npx prisma generate
 
-# Build Next.js
-RUN npm run build
+# next build's own SWC-binary downloader has no meaningful retry and dies
+# near the end of the fetch under Rosetta-emulated network load — and once
+# it fails, Next falls back to WASM bindings, which Turbopack (if enabled)
+# refuses to run on at all. Install the native binary explicitly via npm's
+# own --fetch-retries first, matching the installed next version, so next
+# build finds it already present and never attempts its own download.
+RUN --mount=type=cache,target=/root/.npm \
+    NEXT_VERSION=$(node -p "require('./node_modules/next/package.json').version") && \
+    npm install --no-save --cache /root/.npm \
+      --fetch-retries=6 --fetch-retry-mintimeout=20000 --fetch-retry-maxtimeout=120000 \
+      "@next/swc-linux-x64-musl@$NEXT_VERSION" && \
+    npm run build
 
 # ── Migrator (used for one-off migration runs) ──
 FROM base AS migrator
