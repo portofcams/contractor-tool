@@ -2,29 +2,34 @@
 # GitHub Actions — ProBuildCalc Deploy Pipeline
 # ─────────────────────────────────────────────────────────────
 #
-# Trigger: manual dispatch, or a daily backstop (see below).
+# Trigger: manual dispatch, or a daily backstop (see below). Not on push.
 #
-# NOT triggered on push. The `deploy` job's build step runs `docker compose
-# build` directly ON the shared Vultr box (unlike binnacle-ai/harbor/cleared,
-# which build off-box on GitHub's runners) — that's a real OOM/load risk on a
-# box running ~47 containers, so it must never fire unattended on every push.
-# 2026-07-08: a push auto-fired this exact build mid-session; GitHub's own
-# cancel-in-progress didn't propagate to the SSH-spawned process on the box,
-# and it had to be killed manually there. Ship with:
-#   gh workflow run deploy.yml
-# and only when you actually mean to deploy right now.
+# Builds happen on GitHub's runner, not on the shared Vultr box and not on a
+# local Mac — same pattern as binnacle-harbor's deploy-image.yml. Migrated
+# 2026-07-09 after two separate incidents on the old on-box-build path:
+#   1. A routine push auto-fired an on-box build; GitHub's cancel-in-progress
+#      didn't propagate to the SSH-spawned process, had to be killed manually
+#      on the box (2026-07-08, fixed short-term by going manual-dispatch-only).
+#   2. Building this repo's unusually large dependency tree (Capacitor CLI,
+#      Stripe, Twilio) locally on an M4 laptop under Rosetta emulation crashed
+#      Colima's VM outright under host memory pressure — a real but totally
+#      avoidable failure mode once the build doesn't depend on local resources
+#      at all. contractor-tool is a public repo, so runner minutes are free —
+#      there's no reason to depend on either the box or a laptop's headroom.
+# Ship with: gh workflow run deploy.yml
 #
 # Flow:
 #   1. quality — install deps, generate Prisma client, lint + type-check
 #                (both advisory; deploys are never blocked by lint/type debt).
-#   2. deploy  — SSH to the Vultr server, fast-forward the live build context
-#                to `main`, rebuild the Docker image, recreate the container.
+#   2. deploy  — build the image on the runner, ship it to Vultr via
+#                docker save | gzip | ssh | docker load, recreate the
+#                container from the loaded image (zero build on the box).
 #
 # The live site runs as the Docker Compose service `app`
 # (container `contractorcalc-app`, listening on :8002) defined at
 #   /root/server/contractorcalc/docker-compose.yml
-# It does NOT run via pm2 or /opt/contractorcalc. The compose build context is
-# ./src, which is a git checkout of this repo's `main`.
+# That compose file's `app.build.context` (./src, a git checkout) is now only
+# a fallback for manual on-box rebuilds — normal deploys never touch it.
 #
 # Required GitHub Secrets:
 #   VULTR_HOST     — server IP (144.202.116.229)
@@ -44,14 +49,11 @@ on:
   schedule:
     - cron: "0 12 * * *" # 02:00 HST daily — backstop deploy of latest main
 
-# Never let two deploys rebuild the same container concurrently. Left as
-# cancel-in-progress: false on purpose — this workflow's build step runs ON
-# the box (see above), and a GitHub-side cancel does not reliably kill the
-# SSH-spawned build process there. Queuing behind a running deploy is safer
-# than risking two builds fighting over the same container.
+# Runner-side builds are cheap and cancel cleanly (no orphaned box process),
+# so a superseding dispatch can safely cancel an in-flight one.
 concurrency:
   group: deploy-vultr
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   quality:
@@ -84,41 +86,55 @@ jobs:
         continue-on-error: true
 
   deploy:
-    name: Build & Deploy (Docker)
+    name: Build on runner, ship to server
     needs: quality
     runs-on: ubuntu-latest
     steps:
-      - name: Rebuild & restart the live container over SSH
-        uses: appleboy/ssh-action@v1
+      - uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build the production image (on the runner, with layer cache)
+        uses: docker/build-push-action@v6
         with:
-          host: ${{ secrets.VULTR_HOST }}
-          username: ${{ secrets.VULTR_USER }}
-          key: ${{ secrets.VULTR_SSH_KEY }}
-          script_stop: true
-          # A cold (cache-miss) `docker compose build` on the 2-vCPU server runs
-          # several minutes and exceeds appleboy/ssh-action's 10m default, which
-          # would false-fail the deploy. Give it plenty of headroom.
-          command_timeout: "30m"
-          script: |
-            set -euo pipefail
-            APP_DIR=/root/server/contractorcalc
+          context: .
+          file: Dockerfile
+          tags: contractorcalc-app:latest
+          load: true # load into the local daemon so `docker save | ssh load` works unchanged
+          build-args: |
+            NEXT_PUBLIC_SENTRY_DSN=https://03e280a8e3b349699b0bddf8765ba604@errors.portofcams.com/8
+          cache-from: type=gha
+          cache-to: type=gha,mode=max # GHA cache — does NOT count against Actions minutes
 
-            echo "── Fast-forward build context to origin/main ──"
-            cd "$APP_DIR/src"
-            git fetch --prune origin main
-            git reset --hard origin/main
-            echo "Now at: $(git rev-parse --short HEAD) — $(git log -1 --pretty=%s)"
+      - name: Set up SSH to the server
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "${{ secrets.VULTR_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H "${{ secrets.VULTR_HOST }}" >> ~/.ssh/known_hosts 2>/dev/null
 
-            echo "── Build image (old container keeps running if this fails) ──"
-            cd "$APP_DIR"
-            docker compose build app
+      - name: Ship image to server (save | gzip | ssh load — zero build on the box)
+        run: |
+          docker save contractorcalc-app:latest | gzip | \
+            ssh -i ~/.ssh/deploy_key "${{ secrets.VULTR_USER }}@${{ secrets.VULTR_HOST }}" \
+            'gunzip | docker load'
 
-            echo "── Recreate container ──"
-            docker compose up -d app
-            docker image prune -f
+      - name: Recreate container from the loaded image
+        run: |
+          ssh -i ~/.ssh/deploy_key "${{ secrets.VULTR_USER }}@${{ secrets.VULTR_HOST }}" \
+            'cd /root/server/contractorcalc && docker compose up -d app --no-build && docker image prune -f && sleep 8 && docker compose ps app'
 
-            echo "── Live container ──"
-            docker compose ps app
+      - name: Smoke test the live container
+        run: |
+          sleep 5
+          status=$(ssh -i ~/.ssh/deploy_key "${{ secrets.VULTR_USER }}@${{ secrets.VULTR_HOST }}" \
+            'curl -s -o /dev/null -w "%{http_code}" http://localhost:8002/')
+          echo "Root path returned HTTP $status"
+          if [ "$status" -ge 500 ]; then
+            echo "::error::contractorcalc-app is returning server errors post-deploy"
+            exit 1
+          fi
 
   notify:
     name: Post-Deploy
