@@ -2,7 +2,17 @@
 # GitHub Actions — ProBuildCalc Deploy Pipeline
 # ─────────────────────────────────────────────────────────────
 #
-# Trigger: push to `main` (or manual dispatch)
+# Trigger: manual dispatch, or a daily backstop (see below).
+#
+# NOT triggered on push. The `deploy` job's build step runs `docker compose
+# build` directly ON the shared Vultr box (unlike binnacle-ai/harbor/cleared,
+# which build off-box on GitHub's runners) — that's a real OOM/load risk on a
+# box running ~47 containers, so it must never fire unattended on every push.
+# 2026-07-08: a push auto-fired this exact build mid-session; GitHub's own
+# cancel-in-progress didn't propagate to the SSH-spawned process on the box,
+# and it had to be killed manually there. Ship with:
+#   gh workflow run deploy.yml
+# and only when you actually mean to deploy right now.
 #
 # Flow:
 #   1. quality — install deps, generate Prisma client, lint + type-check
@@ -30,16 +40,15 @@
 name: Deploy to Vultr
 
 on:
-  push:
-    branches: [main]
-    # Don't rebuild/redeploy prod for changes that can't affect the running app.
-    paths-ignore:
-      - "**.md"
-      - "docs/**"
-      - ".github/workflows/ios-build.yml"
-  workflow_dispatch: # Allow manual trigger
+  workflow_dispatch: # Preferred — ship current main now, once per batch of work.
+  schedule:
+    - cron: "0 12 * * *" # 02:00 HST daily — backstop deploy of latest main
 
-# Never let two deploys rebuild the same container concurrently.
+# Never let two deploys rebuild the same container concurrently. Left as
+# cancel-in-progress: false on purpose — this workflow's build step runs ON
+# the box (see above), and a GitHub-side cancel does not reliably kill the
+# SSH-spawned build process there. Queuing behind a running deploy is safer
+# than risking two builds fighting over the same container.
 concurrency:
   group: deploy-vultr
   cancel-in-progress: false
