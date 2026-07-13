@@ -3,6 +3,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import bcrypt from "bcryptjs";
 import { prisma } from "./db";
+import { rateLimitByKey } from "./rate-limit";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -16,8 +17,15 @@ export const authOptions: NextAuthOptions = {
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
       },
-      async authorize(credentials) {
+      async authorize(credentials, req) {
         if (!credentials?.email || !credentials?.password) return null;
+
+        const forwarded = (req?.headers as Record<string, string> | undefined)?.[
+          "x-forwarded-for"
+        ];
+        const ip = forwarded?.split(",")[0]?.trim() || "unknown";
+        const rl = rateLimitByKey(`login:${ip}:${credentials.email.toLowerCase()}`, 5, 15 * 60_000);
+        if (!rl.success) return null;
 
         // Try contractor login first
         const contractor = await prisma.contractor.findUnique({
