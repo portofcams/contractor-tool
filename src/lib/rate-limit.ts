@@ -36,7 +36,8 @@ interface Entry {
 // Added 2026-07-13 — see memory: security_detection_coverage_audit_2026_07_13.md
 function shipRateLimitEvent(key: string): void {
   if (process.env.NODE_ENV !== "production") return;
-  const dashboardKey = process.env.CAPT_J_DASHBOARD_KEY;
+  const dashboardKey =
+    process.env.CAPT_J_DASHBOARD_KEY ?? process.env.DASHBOARD_API_KEY;
   if (!dashboardKey) return;
   const endpoint =
     process.env.DASHBOARD_ERROR_ENDPOINT ??
