@@ -4,7 +4,7 @@
 B2B SaaS for flooring/renovation contractors. Calculate materials, generate quotes, manage projects, track jobs and invoices. Built for field use — mobile-first with offline support and auto-save.
 
 **Live**: `https://probuildcalc.com` (currently `https://contract.portofcams.com`)
-**Login**: `portofcams@gmail.com` / `Cameraman1$` (credentials auth, Google OAuth removed)
+**Login**: `portofcams@gmail.com` / password in the server `.env` / local password manager — not stored in this public repo (credentials auth, Google OAuth removed)
 
 ## Tech Stack
 - **Frontend**: Next.js 16, React 19, TypeScript, Tailwind CSS v4, shadcn/ui
@@ -18,7 +18,7 @@ B2B SaaS for flooring/renovation contractors. Calculate materials, generate quot
 - **IP**: 144.202.116.229
 - **Docker**: `contractorcalc-app` (port 8002) + `contractorcalc-db` (PostgreSQL)
 - **Domain**: `contract.portofcams.com` via Nginx Proxy Manager + Let's Encrypt
-- **DB Creds**: `contractorcalc` / `cc_prod_2024` / database `contractor_tool`
+- **DB Creds**: user `contractorcalc` / password in the server `.env` (not stored in this public repo) / database `contractor_tool`
 
 ## Deploy
 ```bash

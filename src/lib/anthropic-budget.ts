@@ -19,13 +19,32 @@ const MONTHLY_BUDGET_USD = Number(
   process.env.ANTHROPIC_MONTHLY_BUDGET_USD ?? 10,
 );
 
+/**
+ * The shared-pg ledger password is a real secret — it must come from the
+ * environment, never a hardcoded fallback. (This repo is public; a literal
+ * here lands in source and git history.) Fail loudly if it is missing rather
+ * than silently connecting with a baked-in credential. Host/user/db-name are
+ * non-secret infra identifiers, so a default is fine for those.
+ */
+function requireEnv(name: string): string {
+  const value = process.env[name];
+  if (!value) {
+    throw new Error(
+      `${name} is not set. The shared-pg ledger credential must be provided ` +
+        `via the environment — there is no hardcoded fallback. Set it in the ` +
+        `server .env (/root/server/contractorcalc/src/.env).`,
+    );
+  }
+  return value;
+}
+
 let pool: Pool | null = null;
 function getPool(): Pool {
   if (!pool) {
     pool = new Pool({
       host: process.env.SHARED_LEDGER_DB_HOST ?? "shared-pg",
       user: process.env.SHARED_LEDGER_DB_USER ?? "ai_service",
-      password: process.env.SHARED_LEDGER_DB_PASS ?? "Cameraman1$",
+      password: requireEnv("SHARED_LEDGER_DB_PASS"),
       database: process.env.SHARED_LEDGER_DB_NAME ?? "ai_service",
       max: 2,
     });
