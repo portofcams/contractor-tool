@@ -122,8 +122,25 @@ jobs:
 
       - name: Recreate container from the loaded image
         run: |
-          ssh -i ~/.ssh/deploy_key "${{ secrets.VULTR_USER }}@${{ secrets.VULTR_HOST }}" \
-            'cd /root/server/contractorcalc && docker compose up -d app --no-build && docker image prune -f && sleep 8 && docker compose ps app'
+          ssh -i ~/.ssh/deploy_key "${{ secrets.VULTR_USER }}@${{ secrets.VULTR_HOST }}" '
+            set -e
+            cd /root/server/contractorcalc
+            # A container hand-run outside compose (incident surgery on the box)
+            # squats on the name and fails `compose up` with a create conflict —
+            # killed the backstop deploy on 2026-07-14/15. This deploy exists to
+            # converge the box onto main + this compose file, so replace such a
+            # container instead of dying. Anything a hand-run needed must live in
+            # the compose file / env_file, or the next deploy will drop it.
+            owner=$(docker inspect contractorcalc-app --format "{{index .Config.Labels \"com.docker.compose.project\"}}" 2>/dev/null || echo absent)
+            if [ "$owner" != "contractorcalc" ] && [ "$owner" != "absent" ]; then
+              echo "Removing contractorcalc-app container not owned by this compose project (label: ${owner:-none})"
+              docker rm -f contractorcalc-app
+            fi
+            docker compose up -d app --no-build
+            docker image prune -f
+            sleep 8
+            docker compose ps app
+          '
 
       - name: Smoke test the live container
         run: |
